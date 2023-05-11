@@ -13,13 +13,34 @@
         packages = with pkgs; [
         ];
       };
+
+      xsession.windowManager.bspwm = {
+        enable = true;
+        settings = {
+          border_width = 2;
+          window_gap = 18;
+
+          split_ratio = 0.52;
+          borderless_monocle = true;
+          gapless_monocle = true;
+
+          focused_border_color = "#a6bc69";
+        };
+      };
   
       programs = {
         home-manager.enable = true;
         fish = {
           enable = true;
+          interactiveShellInit = ''
+            set fish_greeting # Disable greeting
+          '';
+          plugins = with pkgs.fishPlugins; [
+            { name = "pisces"; src = pisces; }
+            { name = "tide"; src = tide; }
+          ];
         };
-      
+
         alacritty = {
           enable = true;
           settings = {
@@ -59,9 +80,9 @@
                 white   = "#f3f4f5";
               };
             };
-            visual_bell = {
-              animation = "Ease";
-              duration = 1;
+            bell = {
+              animation = "EaseOut";
+              duration = 100;
               color = "0xc0c5ce";
             };
           };

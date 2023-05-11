@@ -10,6 +10,9 @@
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelParams = ["quiet"];
+  boot.plymouth.enable = true;
+  boot.plymouth.theme = "breeze";
 
   boot.initrd.kernelModules = [ "amdgpu" ];
 
@@ -26,7 +29,9 @@
         defaultSession = "xfce+bspwm";
       };
       desktopManager.xfce.enable = true;
-      windowManager.bspwm.enable = true;
+      windowManager.bspwm = {
+        enable = true;
+      };
     };
   };
 
@@ -40,6 +45,7 @@
     initialPassword = "password";
     shell = pkgs.fish;
   };
+  programs.fish.enable = true;
 
   fonts.fonts = with pkgs; [
     font-awesome
