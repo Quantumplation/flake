@@ -3,6 +3,8 @@
 {
   imports = [ ./hardware-configuration.nix ];
 
+  nixpkgs.config.allowUnfree = true;
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -18,7 +20,7 @@
       enable = true;
       displayManager = {
         lightdm.enable = true;
-        defaultSession = "xfce";
+        defaultSession = "xfce+bspwm";
       };
       desktopManager.xfce.enable = true;
       windowManager.bspwm.enable = true;
@@ -35,12 +37,28 @@
     initialPassword = "password";
   };
 
-  # List packages installed in system profile. To search, run:
-  environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wget
-    git
+  fonts.fonts = with pkgs; [
+    font-awesome
+    corefonts
+    (nerdfonts.override {
+      fonts = [
+        "FiraCode" "DroidSansMono"
+      ];
+    })
   ];
+
+  environment = {
+    variables = {
+      TERMINAL = "alacritty";
+      EDITOR = "vim";
+      VISUAL = "vim";
+    };
+    systemPackages = with pkgs; [
+      vim
+      wget
+      git
+    ];
+  };
 
   system.stateVersion = "22.11"; # Don't update
 
