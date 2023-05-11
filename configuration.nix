@@ -38,6 +38,7 @@
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
     initialPassword = "password";
+    shell = pkgs.fish;
   };
 
   fonts.fonts = with pkgs; [

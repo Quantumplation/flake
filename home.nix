@@ -2,7 +2,7 @@
 
 {
   home-manager = {
-    useGlobalPackages = true;
+    useGlobalPkgs = true;
     useUserPackages = true;
     users.pi = {
       home = {
