@@ -33,26 +33,43 @@
         sxhkd = {
           enable = true;
           keybindings = {
+            # Applications
             "super + a" = "alacritty";
             "super + b" = "firefox";
             "super + e" = "echo 'tbd'";
             "super + p" = "mypaint";
             
+            # Close
 	    "super + {_,shift + }w" = "bspc node -{c,k}";
 
+            # Monocle mode
             "super + m" = "bspc desktop -l next";
+
+            # Floating / tiled / fullscreen
             "super + {t,shift + t,s,f}" = "bspc node -t {tiled,pseud_tiled,floating,fullscreen}";
 
-            "super + alt + bracket{left, right}" = "set NODE (bspc query -N -n focused); bspc node -m {prev,next}; bspc node -f $NODE";
+            # Move node between windows
+            "super + alt + bracket{left, right}" = ''
+               set NODE (bspc query -N -n focused); \
+                 bspc node -m {prev,next}; \
+                 bspc node -f $NODE
+            '';
+            # Move node between desktops
             "super + shift + bracket{left, right}" = "bspc node -d {next,prev}.local --follow";
+
+            # Rotate or cylce nodes
+            "super + {_, shift +}grave" = "bspc node @parent -R {90, 270}";
             "super + {_, shift +}Tab" = "bspc node @parent -C {backward,forward}";
 
-            "swap + ctrl + {_,shift +}Tab" = "bspc desktop -f {next, prev}.local";
+            # Switch desktops
+            "super + ctrl + {_,shift +}Tab" = "bspc desktop -f {next, prev}.local";
 
+            # Resize things
             "alt + button{1-3}" = "bspc pointer -g {move,resize_side,resize_corner}";
             "alt + !button{1-3}" = "bspc pointer -t %i, %i";
             "alt + @button{1-3}" = "bspc pointer -u";
 
+            # Screenshot
             # 2 extra spaces required for proper formatting
             "ctrl + shift + 4" = ''
                mkdir -p ~/Pictures/Captures/$(date +"%Y-%m"); \
