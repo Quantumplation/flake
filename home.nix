@@ -27,6 +27,40 @@
           focused_border_color = "#a6bc69";
         };
       };
+
+      services = {
+        flameshot.enable = true;
+        sxhkd = {
+          enable = true;
+          keybindings = {
+            "super + a" = "alacritty";
+            "super + b" = "firefox";
+            "super + e" = "echo 'tbd'";
+            "super + p" = "mypaint";
+            
+	    "super + {_,shift + }w" = "bspc node -{c,k}";
+
+            "super + m" = "bspc desktop -l next";
+            "super + {t,shift + t,s,f}" = "bspc node -t {tiled,pseud_tiled,floating,fullscreen}";
+
+            "super + alt + bracket{left, right}" = "set NODE (bspc query -N -n focused); bspc node -m {prev,next}; bspc node -f $NODE";
+            "super + shift + bracket{left, right}" = "bspc node -d {next,prev}.local --follow";
+            "super + {_, shift +}Tab" = "bspc node @parent -C {backward,forward}";
+
+            "swap + ctrl + {_,shift +}Tab" = "bspc desktop -f {next, prev}.local";
+
+            "alt + button{1-3}" = "bspc pointer -g {move,resize_side,resize_corner}";
+            "alt + !button{1-3}" = "bspc pointer -t %i, %i";
+            "alt + @button{1-3}" = "bspc pointer -u";
+
+            # 2 extra spaces required for proper formatting
+            "ctrl + shift + 4" = ''
+               mkdir -p ~/Pictures/Captures/$(date +"%Y-%m"); \
+                 flameshot gui -p ~/Pictures/Captures/$(date +"%Y-%m")/
+            '';
+          };
+        };
+      };
   
       programs = {
         home-manager.enable = true;
@@ -40,6 +74,8 @@
             { name = "tide"; src = tide; }
           ];
         };
+
+        firefox.enable = true;
 
         alacritty = {
           enable = true;
