@@ -8,19 +8,25 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelParams = ["quiet"];
-  boot.plymouth.enable = true;
-  boot.plymouth.theme = "breeze";
-
-  boot.initrd.kernelModules = [ "amdgpu" ];
+  boot = {
+    kernelParams = ["quiet" "splash"];
+    loader.systemd-boot.enable = true;
+    loader.efi.canTouchEfiVariables = true;
+    plymouth.enable = true;
+    plymouth.theme = "connect";
+    plymouth.themePackages = [ (pkgs.adi1090x-plymouth-themes.override { selected_themes = [ "connect" ]; }) ];
+    initrd.kernelModules = [ "amdgpu" ];
+  };
+  systemd.extraConfig = ''
+    DefaultTimeoutStopSec=30s
+  '';
 
   networking.hostName = "pinix";
   networking.networkmanager.enable = true;
 
   time.timeZone = "America/New_York";
 
+  console.earlySetup = true;
   services = {
     xserver = {
       enable = true;

@@ -13,6 +13,13 @@
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
+     #pkgs = import inputs.nixpkgs {
+     #  overlays = [
+     #    (final: prev: {
+     #      plymouth-themes = final.callPackage pkgs.adi1090x-plymouth-themes { selected_themes = ["circle"]; };
+     #    })
+     #  ]
+     #};
     in {
       nixosConfigurations = {
         pi = lib.nixosSystem {
