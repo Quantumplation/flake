@@ -31,7 +31,10 @@
     xserver = {
       enable = true;
       displayManager = {
-        lightdm.enable = true;
+        sddm = {
+          enable = true;
+          theme = "abstract-dark";
+        };
         defaultSession = "xfce+bspwm";
       };
       desktopManager.xfce.enable = true;
@@ -69,10 +72,12 @@
       EDITOR = "vim";
       VISUAL = "vim";
     };
-    systemPackages = with pkgs; [
-      vim
-      wget
-      git
+    systemPackages = let themes = pkgs.callPackage ./packages/sddm-theme.nix {}; in [
+      pkgs.vim
+      pkgs.wget
+      pkgs.git
+
+      themes.sddm-abstract-dark
     ];
   };
 
