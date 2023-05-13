@@ -301,6 +301,10 @@
             modes = [ "window" "file-browser-extended" "drun" "calc" "emoji" ];
           };
         };
+
+        vscode = {
+          enable = true;
+        };
       };
     };
   };
