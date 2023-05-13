@@ -37,6 +37,7 @@
           "systemctl --user restart polybar"
           "xsetroot -cursor_name left_ptr"
           "xrandr --output Virtual1 --primary --mode 1920x1080"
+          "betterlockscreen -w"
         ];
       };
 
@@ -99,6 +100,8 @@
             # rofi plugins
             "super + c" = "rofi -show calc -terse | xclip -i -selection clipboard -rmlastnl";
             "super + shift + 2" = "rofi -show emoji";
+            "super + v" = "${pkgs.rofi-pulse-select}/bin/rofi-pulse-select sink";
+            "super + shift + v" = "${pkgs.rofi-pulse-select}/bin/rofi-pulse-select source";
             
             # Close
 	    "super + {_,shift + }w" = "bspc node -{c,k}";
@@ -224,7 +227,7 @@
           cycle = false;
           terminal = "\${pkgs.alacritty}/bin/alacritty";
           theme = "purple";
-          plugins = [ pkgs.rofi-calc pkgs.rofi-emoji pkgs.rofi-power-menu ];
+          plugins = [ pkgs.rofi-calc pkgs.rofi-emoji pkgs.rofi-power-menu pkgs.rofi-pulse-select ];
           extraConfig = {
             show-icons = true;
             icon-theme = "Papirus";
