@@ -94,7 +94,8 @@
             # Applications
             "super + a" = "alacritty";
             "super + b" = "firefox";
-            "super + e" = "echo 'tbd'";
+            "super + e" = "rofi -show file-browser-extended -file-browser-depth 3";
+            "super + shift + e" = "thunar";
             "super + p" = "mypaint";
 
             # rofi plugins
@@ -227,14 +228,14 @@
           cycle = false;
           terminal = "\${pkgs.alacritty}/bin/alacritty";
           theme = "purple";
-          plugins = [ pkgs.rofi-calc pkgs.rofi-emoji pkgs.rofi-power-menu pkgs.rofi-pulse-select ];
+          plugins = [ pkgs.rofi-calc pkgs.rofi-emoji pkgs.rofi-power-menu pkgs.rofi-pulse-select pkgs.rofi-file-browser ];
           extraConfig = {
             show-icons = true;
             icon-theme = "Papirus";
             hide-scrollbar = true;
             disable-history = false;
             auto-select = true;
-            modes = [ "window" "filebrowser" "drun" "calc" "emoji" ];
+            modes = [ "window" "file-browser-extended" "drun" "calc" "emoji" ];
           };
         };
       };
