@@ -30,6 +30,13 @@
 
           focused_border_color = "#a6bc69";
         };
+        monitors = {
+          Virtual1 = [ "A" "B" ];
+        };
+        startupPrograms = [
+          "systemctl --user restart polybar"
+          "xsetroot -cursor_name left_ptr"
+        ];
       };
 
       services = {
@@ -42,9 +49,37 @@
             };
           };
         };
+        picom = {
+          enable = true;
+          fade = true;
+          fadeDelta = 10;
+          fadeSteps = [0.05 0.05];
+          settings = {
+            mark-wmwin-focused = true;
+            mark-ovredir-focused = true;
+            use-wemh-active-win = true;
+            detect-rounded-corners = true;
+            detect-client-opacity = true;
+            refresh-rate = 0;
+            dbe = false;
+            paint-on-overlay = true;
+            sw-opti = true;
+            unredir-if-possible = true;
+            detect-transient = true;
+            detect-client-leader = true;
+            wintypes = {
+              tooltip = {
+                fade = true;
+                shadow = false;
+                opacity = 0.85;
+                focus = true;
+              };
+            };
+          };
+        };
         polybar = {
           enable = true;
-          script = "$HOME/.config/polybar/launch.sh";
+          script = "polybar main &";
         };
         sxhkd = {
           enable = true;
@@ -57,6 +92,7 @@
             
             # Close
 	    "super + {_,shift + }w" = "bspc node -{c,k}";
+            "super + alt + shift + {q,r}" = "bspc {quit, wm -r}";
 
             # Monocle mode
             "super + m" = "bspc desktop -l next";
@@ -65,20 +101,20 @@
             "super + {t,shift + t,s,f}" = "bspc node -t {tiled,pseud_tiled,floating,fullscreen}";
 
             # Move node between windows
-            "super + alt + bracket{left, right}" = ''
+            "super + alt + bracket{left,right}" = ''
                set NODE (bspc query -N -n focused); \
                  bspc node -m {prev,next}; \
                  bspc node -f $NODE
             '';
             # Move node between desktops
-            "super + shift + bracket{left, right}" = "bspc node -d {next,prev}.local --follow";
+            "super + shift + bracket{left,right}" = "bspc node -d {next,prev}.local --follow";
 
             # Rotate or cylce nodes
-            "super + {_, shift +}grave" = "bspc node @parent -R {90, 270}";
-            "super + {_, shift +}Tab" = "bspc node @parent -C {backward,forward}";
+            "super + {_,shift +}grave" = "bspc node @parent -R {90, 270}";
+            "super + {_,shift +}Tab" = "bspc node @parent -C {backward,forward}";
 
             # Switch desktops
-            "super + ctrl + {_,shift +}Tab" = "bspc desktop -f {next, prev}.local";
+            "super + ctrl + {_,shift +}Tab" = "bspc desktop -f {next,prev}.local";
 
             # Resize things
             "alt + button{1-3}" = "bspc pointer -g {move,resize_side,resize_corner}";

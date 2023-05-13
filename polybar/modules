@@ -1339,10 +1339,10 @@ format-padding = 0
 ;   %title%
 ; Default: %title%
 label = " %title%"
-label-maxlen = 20
+label-maxlen = 50
 
 ; Used instead of label when there is no window title
-label-empty = " Desktop"
+label-empty = " (None)"
 label-empty-foreground = ${color.fg1}
 label-empty-background = ${color.bg}
 
@@ -1373,9 +1373,6 @@ enable-scroll = true
 icon-0 = I;%{F#98C379}
 icon-1 = II;%{F#E06C75}
 icon-2 = III;%{F#E5C078}
-; icon-3 = 4;
-; icon-4 = 5;
-;icon-default = " " 
 icon-font = 5
 
 
@@ -1397,25 +1394,18 @@ label-monitor = %name%
 ;   %icon%
 ;   %index%
 ; Default: %icon%  %name%
-;label-active = ""
-label-active = %index% %icon%
+label-active =  %index% %icon%
 label-active-font = 5
 label-active-underline = ${color.yellow}
-;label-active-overline = ${color.yellow}
 label-active-background = ${color.bg}
 label-active-foreground = ${color.fg}
-; ${color.foreground-alt}
 
 ; Available tokens:
 ;   %name%
 ;   %icon%
 ;   %index%
 ; Default: %icon%  %name%
-;label-occupied = "  "
-;label-occupied = "  "
 label-occupied =  %index% %icon%
-;label-occupied =  %icon%
-;label-occupied-foreground = ${color.YELLOW}
 label-occupied-font = 5
 label-occupied-foreground = ${color.fg} 
 label-occupied-background = ${color.bg}
@@ -1428,7 +1418,7 @@ label-occupied-background = ${color.bg}
 ; Default: %icon%  %name%
 ;label-urgent = "  "
 ;label-urgent = %icon%
-label-urgent = %index% %icon%
+label-urgent =  %index% %icon%
 label-urgent-font = 5
 label-urgent-foreground = ${color.red}
 label-urgent-background = ${color.bg}
@@ -1440,10 +1430,7 @@ label-urgent-background = ${color.bg}
 ;   %icon%
 ;   %index%
 ; Default: %icon%  %name%
-;label-empty = "  "
-;label-empty = "  " 
-label-empty = %index% %icon% 
-;label-empty = %icon% 
+label-empty = "  %index% %icon%"
 label-empty-font = 5
 label-empty-background = ${color.bg}
 label-empty-foreground = ${color.fg}
