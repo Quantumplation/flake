@@ -82,6 +82,7 @@
       pkgs.git
       pkgs.xclip
       pkgs.xdotool
+      pkgs.xsecurelock
 
       themes.sddm-abstract-dark
     ];

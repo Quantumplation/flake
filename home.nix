@@ -41,6 +41,10 @@
       };
 
       services = {
+        betterlockscreen = {
+          enable = true;
+          arguments = [ "-u ~/Pictures/Wallpapers" ];
+        };
         flameshot = {
           enable = true;
           settings = {
@@ -100,6 +104,7 @@
 	    "super + {_,shift + }w" = "bspc node -{c,k}";
             # "super + alt + shift + {q,r}" = "bspc {quit, wm -r}";
             "super + y" = "rofi -show power-menu -modi power-menu:${pkgs.rofi-power-menu}/bin/rofi-power-menu -font 'JetBrainsMono Nerd Font 16'";
+            "super + l" = "${pkgs.betterlockscreen}/bin/betterlockscreen -l blur 0.5";
 
             # Monocle mode
             "super + m" = "bspc desktop -l next";
@@ -188,6 +193,8 @@
             };
           };
         };
+
+        feh.enable = true;
 
         firefox.enable = true;
 
