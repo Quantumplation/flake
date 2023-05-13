@@ -284,6 +284,8 @@
           };
         };
 
+        go.enable = true;
+
         rofi = {
           enable = true;
           cycle = false;
