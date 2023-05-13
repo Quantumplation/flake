@@ -1,0 +1,40 @@
+
+
+[color]
+
+alpha = #0000ffff
+bg = #141b1e
+bg1 = #232a2d
+fg = #dadada
+fg1 = #b3b9b8
+
+
+;; for 50% transparent
+trans1 = #80000000 
+;; 100% transparent
+trans2 = #00
+
+
+;; colors
+black = #3B4252
+red = #BF616A
+green = #A3BE8C
+green1 = #A3BE8C
+yellow = #EBCB8B
+blue = #61afef
+blue1 = #61afef
+ocean = #6381C4
+bluedark = #3D59A1
+purple = #B48EAD
+purple1 = #B48EAD
+indigo = #6C77BB
+indigolight = #808bcf
+cyan = #88c0d0
+white = #ECEFF4
+teal = #8FBCBB
+;orange = 
+;pink = 
+
+
+;; xrdb colors
+;; Uncomment this if you want to use color from .Xdefaults or Xresources

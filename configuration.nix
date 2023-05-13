@@ -54,14 +54,18 @@
     initialPassword = "password";
     shell = pkgs.fish;
   };
+
+  # Programs that aren't managed by homemanager
   programs.fish.enable = true;
+  programs.light.enable = true;
 
   fonts.fonts = with pkgs; [
+    material-icons
     font-awesome
     corefonts
     (nerdfonts.override {
       fonts = [
-        "FiraCode" "DroidSansMono"
+        "FiraCode" "DroidSansMono" "Iosevka" "JetBrainsMono"
       ];
     })
   ];
