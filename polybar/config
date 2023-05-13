@@ -137,7 +137,7 @@ font-4 = "JetBrainsMono Nerd Font:style=Bold:size=8;1"
 
 modules-left = workspaces sepl title 
 modules-center = 
-modules-right = cpu sep memory sep alsa sep date
+modules-right = cpu sep memory sep pulseaudio sep date
 
 ;; _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 

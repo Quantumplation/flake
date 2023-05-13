@@ -46,6 +46,66 @@
           enable = true;
           arguments = [ "-u ~/Pictures/Wallpapers" ];
         };
+        dunst = {
+          enable = true;
+          settings = {
+            global = {
+              monitor = 0;
+              follow = "mouse";
+              width = 280;
+              height = 80;
+              origin = "top-right";
+              offset = "10x40";
+              scale = 0;
+              indicate_hidden = "yes";
+              shrink = "no";
+              separator_color = "auto";
+              separator_height = 4;
+              line_height = 4;
+              padding = 15;
+              horizontal_padding = 15;
+              frame_width = 2;
+              sort = "no";
+              idle_threshold = 120;
+              font = "JetBrainsMono Nerd Font 12";
+              markup = "full";
+              format = "%s\n%b";
+              alignment = "left";
+              show_age_threshold = 60;
+              word_wrap = "yes";
+              ignore_newline = "no";
+              stack_duplicates = false;
+              hide_duplicate_count = "yes";
+              show_indicators = "no";
+              icon_position = "left";
+              max_icon_size = 48;
+              sticky_history = "yes";
+              history_length = 20;
+              browser = "${pkgs.firefox}/bin/firefox";
+              always_run_script = "true";
+              title = "Dunst";
+              class = "Dunst";
+            };
+            urgency_low = {
+              timeout = 2;
+              background = "#20262C";
+              foreground = "f1fcf9";
+              frame_color = "#b4a1db";
+            };
+            urgency_normal = {
+              timeout = 5;
+              background = "#20262c";
+              foreground = "#f1fcf9";
+              frame_color = "#b4a1db";
+            };
+            urgency_critical = {
+              timeout = 0;
+              background = "#20262c";
+              foreground = "#f1fcf9";
+              frame_color = "#db86ba";
+            };
+          };
+        };
         flameshot = {
           enable = true;
           settings = {
@@ -85,6 +145,7 @@
         };
         polybar = {
           enable = true;
+          package = pkgs.polybarFull;
           script = "polybar main &";
         };
         sxhkd = {
