@@ -83,6 +83,8 @@
       pkgs.xclip
       pkgs.xdotool
       pkgs.xsecurelock
+      pkgs.discord
+      pkgs.baobab
 
       themes.sddm-abstract-dark
     ];
@@ -101,5 +103,16 @@
     };
   };
 
+  nixpkgs.overlays = [
+    (self: super: {
+      discord = super.discord.overrideAttrs (
+        _: { src = builtins.fetchTarball {
+          url = "https://discord.com/api/download?platform=linux&format=tar.gz";
+          # sha256 = "0000000000000000000000000000000000000000000000000000";
+          sha256 = "0mr1az32rcfdnqh61jq7jil6ki1dpg7bdld88y2jjfl2bk14vq4s";
+       }; }
+      );
+    })
+  ];
 }
 
