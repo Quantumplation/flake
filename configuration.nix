@@ -50,7 +50,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.pi = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "audio" ]; # Enable ‘sudo’ for the user.
     initialPassword = "password";
     shell = pkgs.fish;
   };
@@ -80,6 +80,8 @@
       pkgs.vim
       pkgs.wget
       pkgs.git
+      pkgs.xclip
+      pkgs.xdotool
 
       themes.sddm-abstract-dark
     ];

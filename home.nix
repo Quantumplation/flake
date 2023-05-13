@@ -36,6 +36,7 @@
         startupPrograms = [
           "systemctl --user restart polybar"
           "xsetroot -cursor_name left_ptr"
+          "xrandr --output Virtual1 --primary --mode 1920x1080"
         ];
       };
 
@@ -84,15 +85,21 @@
         sxhkd = {
           enable = true;
           keybindings = {
+            "super + @space" = "rofi -show drun";
             # Applications
             "super + a" = "alacritty";
             "super + b" = "firefox";
             "super + e" = "echo 'tbd'";
             "super + p" = "mypaint";
+
+            # rofi plugins
+            "super + c" = "rofi -show calc -terse | xclip -i -selection clipboard -rmlastnl";
+            "super + shift + 2" = "rofi -show emoji";
             
             # Close
 	    "super + {_,shift + }w" = "bspc node -{c,k}";
-            "super + alt + shift + {q,r}" = "bspc {quit, wm -r}";
+            # "super + alt + shift + {q,r}" = "bspc {quit, wm -r}";
+            "super + y" = "rofi -show power-menu -modi power-menu:${pkgs.rofi-power-menu}/bin/rofi-power-menu -font 'JetBrainsMono Nerd Font 16'";
 
             # Monocle mode
             "super + m" = "bspc desktop -l next";
@@ -111,7 +118,8 @@
 
             # Rotate or cylce nodes
             "super + {_,shift +}grave" = "bspc node @parent -R {90, 270}";
-            "super + {_,shift +}Tab" = "bspc node @parent -C {backward,forward}";
+            # "super + {_,shift +}Tab" = "bspc node @parent -C {backward,forward}";
+            "super + Tab" = "rofi -show window";
 
             # Switch desktops
             "super + ctrl + {_,shift +}Tab" = "bspc desktop -f {next,prev}.local";
@@ -133,18 +141,6 @@
   
       programs = {
         home-manager.enable = true;
-        fish = {
-          enable = true;
-          interactiveShellInit = ''
-            set fish_greeting # Disable greeting
-          '';
-          plugins = with pkgs.fishPlugins; [
-            { name = "pisces"; src = pisces; }
-            { name = "tide"; src = tide; }
-          ];
-        };
-
-        firefox.enable = true;
 
         alacritty = {
           enable = true;
@@ -192,7 +188,20 @@
             };
           };
         };
-  
+
+        firefox.enable = true;
+
+        fish = {
+          enable = true;
+          interactiveShellInit = ''
+            set fish_greeting # Disable greeting
+          '';
+          plugins = with pkgs.fishPlugins; [
+            { name = "pisces"; src = pisces; }
+            { name = "tide"; src = tide; }
+          ];
+        };
+
         git = {
           enable = true;
           userName = "Pi Lanningham";
@@ -200,6 +209,22 @@
           extraConfig = {
             init.defaultBranch = "main";
             core.editor = "vim";
+          };
+        };
+
+        rofi = {
+          enable = true;
+          cycle = false;
+          terminal = "\${pkgs.alacritty}/bin/alacritty";
+          theme = "purple";
+          plugins = [ pkgs.rofi-calc pkgs.rofi-emoji pkgs.rofi-power-menu ];
+          extraConfig = {
+            show-icons = true;
+            icon-theme = "Papirus";
+            hide-scrollbar = true;
+            disable-history = false;
+            auto-select = true;
+            modes = [ "window" "filebrowser" "drun" "calc" "emoji" ];
           };
         };
       };
