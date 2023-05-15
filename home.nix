@@ -16,6 +16,10 @@
     
         packages = with pkgs; [
         ];
+
+        sessionPath = [
+          "${pkgs.rofi-pulse-select}/bin"
+        ];
       };
 
       xsession.windowManager.bspwm = {
@@ -31,17 +35,18 @@
           focused_border_color = "#a6bc69";
         };
         monitors = {
-          Virtual1 = [ "A" "B" ];
+          DP-2 = [ "A" "B" ];
+          DP-3-8 = [ "C" "D" ];
         };
         startupPrograms = [
           "systemctl --user restart polybar"
           "xsetroot -cursor_name left_ptr"
-          "xrandr --output Virtual1 --primary --mode 1920x1080"
-          "betterlockscreen -w"
+          "betterlockscreen -w blur 0.5"
         ];
       };
 
       services = {
+        autorandr.enable = false;
         betterlockscreen = {
           enable = true;
           arguments = [ "-u ~/Pictures/Wallpapers" ];
@@ -51,11 +56,10 @@
           settings = {
             global = {
               monitor = 0;
-              follow = "mouse";
               width = 280;
               height = 80;
               origin = "top-right";
-              offset = "10x40";
+              offset = "10x45";
               scale = 0;
               indicate_hidden = "yes";
               shrink = "no";
@@ -69,7 +73,7 @@
               idle_threshold = 120;
               font = "JetBrainsMono Nerd Font 12";
               markup = "full";
-              format = "%s\n%b";
+              format = "%s\\n%b";
               alignment = "left";
               show_age_threshold = 60;
               word_wrap = "yes";
@@ -146,7 +150,7 @@
         polybar = {
           enable = true;
           package = pkgs.polybarFull;
-          script = "polybar main &";
+          script = "${config.users.users.pi.home}/.config/polybar/launch.sh";
         };
         sxhkd = {
           enable = true;
@@ -157,6 +161,7 @@
             "super + b" = "firefox";
             "super + e" = "rofi -show file-browser-extended -file-browser-depth 3";
             "super + shift + e" = "thunar";
+            "super + n" = "code";
             "super + p" = "mypaint";
 
             # rofi plugins
@@ -169,7 +174,7 @@
 	    "super + {_,shift + }w" = "bspc node -{c,k}";
             # "super + alt + shift + {q,r}" = "bspc {quit, wm -r}";
             "super + y" = "rofi -show power-menu -modi power-menu:${pkgs.rofi-power-menu}/bin/rofi-power-menu -font 'JetBrainsMono Nerd Font 16'";
-            "super + l" = "${pkgs.betterlockscreen}/bin/betterlockscreen -l blur 0.5";
+            "super + l" = "${pkgs.betterlockscreen}/bin/betterlockscreen -l";
 
             # Monocle mode
             "super + m" = "bspc desktop -l next";
@@ -179,9 +184,7 @@
 
             # Move node between windows
             "super + alt + bracket{left,right}" = ''
-               set NODE (bspc query -N -n focused); \
-                 bspc node -m {prev,next}; \
-                 bspc node -f $NODE
+               bspc node -m {prev,next} --follow
             '';
             # Move node between desktops
             "super + shift + bracket{left,right}" = "bspc node -d {next,prev}.local --follow";
@@ -259,6 +262,10 @@
           };
         };
 
+        autorandr = {
+          enable = true;
+        };
+
         feh.enable = true;
 
         firefox.enable = true;
@@ -281,6 +288,7 @@
           extraConfig = {
             init.defaultBranch = "main";
             core.editor = "vim";
+            safe.directory = "/home/pi/flake";
           };
         };
 
@@ -299,6 +307,9 @@
             disable-history = false;
             auto-select = true;
             modes = [ "window" "file-browser-extended" "drun" "calc" "emoji" ];
+            hover-select = true;
+            me-select-entry = "";
+            me-accept-entry = [ "MousePrimary" ];
           };
         };
 

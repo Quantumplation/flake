@@ -35,11 +35,12 @@
           enable = true;
           theme = "abstract-dark";
         };
-        defaultSession = "none+bspwm";
+        defaultSession = "xfce+bspwm";
       };
       windowManager.bspwm = {
         enable = true;
       };
+      desktopManager.xfce.enable = true;
     };
   };
 
@@ -91,6 +92,7 @@
       pkgs.rustup
       pkgs.xpra
       pkgs.python3
+      pkgs.signal-desktop-beta
 
       themes.sddm-abstract-dark
     ];
