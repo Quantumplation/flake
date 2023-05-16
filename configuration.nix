@@ -21,7 +21,7 @@
     DefaultTimeoutStopSec=30s
   '';
 
-  networking.hostName = "pinix";
+  networking.hostName = "Goldwasser";
   networking.networkmanager.enable = true;
 
   time.timeZone = "America/New_York";

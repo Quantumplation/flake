@@ -3,6 +3,7 @@
 {
   imports = [
     ./polybar/default.nix
+    ./ssh.nix
   ];
 
   home-manager = {
