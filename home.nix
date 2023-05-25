@@ -21,6 +21,22 @@
         sessionPath = [
           "${pkgs.rofi-pulse-select}/bin"
         ];
+
+        sessionVariables = {
+          "AWS_REGION" = "us-east-2";
+        };
+      };
+
+      xdg.mime.enable = true;
+      xdg.mimeApps = {
+        enable = true;
+        defaultApplications = {
+          "text/html" = "brave-browser.desktop";
+          "x-scheme-handler/http" = "brave-browser.desktop";
+          "x-scheme-handler/https" = "brave-browser.desktop";
+          "x-scheme-handler/about" = "brave-browser.desktop";
+          "x-scheme-handler/unknown" = "brave-browser.desktop";
+        };
       };
 
       xsession.windowManager.bspwm = {
@@ -35,9 +51,11 @@
 
           focused_border_color = "#a6bc69";
         };
+        alwaysResetDesktops = true;
         monitors = {
-          DP-2 = [ "A" "B" ];
-          DP-3-8 = [ "C" "D" ];
+          "%DP-2.8" = [ "A" "B" ];
+          "DP-0" = [ "C" "D" ];
+          "DP-4" = [ "E" "F" ];
         };
         startupPrograms = [
           "systemctl --user restart polybar"
@@ -47,7 +65,7 @@
       };
 
       services = {
-        autorandr.enable = false;
+        autorandr.enable = true;
         betterlockscreen = {
           enable = true;
           arguments = [ "-u ~/Pictures/Wallpapers" ];
@@ -86,7 +104,7 @@
               max_icon_size = 48;
               sticky_history = "yes";
               history_length = 20;
-              browser = "${pkgs.firefox}/bin/firefox";
+              browser = "${pkgs.brave}/bin/brave";
               always_run_script = "true";
               title = "Dunst";
               class = "Dunst";
@@ -159,7 +177,7 @@
             "super + @space" = "rofi -show drun";
             # Applications
             "super + a" = "alacritty";
-            "super + b" = "firefox";
+            "super + b" = "brave";
             "super + e" = "rofi -show file-browser-extended -file-browser-depth 3";
             "super + shift + e" = "thunar";
             "super + n" = "code";
@@ -263,8 +281,40 @@
           };
         };
 
-        autorandr = {
+	autorandr = {
           enable = true;
+          profiles = {
+            "default" = {
+              fingerprint = {
+                "DP-0" = "00ffffffffffff0010acea404c414b42051d0104a53c22783aee95a3544c99260f5054a54b00714fa9408180d1c00101010101010101565e00a0a0a029503020350055502100001a000000ff003637594756393232424b414c0a000000fc0044454c4c205532373137440a20000000fd00324b1e5819010a202020202020018402031cf14f90050403020716010611121513141f23091f0783010000023a801871382d40582c450055502100001e7e3900a080381f4030203a0055502100001a011d007251d01e206e28550055502100001ebf1600a08038134030203a0055502100001a00000000000000000000000000000000000000000000000000000072";
+                "DP-2.8" = "00ffffffffffff0010acea404c473842051d0104a53c22783aee95a3544c99260f5054a54b00714fa9408180d1c00101010101010101565e00a0a0a029503020350055502100001a000000ff0036375947563932324238474c0a000000fc0044454c4c205532373137440a20000000fd00324b1e5819010a202020202020019e02031cf14f90050403020716010611121513141f23091f0783010000023a801871382d40582c450055502100001e7e3900a080381f4030203a0055502100001a011d007251d01e206e28550055502100001ebf1600a08038134030203a0055502100001a00000000000000000000000000000000000000000000000000000072";
+                "DP-4" = "00ffffffffffff001e6d4877d1010200071e0104b55022789eca95a6554ea1260f5054256b807140818081c0a9c0b300d1c08100d1cfcd4600a0a0381f4030203a001e4e3100001a023a801871382d40582c45001e4e3100001e000000fd00384b1e5a18000a202020202020000000fc004c4720574648440a20202020200198020316712309070749100403011f1359da12830100008c0ad08a20e02d10103e96001e4e31000018295900a0a038274030203a001e4e3100001a000000ff00303037494e545833563533370a0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006b";
+              };
+              config = {
+                "DP-0" = {
+                  enable = true;
+                  crtc = 2;
+                  mode = "2560x1440";
+                  position = "0x0";
+                  rate = "59.95";
+                };
+                "DP-2.8" = {
+                  enable = true;
+                  crtc = 0;
+                  mode = "2560x1440";
+                  position = "2560x0";
+                  rate = "59.95";
+                };
+                "DP-4" = {
+                  enable = true;
+                  crtc = 1;
+                  mode = "2560x1080";
+                  position = "5120x480";
+                  rate = "59.98";
+                };
+              };
+            };
+          };
         };
 
         feh.enable = true;
@@ -290,10 +340,18 @@
             init.defaultBranch = "main";
             core.editor = "vim";
             safe.directory = "/home/pi/flake";
+            url."git@github.com:" = {
+              insteadOf = "https://github.com";
+            };
           };
         };
 
-        go.enable = true;
+        go = {
+          enable = true;
+          goPrivate = [
+            "github.com/SundaeSwap-finance"
+          ];
+        };
 
         rofi = {
           enable = true;

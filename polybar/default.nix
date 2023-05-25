@@ -15,6 +15,7 @@ in
   home-manager.users.pi.xdg.configFile."polybar/config".text = (builtins.readFile ./config);
   home-manager.users.pi.xdg.configFile."polybar/main".text = (builtins.readFile ./main);
   home-manager.users.pi.xdg.configFile."polybar/second".text = (builtins.readFile ./second);
+  home-manager.users.pi.xdg.configFile."polybar/third".text = (builtins.readFile ./third);
   home-manager.users.pi.xdg.configFile."polybar/colors".text = (builtins.readFile ./colors);
   home-manager.users.pi.xdg.configFile."polybar/system".text = (builtins.readFile ./system);
   home-manager.users.pi.xdg.configFile."polybar/modules".text = (builtins.readFile modulesContent);

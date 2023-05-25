@@ -22,6 +22,7 @@ include-file = ~/.config/polybar/modules
 
 include-file = ~/.config/polybar/main
 include-file = ~/.config/polybar/second
+include-file = ~/.config/polybar/third
 
 ;; _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 

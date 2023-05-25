@@ -15,7 +15,6 @@
     plymouth.enable = true;
     plymouth.theme = "connect";
     plymouth.themePackages = [ (pkgs.adi1090x-plymouth-themes.override { selected_themes = [ "connect" ]; }) ];
-    initrd.kernelModules = [ "amdgpu" ];
   };
   systemd.extraConfig = ''
     DefaultTimeoutStopSec=30s
@@ -30,6 +29,7 @@
   services = {
     xserver = {
       enable = true;
+      videoDrivers = [ "nvidia" ];
       displayManager = {
         sddm = {
           enable = true;
@@ -46,6 +46,9 @@
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;
+  hardware.opengl.enable = true;
+  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
+  hardware.nvidia.modesetting.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.pi = {
@@ -61,6 +64,7 @@
   # Programs that aren't managed by homemanager
   programs.fish.enable = true;
   programs.light.enable = true;
+  programs.ssh.startAgent = true;
 
   fonts.fonts = with pkgs; [
     material-icons
@@ -81,6 +85,8 @@
     };
     systemPackages = let themes = pkgs.callPackage ./packages/sddm-theme.nix {}; in [
       pkgs.vim
+      pkgs.gcc
+      pkgs.meld
       pkgs.wget
       pkgs.git
       pkgs.xclip
@@ -93,6 +99,17 @@
       pkgs.xpra
       pkgs.python3
       pkgs.signal-desktop-beta
+      pkgs.gotools
+      pkgs.go-tools
+      pkgs.gopls
+      pkgs.delve
+      pkgs.awscli2
+      pkgs.aws-vault
+      pkgs.brave
+      pkgs.zip
+      pkgs.unzip
+      pkgs.mypaint
+      pkgs.zig
 
       themes.sddm-abstract-dark
     ];
