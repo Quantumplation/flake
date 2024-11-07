@@ -7,6 +7,7 @@
   ];
 
   home-manager = {
+    backupFileExtension = "backup";
     useGlobalPkgs = true;
     useUserPackages = true;
     users.pi = {
@@ -24,12 +25,19 @@
 
         sessionVariables = {
           "AWS_REGION" = "us-east-2";
+          "CACHIX_AUTH_TOKEN" = import ./cachix.nix;
+          LIBCLANG_PATH = "${pkgs.llvmPackages_17.libclang.lib}/lib";
         };
       };
 
       xdg.mime.enable = true;
       xdg.mimeApps = {
         enable = true;
+        associations.added = {
+          "video/x-matroska" = [ "org.xfce.Parole.desktop" "vlc.desktop" ];
+          "application/x-zerosize" = "code.desktop";
+          "image/svg+xml" = "brave-browser.desktop";
+        };
         defaultApplications = {
           "text/html" = "brave-browser.desktop";
           "x-scheme-handler/http" = "brave-browser.desktop";
@@ -61,6 +69,7 @@
           "systemctl --user restart polybar"
           "xsetroot -cursor_name left_ptr"
           "betterlockscreen -w blur 0.5"
+          "feh --bg-scale --random ~/Pictures/Wallpapers"
         ];
       };
 
@@ -134,7 +143,6 @@
           settings = {
             General = {
               contrastOpacity = 188;
-              buttons = "@Variant(\\0\\0\\0\\x7f\\0\\0\\0\\vQList<int>\\0\\0\\0\\0\\x14\\0\\0\\0\\0\\0\\0\\0\\x2\\0\\0\\0\\x3\\0\\0\\0\\x5\\0\\0\\0\\x6\\0\\0\\0\\x12\\0\\0\\0\\xf\\0\\0\\0\\x16\\0\\0\\0\\x13\\0\\0\\0\\a\\0\\0\\0\\b\\0\\0\\0\\t\\0\\0\\0\\x10\\0\\0\\0\\n\\0\\0\\0\\v\\0\\0\\0\\r\\0\\0\\0\\x17\\0\\0\\0\\xe\\0\\0\\0\\f\\0\\0\\0\\x11)";
             };
           };
         };
@@ -149,10 +157,7 @@
             use-wemh-active-win = true;
             detect-rounded-corners = true;
             detect-client-opacity = true;
-            refresh-rate = 0;
             dbe = false;
-            paint-on-overlay = true;
-            sw-opti = true;
             unredir-if-possible = true;
             detect-transient = true;
             detect-client-leader = true;
@@ -239,7 +244,7 @@
           settings = {
             window = {
               decorations = "full";
-              opacity = 0.85;
+              opacity = 0.95;
             };
             font = rec {
               normal.family = "FiraCode Nerd Font";
@@ -278,6 +283,13 @@
               duration = 100;
               color = "0xc0c5ce";
             };
+          };
+        };
+
+        atuin = {
+          enable = true;
+          settings = {
+            key_path = config.sops.secrets."atuin/key".path;
           };
         };
 
@@ -326,9 +338,23 @@
           interactiveShellInit = ''
             set fish_greeting # Disable greeting
           '';
+          shellInit = ''
+            set -Ux NIX_LD /run/current-system/sw/share/nix-ld/lib/ld.so
+            set -Ux NIX_LD_LIBRARY_PATH /run/current-system/sw/share/nix-ld/lib
+            set -Ux LD_LIBRARY_PATH ${pkgs.openssl.out}/lib
+            set -Ux PKG_CONFIG_PATH "${pkgs.openssl.dev}/lib/pkgconfig:${pkgs.libsoup.dev}:${pkgs.webkitgtk.dev}:${pkgs.glib.dev}:${pkgs.gobject-introspection.dev}"
+            set -Ux GOPRIVATE github.com/SundaeSwap-finance
+          '';
           plugins = with pkgs.fishPlugins; [
-            { name = "pisces"; src = pisces; }
-            { name = "tide"; src = tide; }
+            {
+              name = "tide";
+              src = pkgs.fetchFromGitHub {
+                owner = "IlanCosman";
+                repo = "tide";
+                rev = "a34b0c2809f665e854d6813dd4b052c1b32a32b4";
+                sha256 = "sha256-ZyEk/WoxdX5Fr2kXRERQS1U1QHH3oVSyBQvlwYnEYyc=";
+              };
+            }
           ];
         };
 
@@ -372,8 +398,19 @@
           };
         };
 
+        vim = {
+          enable = true;
+        };
+
         vscode = {
           enable = true;
+          # package = (pkgs.vscode.override{ isInsiders = true; }).overrideAttrs (oldAttrs: rec {
+          #   src = (builtins.fetchTarball {
+          #     url = "https://update.code.visualstudio.com/latest/linux-x64/insider";
+          #     sha256 = "16vcginn0w22aciawibch0y7dibqfjbkik1nhs23x76abww1qkzv";
+          #   });
+          #   version = "latest";
+          # });
         };
       };
     };
