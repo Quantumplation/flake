@@ -52,29 +52,29 @@
     };
   };
 
-  sops = {
-    defaultSopsFile = ./secrets/secrets.yaml;
-    defaultSopsFormat = "yaml";
-    age = {
-      sshKeyPaths = ["/home/pi/.ssh/id_ed25519"];
-      keyFile = "/home/pi/.config/sops/age/keys.txt";
-      generateKey = true;
-    };
-    secrets = {
-      "atuin/username" = {
-        mode = "0440";
-        owner = config.users.users.pi.name;
-      };
-      "atuin/password" = {
-        mode = "0440";
-        owner = config.users.users.pi.name;
-      };
-      "atuin/key" = {
-        mode = "0440";
-        owner = config.users.users.pi.name;
-      };
-    };
-  };
+#   sops = {
+#     defaultSopsFile = ./secrets/secrets.yaml;
+#     defaultSopsFormat = "yaml";
+#     age = {
+#       sshKeyPaths = ["/home/pi/.ssh/id_ed25519"];
+#       keyFile = "/home/pi/.config/sops/age/keys.txt";
+#       generateKey = true;
+#     };
+#     secrets = {
+#       "atuin/username" = {
+#         mode = "0440";
+#         owner = config.users.users.pi.name;
+#       };
+#       "atuin/password" = {
+#         mode = "0440";
+#         owner = config.users.users.pi.name;
+#       };
+#       "atuin/key" = {
+#         mode = "0440";
+#         owner = config.users.users.pi.name;
+#       };
+#     };
+#   };
 
 
   #hardware.pulseaudio.enable = true;
@@ -103,6 +103,9 @@
     enable = true;
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
+  };
+  programs.gnupg = {
+    agent.enable = true;
   };
 
   programs.nix-ld.enable = true;
@@ -159,11 +162,10 @@
     material-icons
     font-awesome
     corefonts
-    (nerdfonts.override {
-      fonts = [
-        "FiraCode" "DroidSansMono" "Iosevka" "JetBrainsMono"
-      ];
-    })
+    nerd-fonts.fira-code
+    nerd-fonts.droid-sans-mono
+    nerd-fonts.iosevka
+    nerd-fonts.jetbrains-mono
   ];
 
   environment = {
@@ -176,6 +178,8 @@
     systemPackages = let themes = pkgs.callPackage ./packages/sddm-theme.nix {}; in [
       pkgs.vim_configurable
       pkgs.gcc
+      pkgs.clang
+      pkgs.glib
       pkgs.meld
       pkgs.wget
       pkgs.git
@@ -201,7 +205,7 @@
       pkgs.brave
       pkgs.zip
       pkgs.unzip
-      # pkgs.mypaint
+      pkgs.mypaint
       pkgs.zig
       pkgs.cachix
       pkgs.obs-studio
@@ -220,13 +224,15 @@
       pkgs.btop
       pkgs.zed-editor
       pkgs.bun
-      pkgs.libsoup
+      pkgs.libsoup_2_4
       pkgs.webkitgtk
       pkgs.gobject-introspection
       pkgs.buf
       pkgs.sops
       pkgs.kubectl
       pkgs.k9s
+      pkgs.aws-vault
+      pkgs.gnupg
 
       themes.sddm-abstract-dark
     ];

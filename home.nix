@@ -23,26 +23,28 @@
           "${pkgs.rofi-pulse-select}/bin"
         ];
 
-        sessionVariables = {
+        sessionVariables = with pkgs; {
           "AWS_REGION" = "us-east-2";
           "CACHIX_AUTH_TOKEN" = import ./cachix.nix;
-          LIBCLANG_PATH = "${pkgs.llvmPackages_17.libclang.lib}/lib";
+          LIBCLANG_PATH = "${llvmPackages_17.libclang.lib}/lib";
+          LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${lib.makeLibraryPath ([stdenv xorg.libX11 xorg.libX11.dev xorg.libXcursor xorg.libXi libxkbcommon libGL vulkan-headers vulkan-loader])}";
         };
       };
 
       xdg.mime.enable = true;
+      xdg.configFile."mimeapps.list".force = true;
       xdg.mimeApps = {
         enable = true;
         associations.added = {
-          "video/x-matroska" = [ "org.xfce.Parole.desktop" "vlc.desktop" ];
           "application/x-zerosize" = "code.desktop";
           "image/svg+xml" = "brave-browser.desktop";
+          "video/x-matroska" = [ "org.xfce.Parole.desktop" "vlc.desktop" ];
         };
         defaultApplications = {
           "text/html" = "brave-browser.desktop";
+          "x-scheme-handler/about" = "brave-browser.desktop";
           "x-scheme-handler/http" = "brave-browser.desktop";
           "x-scheme-handler/https" = "brave-browser.desktop";
-          "x-scheme-handler/about" = "brave-browser.desktop";
           "x-scheme-handler/unknown" = "brave-browser.desktop";
         };
       };
@@ -51,7 +53,7 @@
         enable = true;
         settings = {
           border_width = 2;
-          window_gap = 18;
+          window_gap = 14;
 
           split_ratio = 0.52;
           borderless_monocle = true;
@@ -181,9 +183,9 @@
           keybindings = {
             "super + @space" = "rofi -show drun";
             # Applications
-            "super + a" = "alacritty";
+            "super + a" = "ghostty";
             "super + b" = "brave";
-            "super + e" = "rofi -show file-browser-extended -file-browser-depth 3";
+            # "super + e" = "rofi -show file-browser-extended -file-browser-depth 3";
             "super + shift + e" = "thunar";
             "super + n" = "code";
             "super + p" = "mypaint";
@@ -233,6 +235,13 @@
                  flameshot gui -c -p ~/Pictures/Captures/$(date +"%Y-%m")/
             '';
           };
+        };
+      };
+
+      systemd.user.targets.tray = {
+        Unit = {
+          Description = "Home Manager System Tray";
+          Requires = [ "graphical-session-pre.target" ];
         };
       };
   
@@ -289,8 +298,15 @@
         atuin = {
           enable = true;
           settings = {
-            key_path = config.sops.secrets."atuin/key".path;
+            show_preview = true;
+            invert = false;
+            inline_height = 10;
+            style = "auto";
+            enter_accept = true;
           };
+          #settings = {
+          #  key_path = config.sops.secrets."atuin/key".path;
+          #};
         };
 
 	autorandr = {
@@ -329,6 +345,38 @@
           };
         };
 
+        awscli = {
+          enable = true;
+          settings = {
+            "default" = {
+              "region" = "us-east-2";
+            };
+            "profile hydra-doom-admin" = {
+              "sso_session" = "pi";
+              "sso_account_id" = "509399595051";
+              "sso_role_name" = "AWSAdministratorAccess";
+              "region" = "us-east-2";
+            };
+            "profile dev-admin" = {
+              "sso_session" = "pi";
+              "sso_account_id" = "529991308818";
+              "sso_role_name" = "AWSAdministratorAccess";
+              "region" = "us-east-2";
+            };
+            "profile prod-admin" = {
+              "sso_session" = "pi";
+              "sso_account_id" = "705895683800";
+              "sso_role_name" = "AWSAdministratorAccess";
+              "region" = "us-east-2";
+            };
+            "sso-session pi" = {
+              "sso_start_url" = "https://d-9a672d8c7d.awsapps.com/start/#";
+              "sso_region" = "us-east-2";
+              "sso_registration_scopes" = "sso:account:access";
+            };
+          };
+        };
+
         feh.enable = true;
 
         firefox.enable = true;
@@ -341,9 +389,10 @@
           shellInit = ''
             set -Ux NIX_LD /run/current-system/sw/share/nix-ld/lib/ld.so
             set -Ux NIX_LD_LIBRARY_PATH /run/current-system/sw/share/nix-ld/lib
-            set -Ux LD_LIBRARY_PATH ${pkgs.openssl.out}/lib
-            set -Ux PKG_CONFIG_PATH "${pkgs.openssl.dev}/lib/pkgconfig:${pkgs.libsoup.dev}:${pkgs.webkitgtk.dev}:${pkgs.glib.dev}:${pkgs.gobject-introspection.dev}"
+            set -Ux LD_LIBRARY_PATH "${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.openssl.out}/lib"
+            set -Ux PKG_CONFIG_PATH "${pkgs.openssl.dev}/lib/pkgconfig:${pkgs.libsoup_2_4.dev}:${pkgs.webkitgtk.dev}:${pkgs.glib.dev}:${pkgs.gobject-introspection.dev}"
             set -Ux GOPRIVATE github.com/SundaeSwap-finance
+            set --global tide_right_prompt_items status cmd_duration node rustc go aws time
           '';
           plugins = with pkgs.fishPlugins; [
             {
@@ -372,6 +421,16 @@
           };
         };
 
+        ghostty = {
+          enable = true;
+          enableFishIntegration = true;
+          settings = {
+            font-family = "Fira Code";
+            theme = "Hardcore";
+            shell-integration-features = "sudo";
+          };
+        };
+
         go = {
           enable = true;
           goPrivate = [
@@ -384,14 +443,14 @@
           cycle = false;
           terminal = "\${pkgs.alacritty}/bin/alacritty";
           theme = "purple";
-          plugins = [ pkgs.rofi-calc pkgs.rofi-emoji pkgs.rofi-power-menu pkgs.rofi-pulse-select pkgs.rofi-file-browser ];
+          plugins = [ pkgs.rofi-calc pkgs.rofi-emoji pkgs.rofi-power-menu pkgs.rofi-pulse-select ];
           extraConfig = {
             show-icons = true;
             icon-theme = "Papirus";
             hide-scrollbar = true;
             disable-history = false;
             auto-select = true;
-            modes = [ "window" "file-browser-extended" "drun" "calc" "emoji" ];
+            modes = [ "window" "drun" "calc" "emoji" ];
             hover-select = true;
             me-select-entry = "";
             me-accept-entry = [ "MousePrimary" ];
