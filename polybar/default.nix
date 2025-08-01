@@ -1,8 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  modulesContent = pkgs.substituteAll {
-    src = ./modules;
+  modulesContent = pkgs.replaceVars ./modules {
     rofi = "${config.home-manager.users.pi.home.path.outPath}/bin/rofi";
     rofipulseselect = "${pkgs.rofi-pulse-select}/bin/rofi-pulse-select";
   };

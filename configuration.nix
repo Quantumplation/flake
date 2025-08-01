@@ -1,4 +1,4 @@
-{ config, pkgs, lib, aiken, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [
@@ -39,7 +39,7 @@
         enable = true;
         theme = "abstract-dark";
       };
-      defaultSession = "xfce+bspwm";
+      defaultSession = "none+bspwm";
     };
     xserver = {
       enable = true;
@@ -225,7 +225,7 @@
       pkgs.zed-editor
       pkgs.bun
       pkgs.libsoup_2_4
-      pkgs.webkitgtk
+      pkgs.webkitgtk_4_0
       pkgs.gobject-introspection
       pkgs.buf
       pkgs.sops
@@ -233,6 +233,7 @@
       pkgs.k9s
       pkgs.aws-vault
       pkgs.gnupg
+      pkgs.aiken
 
       themes.sddm-abstract-dark
     ];

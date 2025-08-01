@@ -27,7 +27,7 @@
           "AWS_REGION" = "us-east-2";
           "CACHIX_AUTH_TOKEN" = import ./cachix.nix;
           LIBCLANG_PATH = "${llvmPackages_17.libclang.lib}/lib";
-          LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${lib.makeLibraryPath ([stdenv xorg.libX11 xorg.libX11.dev xorg.libXcursor xorg.libXi libxkbcommon libGL vulkan-headers vulkan-loader])}";
+          LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${lib.makeLibraryPath ([stdenv xorg.libX11 xorg.libX11.dev xorg.libXcursor xorg.libXi libxkbcommon libGL vulkan-headers vulkan-loader fontconfig])}";
         };
       };
 
@@ -187,7 +187,7 @@
             "super + b" = "brave";
             # "super + e" = "rofi -show file-browser-extended -file-browser-depth 3";
             "super + shift + e" = "thunar";
-            "super + n" = "code";
+            "super + n" = "zed";
             "super + p" = "mypaint";
 
             # rofi plugins
@@ -326,18 +326,11 @@
                   position = "0x0";
                   rate = "59.95";
                 };
-                "DP-2.8" = {
-                  enable = true;
-                  crtc = 0;
-                  mode = "2560x1440";
-                  position = "2560x0";
-                  rate = "59.95";
-                };
                 "DP-4" = {
                   enable = true;
                   crtc = 1;
                   mode = "2560x1080";
-                  position = "5120x480";
+                  position = "2560x0";
                   rate = "59.98";
                 };
               };
@@ -385,12 +378,13 @@
           enable = true;
           interactiveShellInit = ''
             set fish_greeting # Disable greeting
+            ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
           '';
           shellInit = ''
             set -Ux NIX_LD /run/current-system/sw/share/nix-ld/lib/ld.so
             set -Ux NIX_LD_LIBRARY_PATH /run/current-system/sw/share/nix-ld/lib
             set -Ux LD_LIBRARY_PATH "${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.openssl.out}/lib"
-            set -Ux PKG_CONFIG_PATH "${pkgs.openssl.dev}/lib/pkgconfig:${pkgs.libsoup_2_4.dev}:${pkgs.webkitgtk.dev}:${pkgs.glib.dev}:${pkgs.gobject-introspection.dev}"
+            set -Ux PKG_CONFIG_PATH "${pkgs.openssl.dev}/lib/pkgconfig:${pkgs.libsoup_2_4.dev}:${pkgs.glib.dev}:${pkgs.gobject-introspection.dev}"
             set -Ux GOPRIVATE github.com/SundaeSwap-finance
             set --global tide_right_prompt_items status cmd_duration node rustc go aws time
           '';
@@ -407,14 +401,54 @@
           ];
         };
 
+        # Customized based on https://blog.gitbutler.com/how-git-core-devs-configure-git/
         git = {
           enable = true;
           userName = "Pi Lanningham";
           userEmail = "pi.lanningham@gmail.com";
           extraConfig = {
             init.defaultBranch = "main";
-            core.editor = "vim";
+            branch.sort = "-committerdate";
+            column.ui = "auto";
+            commit.verbose = true;
+            core = {
+              editor = "vim";
+              excludesfile = "~/.gitignore";
+              fsmonitor = true;
+              untrackedCache = true;
+            };
+            diff = {
+              algorithm = "histogram";
+              colorMoved = "plain";
+              mnemonicPrefix = true;
+              renames = true;
+            };
+            fetch = {
+              prune = true;
+              pruneTags = true;
+              all = true;
+            };
+            help.autocorrect = "prompt";
+            merge.conflictstyle = "zdiff3";
+            push = {
+              default = "simple";
+              autoSetupRemote = true;
+              followTags = true;
+            };
+            pull = {
+              rebase = true;
+            };
+            rebase = {
+              autoSquash = true;
+              autoStash = true;
+              updateRefs = true;
+            };
+            rerere = {
+              enabled = true;
+              autoupdate = true;
+            };
             safe.directory = "/home/pi/flake";
+            tag.sort = "version:refname";
             url."git@github.com:" = {
               insteadOf = "https://github.com";
             };

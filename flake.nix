@@ -8,16 +8,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vscode-server.url = "github:nix-community/nixos-vscode-server";
-    aiken = {
-      url = github:aiken-lang/aiken;
-    };
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, vscode-server, aiken, sops-nix, ... }@attrs:
+  outputs = { self, nixpkgs, home-manager, vscode-server, sops-nix, ... }@attrs:
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
