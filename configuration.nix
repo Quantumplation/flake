@@ -20,9 +20,9 @@
     plymouth.theme = "connect";
     plymouth.themePackages = [ (pkgs.adi1090x-plymouth-themes.override { selected_themes = [ "connect" ]; }) ];
   };
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=30s
-  '';
+  systemd.settings.Manager = {
+    DefaultTimeoutStopSec = "30s";
+  };
 
   networking.hostName = "Goldwasser";
   networking.networkmanager.enable = true;
@@ -80,8 +80,9 @@
   #hardware.pulseaudio.enable = true;
   hardware.graphics.enable = true;
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
-  hardware.nvidia.open = true;
+  hardware.nvidia.open = false;
   hardware.nvidia.modesetting.enable = true;
+  hardware.nvidia.powerManagement.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.pi = {
@@ -189,13 +190,23 @@
       pkgs.discord
       pkgs.baobab
       pkgs.tailscale
-      pkgs.rustup
       pkgs.llvmPackages.libclang
       pkgs.llvmPackages.libcxxClang
       pkgs.clang
       pkgs.deno
       pkgs.xpra
       pkgs.python3
+      # Rust toolchain
+      (pkgs.rust-bin.selectLatestNightlyWith (t:
+        t.default.override {
+          extensions = [ "rustfmt" "clippy" "rust-src" ];
+        }
+      ))
+      # Linker & friends
+      pkgs.lld
+      pkgs.binutils
+      pkgs.cmake
+      pkgs.gnumake
       pkgs.gotools
       pkgs.go-tools
       pkgs.gopls
@@ -221,11 +232,14 @@
       pkgs.obsidian
       pkgs.pkg-config
       pkgs.openssl
+      pkgs.openssl.dev
+      pkgs.zlib
+      pkgs.zlib.dev
       pkgs.btop
       pkgs.zed-editor
       pkgs.bun
-      pkgs.libsoup_2_4
-      pkgs.webkitgtk_4_0
+      pkgs.libsoup_3
+      pkgs.webkitgtk_6_0
       pkgs.gobject-introspection
       pkgs.buf
       pkgs.sops
@@ -279,6 +293,7 @@
         "root"
         "pi"
       ];
+      access-tokens = [];
     };
     gc = {
       automatic = true;
