@@ -1,0 +1,157 @@
+/* ~/.config/swaync/style.css */
+
+* {
+  all: unset;
+  font-family: "JetBrainsMono Nerd Font", monospace;
+  font-size: 14px;
+}
+
+.control-center {
+  background: rgba(20, 20, 30, 0.95);
+  border: 2px solid rgba(200, 100, 255, 0.4);
+  border-radius: 12px;
+  margin: 10px;
+  padding: 10px;
+}
+
+.control-center-list {
+  background: transparent;
+}
+
+.notification {
+  background: rgba(30, 30, 40, 0.9);
+  border: 1px solid rgba(200, 100, 255, 0.3);
+  border-radius: 8px;
+  margin: 6px 0;
+  padding: 10px;
+}
+
+.notification-time {
+  color: #808080;
+  font-size: 12px;
+}
+
+.notification:hover {
+  background: rgba(40, 40, 50, 0.95);
+  border-color: rgba(200, 100, 255, 0.6);
+}
+
+.notification-content {
+  padding: 8px;
+}
+
+.notification-default-action,
+.notification-action {
+  background: rgba(200, 100, 255, 0.15);
+  border: 1px solid rgba(200, 100, 255, 0.4);
+  border-radius: 6px;
+  padding: 8px 16px;
+  color: #c864ff;
+  margin: 4px;
+}
+
+.notification-default-action:hover,
+.notification-action:hover {
+  background: rgba(200, 100, 255, 0.25);
+  border-color: rgba(200, 100, 255, 0.6);
+}
+
+.notification-default-action button,
+.notification-action button {
+  background: transparent;
+  color: #c864ff;
+}
+
+.summary {
+  color: #c864ff;
+  font-weight: bold;
+}
+
+.body {
+  color: #b0b0b0;
+  margin-top: 4px;
+}
+
+.control-center-clear-all {
+  background: rgba(200, 100, 255, 0.2);
+  border: 1px solid rgba(200, 100, 255, 0.4);
+  border-radius: 6px;
+  color: #c864ff;
+  margin: 6px;
+  padding: 8px;
+}
+
+.control-center-clear-all:hover {
+  background: rgba(200, 100, 255, 0.3);
+  border-color: rgba(200, 100, 255, 0.6);
+}
+
+.close-button {
+  background: transparent;
+  color: #ff6b9d;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+.close-button:hover {
+  background: rgba(255, 107, 157, 0.2);
+}
+
+/* Notification window (popup) */
+.notification-window {
+  background: rgba(20, 20, 30, 0.95);
+  border: 2px solid rgba(200, 100, 255, 0.4);
+  border-radius: 8px;
+}
+
+/* Different urgency levels */
+.low {
+  border-left: 3px solid rgba(100, 150, 255, 0.6);
+}
+
+.normal {
+  border-left: 3px solid rgba(200, 100, 255, 0.6);
+}
+
+.critical {
+  border-left: 3px solid rgba(255, 100, 130, 0.8);
+  animation: blink 1s ease infinite;
+}
+
+/* Do Not Disturb toggle - correct class! */
+.widget-dnd {
+  background: transparent;
+  padding: 8px 10px;
+  margin: 5px 10px;
+}
+
+.widget-dnd > label {
+  color: #c0c0c0;
+  font-size: 14px;
+}
+
+switch.control-center-dnd {
+  background: rgba(60, 60, 70, 0.8);
+  border: 1px solid rgba(200, 100, 255, 0.3);
+  border-radius: 12px;
+  min-width: 42px;
+  min-height: 22px;
+}
+
+switch.control-center-dnd:checked {
+  background: rgba(200, 100, 255, 0.4);
+  border-color: rgba(200, 100, 255, 0.6);
+}
+
+switch.control-center-dnd slider {
+  background: #c864ff;
+  border-radius: 50%;
+  min-width: 16px;
+  min-height: 16px;
+  margin: 3px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
