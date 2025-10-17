@@ -115,7 +115,6 @@ in {
             script-fail-notify = false;
           };
         };
-        # autorandr.enable = true;
       };
 
       # Workaround for something? https://github.com/nix-community/home-manager/issues/2064#issuecomment-887300055
@@ -155,40 +154,6 @@ in {
           };
         };
 
-        # autorandr = {
-        #   enable = true;
-        #   profiles = {
-        #     "default" = {
-        #       fingerprint = {
-        #         "DP-2" = "00ffffffffffff001e6d7f5bc0340600051e0104b53c22789f8cb5af4f43ab260e5054254b007140818081c0a9c0b300d1c08100d1cf28de0050a0a038500830080455502100001a000000fd003090e6e63c010a202020202020000000fc003237474c3835300a2020202020000000ff003030354e54504342593732300a010602031a7123090607e305c000e606050160592846100403011f13565e00a0a0a029503020350055502100001a909b0050a0a046500820880c555021000000b8bc0050a0a055500838f80c55502100001a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001a";
-        #         "DP-4" = "00ffffffffffff001e6d7f5b1d380600051e0104b53c22789f8cb5af4f43ab260e5054254b007140818081c0a9c0b300d1c08100d1cf28de0050a0a038500830080455502100001a000000fd003090e6e63c010a202020202020000000fc003237474c3835300a2020202020000000ff003030354e544b46425a3538310a01a102031a7123090607e305c000e606050160592846100403011f13565e00a0a0a029503020350055502100001a909b0050a0a046500820880c555021000000b8bc0050a0a055500838f80c55502100001a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001a";
-        #       };
-        #       config = {
-        #         "DP-2" = {
-        #           enable = true;
-        #           crtc = 1;
-        #           mode = "2560x1440";
-        #           position = "0x0";
-        #           rate = "144";
-        #           extraConfig = ''
-        #             x-prop-non_desktop 0
-        #           '';
-        #         };
-        #         "DP-4" = {
-        #           enable = true;
-        #           crtc = 0;
-        #           mode = "2560x1440";
-        #           position = "2560x0";
-        #           rate = "144.00";
-        #           extraConfig = ''
-        #             x-prop-non_desktop 0
-        #           '';
-        #         };
-        #       };
-        #     };
-        #   };
-        # };
-
         awscli = {
           enable = true;
           settings = {
@@ -222,40 +187,9 @@ in {
           ];
         };
 
-        # rofi = {
-        #   enable = true;
-        #   cycle = false;
-        #   terminal = "\${pkgs.alacritty}/bin/alacritty";
-        #   theme = "purple";
-        #   plugins = [ pkgs.rofi-calc pkgs.rofi-emoji pkgs.rofi-power-menu pkgs.rofi-pulse-select ];
-        #   extraConfig = {
-        #     show-icons = true;
-        #     icon-theme = "Papirus";
-        #     hide-scrollbar = true;
-        #     disable-history = false;
-        #     auto-select = true;
-        #     modes = [ "window" "drun" "calc" "emoji" ];
-        #     hover-select = true;
-        #     me-select-entry = "";
-        #     me-accept-entry = [ "MousePrimary" ];
-        #   };
-        # };
-
         vim = {
           enable = true;
         };
-
-
-        # vscode = {
-        #   enable = true;
-        #   # package = (pkgs.vscode.override{ isInsiders = true; }).overrideAttrs (oldAttrs: rec {
-        #   #   src = (builtins.fetchTarball {
-        #   #     url = "https://update.code.visualstudio.com/latest/linux-x64/insider";
-        #   #     sha256 = "16vcginn0w22aciawibch0y7dibqfjbkik1nhs23x76abww1qkzv";
-        #   #   });
-        #   #   version = "latest";
-        #   # });
-        # };
       };
     };
   };

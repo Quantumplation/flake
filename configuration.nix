@@ -83,24 +83,6 @@
       enable = true;
       settings.default_session.command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd Hyprland";
     };
-
-    # displayManager = {
-    #   sddm = {
-    #     enable = true;
-    #     theme = "abstract-dark";
-    #   };
-    #   defaultSession = "none+bspwm";
-    # };
-
-    # xserver = {
-    #   enable = true;
-    #   videoDrivers = [ "nvidia" ];
-    #   windowManager.bspwm = {
-    #     enable = true;
-    #   };
-    #   desktopManager.xfce.enable = true;
-    #   wacom.enable = true;
-    # };
   };
 
 
@@ -281,12 +263,6 @@
       delve            # debugger
       gobject-introspection
       buf
-
-      # X Server stuff - deprecated
-      # xclip          # Clipboard stuff
-      # xdotool        # Fake keyboard input
-      # xsecurelock    # Lock screen
-      # xpra           # remote desktop?
 
       # Communication
       discord
