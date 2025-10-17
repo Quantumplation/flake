@@ -3,6 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./hosts/goldwasser/nvidia.nix
     ./packages/sops.nix
     ./packages/discord.nix
     (import ./packages/hyprland/system.nix inputs)
@@ -22,11 +23,6 @@
     kernelParams = [
       "quiet" "splash" "udev.log_priority=3"
       "boot.shell_on_fail"
-      "nvidia-drm.modeset=1"
-      "nvidia-drm.fbdev=1"
-    ];
-    kernelModules = [
-      "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm"
     ];
     supportedFilesystems = [ "ntfs" ];
     loader.systemd-boot.enable = true;
@@ -40,10 +36,6 @@
 
   systemd.settings.Manager = {
     DefaultTimeoutStopSec = "30s";
-  };
-  systemd.services.nvidia-persistenced = {
-    enable = true;
-    wantedBy = [ "multi-user.target" ];
   };
 
   networking.hostName = "Goldwasser";
@@ -62,21 +54,6 @@
   services.greetd = {
     enable = true;
     settings.default_session.command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd Hyprland";
-  };
-
-
-  hardware.graphics.enable = true;
-
-  # Uncommenting this prevents us from starting!
-  services.xserver.videoDrivers = ["nvidia"];
-  hardware.nvidia = {
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-    open = false;
-    modesetting.enable = true;
-    powerManagement.enable = false;
-    powerManagement.finegrained = false;
-    nvidiaPersistenced = true;
-    nvidiaSettings = true;
   };
 
   environment = {
