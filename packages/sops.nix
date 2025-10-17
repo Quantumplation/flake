@@ -46,10 +46,6 @@ in
         owner = pi;
         mode = "0400";
       };
-      "cachix/api_token" = {
-        owner = pi;
-        mode = "0400";
-      };
     };
   };
 }
