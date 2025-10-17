@@ -17,7 +17,7 @@ in {
     users.pi = {
       imports = [
         inputs.nix-colors.homeManagerModules.default
-        (import ./packages/hyprland.nix inputs)
+        (import ./packages/hyprland inputs)
         (import ./packages/hyprlock.nix inputs)
         (import ./packages/hyprshell.nix inputs)
         (import ./packages/hyprpaper.nix)
@@ -26,9 +26,13 @@ in {
         (import ./packages/git.nix)
         (import ./packages/fish.nix)
         (import ./packages/btop.nix)
+        (import ./packages/vim.nix)
+        (import ./packages/zed.nix)
+        (import ./packages/obsidian.nix)
         (import ./packages/waybar.nix inputs)
         (import ./packages/wofi.nix)
         (import ./packages/wayvnc.nix inputs)
+        (import ./packages/scripts.nix)
         ./packages/snap-back
         ./ssh.nix
       ];
@@ -41,17 +45,6 @@ in {
         stateVersion = "22.11";
 
         packages = with pkgs; [
-          (writeShellScriptBin "keylight" (builtins.readFile ./assets/scripts/keylight.sh))
-          (writeShellApplication {
-            name = "audio-switch";
-            runtimeInputs = [ curl libnotify ];
-            text = builtins.readFile ./assets/scripts/audio-switch.sh;
-          })
-          (writeShellApplication {
-            name = "clipboard-manager";
-            runtimeInputs = [ cliphist wofi wl-clipboard gnugrep libnotify coreutils wtype ];
-            text = builtins.readFile ./assets/scripts/clipboard-manager.sh;
-          })
           swaynotificationcenter
         ];
 

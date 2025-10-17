@@ -253,9 +253,6 @@
       curl
 
       # Developer tools
-      vim_configurable # Vim
-      zed-editor
-      git
       meld             # Diff / merge
       wget             # CLI file download
       alejandra        # Nix file formatting
@@ -304,7 +301,6 @@
       aws-vault
       vlc
       jq
-      btop
       sops
       age
       ssh-to-age
@@ -334,7 +330,6 @@
       obs-studio
       mypaint
       digikam
-      obsidian
       openrgb # Lighting control
       wayvnc
       wlr-randr
@@ -409,4 +404,3 @@
     })
   ];
 }
-
