@@ -39,7 +39,7 @@ in {
         username = "pi";
         homeDirectory = "/home/pi";
         stateVersion = "22.11";
-    
+
         packages = with pkgs; [
           (writeShellScriptBin "keylight" (builtins.readFile ./assets/scripts/keylight.sh))
           (writeShellApplication {
@@ -60,11 +60,11 @@ in {
 
         sessionVariables = with pkgs; {
           "AWS_REGION" = "us-east-2";
-          "CACHIX_AUTH_TOKEN" = import ./cachix.nix;
+          # CACHIX_AUTH_TOKEN is now managed via sops - add to shell config if needed
           LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
           LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${lib.makeLibraryPath ([stdenv xorg.libX11 xorg.libX11.dev xorg.libXcursor xorg.libXi libxkbcommon libGL vulkan-headers vulkan-loader fontconfig])}";
         };
-        
+
         pointerCursor = {
           name = "Adwaita";
           package = pkgs.adwaita-icon-theme;
@@ -72,7 +72,7 @@ in {
           gtk.enable = true;
           x11.enable = true;
         };
-  
+
       };
 
       xdg.mime.enable = true;

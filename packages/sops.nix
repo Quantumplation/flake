@@ -16,11 +16,11 @@ in
   sops = {
     defaultSopsFile = ../secrets/secrets.yaml;
     validateSopsFiles = false;
-    
+
     age = {
       sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
     };
-    
+
     secrets = {
       "atuin/key" = {
         owner = pi;
@@ -43,6 +43,10 @@ in
         mode = "0400";
       };
       "blockfrost/mainnet" = {
+        owner = pi;
+        mode = "0400";
+      };
+      "cachix/api_token" = {
         owner = pi;
         mode = "0400";
       };
