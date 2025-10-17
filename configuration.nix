@@ -1,27 +1,40 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
-    ./home.nix
+    ./packages/sops.nix
+    (import ./home.nix inputs)
   ];
 
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-25.9.0"
-  ];
 
   boot = {
-    kernelParams = ["quiet" "splash"];
+    kernelParams = [
+      "quiet" "splash" "udev.log_priority=3"
+      "boot.shell_on_fail"
+      "nvidia-drm.modeset=1"
+      "nvidia-drm.fbdev=1"
+    ];
+    kernelModules = [
+      "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm"
+    ];
     supportedFilesystems = [ "ntfs" ];
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
+
+    # Plymouth provides the boot splash screen
     plymouth.enable = true;
-    plymouth.theme = "connect";
-    plymouth.themePackages = [ (pkgs.adi1090x-plymouth-themes.override { selected_themes = [ "connect" ]; }) ];
+    plymouth.theme = "rings";
+    plymouth.themePackages = [ (pkgs.adi1090x-plymouth-themes.override { selected_themes = [ "rings" ]; }) ];
   };
+
   systemd.settings.Manager = {
     DefaultTimeoutStopSec = "30s";
+  };
+  systemd.services.nvidia-persistenced = {
+    enable = true;
+    wantedBy = [ "multi-user.target" ];
   };
 
   networking.hostName = "Goldwasser";
@@ -33,56 +46,77 @@
   time.timeZone = "America/New_York";
 
   console.earlySetup = true;
+  security.rtkit.enable = true;
   services = {
-    displayManager = {
-      sddm = {
-        enable = true;
-        theme = "abstract-dark";
-      };
-      defaultSession = "none+bspwm";
-    };
-    xserver = {
+    pulseaudio.enable = false;
+    pipewire = {
       enable = true;
-      videoDrivers = [ "nvidia" ];
-      windowManager.bspwm = {
+      alsa.enable = true;
+      pulse.enable = true;
+      jack.enable = true;
+      wireplumber = {
         enable = true;
+        configPackages = [
+          (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/51-disable-hdmi.conf" ''
+            monitor.alsa.rules = [
+              {
+                matches = [
+                  {
+                    node.name = "~alsa_output.pci-.*hdmi.*"
+                  }
+                ]
+                actions = {
+                  update-props = {
+                    node.disabled = true
+                  }
+                }
+              }
+            ]
+          '')
+        ];
       };
-      desktopManager.xfce.enable = true;
-      wacom.enable = true;
     };
+    # Lighting automation
+    hardware.openrgb.enable = true;
+
+    greetd = {
+      enable = true;
+      settings.default_session.command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+    };
+
+    # displayManager = {
+    #   sddm = {
+    #     enable = true;
+    #     theme = "abstract-dark";
+    #   };
+    #   defaultSession = "none+bspwm";
+    # };
+
+    # xserver = {
+    #   enable = true;
+    #   videoDrivers = [ "nvidia" ];
+    #   windowManager.bspwm = {
+    #     enable = true;
+    #   };
+    #   desktopManager.xfce.enable = true;
+    #   wacom.enable = true;
+    # };
   };
 
-#   sops = {
-#     defaultSopsFile = ./secrets/secrets.yaml;
-#     defaultSopsFormat = "yaml";
-#     age = {
-#       sshKeyPaths = ["/home/pi/.ssh/id_ed25519"];
-#       keyFile = "/home/pi/.config/sops/age/keys.txt";
-#       generateKey = true;
-#     };
-#     secrets = {
-#       "atuin/username" = {
-#         mode = "0440";
-#         owner = config.users.users.pi.name;
-#       };
-#       "atuin/password" = {
-#         mode = "0440";
-#         owner = config.users.users.pi.name;
-#       };
-#       "atuin/key" = {
-#         mode = "0440";
-#         owner = config.users.users.pi.name;
-#       };
-#     };
-#   };
 
-
-  #hardware.pulseaudio.enable = true;
   hardware.graphics.enable = true;
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
-  hardware.nvidia.open = false;
-  hardware.nvidia.modesetting.enable = true;
-  hardware.nvidia.powerManagement.enable = true;
+
+  # Uncommenting this prevents us from starting!
+  services.xserver.videoDrivers = ["nvidia"];
+  hardware.nvidia = {
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    open = false;
+    modesetting.enable = true;
+    powerManagement.enable = false;
+    powerManagement.finegrained = false;
+    nvidiaPersistenced = true;
+    nvidiaSettings = true;
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.pi = {
@@ -96,7 +130,19 @@
     ];
   };
 
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+    portalPackage = pkgs.xdg-desktop-portal-hyprland;
+  };
+
   # Programs that aren't managed by homemanager
+  programs._1password.enable = true;
+  programs._1password-gui = {
+    enable = true;
+    polkitPolicyOwners = [ "pi" ];
+  };
   programs.fish.enable = true;
   programs.light.enable = true;
   programs.ssh.startAgent = true;
@@ -167,6 +213,9 @@
     nerd-fonts.droid-sans-mono
     nerd-fonts.iosevka
     nerd-fonts.jetbrains-mono
+    noto-fonts
+    noto-fonts-emoji
+    nerd-fonts.caskaydia-mono
   ];
 
   environment = {
@@ -174,82 +223,128 @@
       TERMINAL = "alacritty";
       EDITOR = "vim";
       VISUAL = "vim";
-      TEST = "abc";
     };
-    systemPackages = let themes = pkgs.callPackage ./packages/sddm-theme.nix {}; in [
-      pkgs.vim_configurable
-      pkgs.gcc
-      pkgs.clang
-      pkgs.glib
-      pkgs.meld
-      pkgs.wget
-      pkgs.git
-      pkgs.xclip
-      pkgs.xdotool
-      pkgs.xsecurelock
-      pkgs.discord
-      pkgs.baobab
-      pkgs.tailscale
-      pkgs.llvmPackages.libclang
-      pkgs.llvmPackages.libcxxClang
-      pkgs.clang
-      pkgs.deno
-      pkgs.xpra
-      pkgs.python3
+    systemPackages = with pkgs; [
+      # Compilers
+      gcc
+      clang
+      llvmPackages.libclang
+      llvmPackages.libcxxClang
+
+      # Linker & friends
+      lld
+      binutils
+      cmake
+      gnumake
+      gnum4
+
+      # System libraries
+      glib
+      openssl
+      openssl.dev
+      zlib
+      zlib.dev
+
+      # Core tools
+      tailscale
+      brave
+      zip
+      unzip
+      curl
+
+      # Developer tools
+      vim_configurable # Vim
+      zed-editor
+      git
+      meld             # Diff / merge
+      wget             # CLI file download
+      alejandra        # Nix file formatting
+      python3
+      cachix           # Nix caching
+      nodejs_20
+      inotify-tools    # filewatching
+      arduino
+      typst
+      bun
+      kubectl
+      k9s
+      aiken
+
       # Rust toolchain
-      (pkgs.rust-bin.selectLatestNightlyWith (t:
+      (rust-bin.selectLatestNightlyWith (t:
         t.default.override {
           extensions = [ "rustfmt" "clippy" "rust-src" ];
         }
       ))
-      # Linker & friends
-      pkgs.lld
-      pkgs.binutils
-      pkgs.cmake
-      pkgs.gnumake
-      pkgs.gotools
-      pkgs.go-tools
-      pkgs.gopls
-      pkgs.delve
-      pkgs.awscli2
-      pkgs.aws-vault
-      pkgs.brave
-      pkgs.zip
-      pkgs.unzip
-      pkgs.mypaint
-      pkgs.zig
-      pkgs.cachix
-      pkgs.obs-studio
-      pkgs.inotify-tools
-      pkgs.vlc
-      pkgs.digikam
-      pkgs.nodejs_20
-      pkgs.arduino
-      pkgs.jq
-      pkgs.pkg-config
-      pkgs.signal-desktop
-      pkgs.typst
-      pkgs.obsidian
-      pkgs.pkg-config
-      pkgs.openssl
-      pkgs.openssl.dev
-      pkgs.zlib
-      pkgs.zlib.dev
-      pkgs.btop
-      pkgs.zed-editor
-      pkgs.bun
-      pkgs.libsoup_3
-      pkgs.webkitgtk_6_0
-      pkgs.gobject-introspection
-      pkgs.buf
-      pkgs.sops
-      pkgs.kubectl
-      pkgs.k9s
-      pkgs.aws-vault
-      pkgs.gnupg
-      pkgs.aiken
 
-      themes.sddm-abstract-dark
+      # Golang toolchain
+      gotools
+      go-tools
+      gopls
+      delve            # debugger
+      gobject-introspection
+      buf
+
+      # X Server stuff - deprecated
+      # xclip          # Clipboard stuff
+      # xdotool        # Fake keyboard input
+      # xsecurelock    # Lock screen
+      # xpra           # remote desktop?
+
+      # Communication
+      discord
+      signal-desktop
+
+      # Utilities
+      baobab    # Disk space usage
+      nautilus  # GNOME file manager
+      cliphist
+      wl-clipboard
+      awscli2
+      aws-vault
+      vlc
+      jq
+      btop
+      sops
+      age
+      ssh-to-age
+      gnupg
+      wdisplays
+      wofi-power-menu
+
+      # Hyprland stuff
+      hyprshot
+      hyprpicker
+      hyprsunset
+      brightnessctl
+      pamixer
+      playerctl
+      gnome-themes-extra
+      pavucontrol
+      kdePackages.xwaylandvideobridge
+
+      # Staple replacements
+      fzf
+      zoxide
+      ripgrep
+      eza
+      fd
+
+      # Misc tools
+      obs-studio
+      mypaint
+      digikam
+      obsidian
+      openrgb # Lighting control
+      wayvnc
+      wlr-randr
+
+      # System stuff?
+      blueberry # Wayland bluetooth stuff
+      pkg-config
+      webkitgtk_6_0
+      libsoup_3
+
     ];
   };
 

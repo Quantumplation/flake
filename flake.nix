@@ -7,14 +7,30 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprland.url = "github:hyprwm/Hyprland";
+    hyprshell = {
+      url = "github:H3rmt/hyprshell";
+    };
+    split-monitor-workspaces = {
+      url = "github:Duckonaut/split-monitor-workspaces";
+      inputs.hyprland.follows = "hyprland";
+    };
+    nix-colors.url = "github:misterio77/nix-colors";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     rust-overlay.url = "github:oxalica/rust-overlay";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs @ {
     self,
     nixpkgs,
+    hyprland,
+    hyprshell,
+    split-monitor-workspaces,
     home-manager,
     vscode-server,
     sops-nix,
@@ -27,10 +43,12 @@
       nixosConfigurations = {
         pi = nixpkgs.lib.nixosSystem {
           inherit system;
+          specialArgs = { inherit inputs; };
           modules = [
             { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
-            ./configuration.nix
             home-manager.nixosModules.home-manager
+            sops-nix.nixosModules.sops
+            ./configuration.nix 
           ];
         };
       };

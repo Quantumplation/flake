@@ -1,0 +1,278 @@
+@import "./theme.css";
+
+* {
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+  font-family: CaskaydiaMono Nerd Font;
+  font-size: 14px;
+}
+
+#workspaces button {
+  padding: 4px;
+  background-color: transparent;
+  opacity: 0.4;
+}
+
+#workspaces button label {
+  color: #6c7086;  /* Grey by default */
+  font-size: 24px;
+  padding-left: 6px;
+  padding-right: 12px;
+  margin: 0px;
+}
+
+/* DP-2 (Monitor 1) - Visible workspaces */
+window#waybar.DP-2 #workspaces button.visible:nth-child(1) label {
+  color: #89b4fa;  /* Blue for workspace 1 */
+  opacity: 1;
+}
+
+window#waybar.DP-2 #workspaces button.visible:nth-child(2) label {
+  color: #a6e3a1;  /* Green for workspace 2 */
+  opacity: 1;
+}
+
+/* DP-3 (Monitor 2) - Visible workspaces */
+window#waybar.DP-3 #workspaces button.visible:nth-child(1) label {
+  color: #c77dff;  /* Purple for workspace 3 */
+  opacity: 1;
+}
+
+window#waybar.DP-3 #workspaces button.visible:nth-child(2) label {
+  color: #f9e2af;  /* Yellow/gold for workspace 4 */
+  opacity: 1;
+}
+
+/* Active workspace - brighter/bolder versions */
+#workspaces button.active {
+  font-weight: bold;
+  opacity: 1;
+}
+
+window#waybar.DP-2 #workspaces button.active:nth-child(1) label {
+  color: #5eb8ff;  /* Brighter blue */
+}
+
+window#waybar.DP-2 #workspaces button.active:nth-child(2) label {
+  color: #7dff7d;  /* Brighter green */
+}
+
+window#waybar.DP-3 #workspaces button.active:nth-child(1) label {
+  color: #e0aaff;  /* Brighter purple */
+}
+
+window#waybar.DP-3 #workspaces button.active:nth-child(2) label {
+  color: #ffe066;  /* Brighter yellow */
+}
+
+#workspaces button:hover {
+  opacity: 0.8;
+}
+
+/* Focused window title */
+#window {
+  margin-left: 10px;
+  padding: 0 10px;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+/* All right-side modules */
+#custom-keylight,
+#custom-volume,
+#custom-system,
+#custom-ada,
+#custom-github,
+#custom-pomodoro,
+#custom-clipboard,
+#custom-dropbox,
+#custom-swaync,
+#cpu,
+#power-profiles-daemon,
+#battery,
+#network,
+#bluetooth,
+#tray,
+#clock {
+  background-color: transparent;
+  min-width: 12px;
+  margin-right: 13px;
+  padding: 0 4px;  /* Increased from 2px to 4px for more spacing */
+}
+
+#custom-swaync.notification {
+  color: #f38ba8;  /* Red when you have notifications */
+}
+
+#custom-swaync.dnd {
+  color: #f9e2af;  /* Yellow when DND is on */
+  opacity: 0.7;
+}
+
+#custom-separator {
+  border-left: #6c7086;
+  opacity: 0.3;
+  margin: 0 8px;
+  font-size: 18px;
+}
+
+/* Volume module styling */
+#custom-volume.muted {
+  opacity: 0.5;
+}
+
+#custom-volume.high {
+  color: #a6e3a1; /* green */
+}
+
+#custom-volume.medium {
+  color: #f9e2af; /* yellow */
+}
+
+#custom-volume.low {
+  color: #f38ba8; /* red */
+}
+
+/* Keylight module styling */
+#custom-keylight.on {
+  color: #f9e2af; /* warm yellow when on */
+}
+
+#custom-keylight.off {
+  opacity: 0.5;
+}
+
+/* System monitor styling */
+#custom-system.good {
+  color: #a6e3a1; /* green */
+}
+
+#custom-system.warning {
+  color: #f9e2af; /* yellow */
+}
+
+#custom-system.critical {
+  color: #f38ba8; /* red */
+  font-weight: bold;
+}
+
+/* ADA price styling */
+#custom-ada.up {
+  color: #a6e3a1; /* green */
+}
+
+#custom-ada.down {
+  color: #f38ba8; /* red */
+}
+
+#custom-ada.neutral {
+  color: #f9e2af; /* yellow */
+}
+
+#custom-ada.error {
+  opacity: 0.5;
+}
+
+/* GitHub notifications styling */
+#custom-github {
+  margin-right: 16px;  /* Extra spacing before tray */
+}
+
+#custom-github.none {
+  opacity: 0.5;
+}
+
+#custom-github.has-notifications {
+  color: #f9e2af; /* yellow */
+  font-weight: bold;
+}
+
+#custom-github.error {
+  color: #f38ba8;
+  opacity: 0.5;
+}
+
+/* Pomodoro timer styling */
+#custom-pomodoro.running {
+  color: #f38ba8; /* red when running */
+  font-weight: bold;
+}
+
+#custom-pomodoro.stopped {
+  opacity: 0.7;
+}
+
+#custom-pomodoro.stopped-break {
+  color: #a6e3a1; /* green for break ready */
+  opacity: 0.7;
+}
+
+/* Clipboard history styling */
+#custom-clipboard.empty {
+  opacity: 0.5;
+}
+
+#custom-clipboard.has-items {
+  color: #89b4fa; /* blue */
+}
+
+/* Clipboard history styling */
+#custom-clipboard.empty {
+  opacity: 0.5;
+}
+
+#custom-clipboard.has-items {
+  color: #89b4fa; /* blue */
+}
+
+#custom-clipboard.sensitive {
+  color: #f38ba8; /* red */
+  animation: blink 1s ease-in-out infinite;
+}
+
+/* Clock styling */
+#clock {
+  font-weight: bold;
+  padding: 0 10px;
+}
+
+/* Battery colors */
+#battery.warning {
+  color: #f9e2af;
+}
+
+#battery.critical {
+  color: #f38ba8;
+  animation: blink 1s linear infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Tooltip styling */
+tooltip {
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+tooltip label {
+  padding: 2px 4px;
+}
+
+#custom-snapback {
+  padding: 0 10px;
+  color: @theme_text_color;
+}
+
+#custom-snapback.organized {
+  color: #a6e3a1; /* Green when organized */
+}
+
+#custom-snapback.misplaced {
+  color: #f38ba8; /* Red when misplaced */
+  animation: blink 1s ease-in-out infinite;
+}
