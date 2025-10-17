@@ -53,18 +53,6 @@
           ];
         };
 
-        # Legacy alias for backwards compatibility (remove after confirming rebuild works)
-        pi = nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = { inherit inputs; };
-          modules = [
-            { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
-            home-manager.nixosModules.home-manager
-            sops-nix.nixosModules.sops
-            ./hosts/goldwasser
-          ];
-        };
-
         # Future: Laptop - Noether (Intel/AMD graphics)
         # noether = nixpkgs.lib.nixosSystem {
         #   inherit system;
@@ -73,7 +61,7 @@
         #     { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
         #     home-manager.nixosModules.home-manager
         #     sops-nix.nixosModules.sops
-        #     ./hosts/noether/configuration.nix
+        #     ./hosts/noether
         #   ];
         # };
       };
