@@ -21,7 +21,7 @@
           git add -v .
           echo ""
           echo "Running nixos-rebuild..."
-          sudo nixos-rebuild switch --flake .#pi
+          sudo nixos-rebuild switch --flake .#goldwasser
         '';
       };
     };

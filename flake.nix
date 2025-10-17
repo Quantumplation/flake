@@ -41,6 +41,19 @@
       system = "x86_64-linux";
     in {
       nixosConfigurations = {
+        # Desktop - Goldwasser (AMD + NVIDIA)
+        goldwasser = nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = { inherit inputs; };
+          modules = [
+            { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
+            home-manager.nixosModules.home-manager
+            sops-nix.nixosModules.sops
+            ./hosts/goldwasser
+          ];
+        };
+
+        # Legacy alias for backwards compatibility (remove after confirming rebuild works)
         pi = nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit inputs; };
@@ -48,9 +61,21 @@
             { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
             home-manager.nixosModules.home-manager
             sops-nix.nixosModules.sops
-            ./configuration.nix 
+            ./hosts/goldwasser
           ];
         };
+
+        # Future: Laptop - Noether (Intel/AMD graphics)
+        # noether = nixpkgs.lib.nixosSystem {
+        #   inherit system;
+        #   specialArgs = { inherit inputs; };
+        #   modules = [
+        #     { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
+        #     home-manager.nixosModules.home-manager
+        #     sops-nix.nixosModules.sops
+        #     ./hosts/noether/configuration.nix
+        #   ];
+        # };
       };
     };
 }
