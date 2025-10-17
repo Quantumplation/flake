@@ -5,7 +5,7 @@ inputs: {
   inputs,
   ...
 }: let
-  themes = import ./themes.nix;
+  themes = import ./modules/themes.nix;
   selectedTheme = themes.${"tokyo-night"};
   generatedColorScheme = null;
 in {
@@ -34,7 +34,7 @@ in {
         (import ./packages/wayvnc.nix inputs)
         (import ./packages/scripts.nix)
         ./packages/snap-back
-        ./ssh.nix
+        ./modules/ssh.nix
       ];
 
       colorScheme = inputs.nix-colors.colorSchemes.${selectedTheme.base16-theme};
