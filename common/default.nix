@@ -41,17 +41,6 @@
     useXkbConfig = true; # Use X keyboard config in console
   };
 
-  # Enable numlock on boot
-  systemd.services.numLockOnTty = {
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.kbd}/bin/setleds -D +num";
-      StandardInput = "tty";
-      TTYPath = "/dev/tty1";
-    };
-  };
-
   services.greetd = {
     enable = true;
     settings.default_session.command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd Hyprland";

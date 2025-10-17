@@ -5,6 +5,11 @@
 }: {
   wayland.windowManager.hyprland.settings = {
     windowrulev2 = [
+      # Eternl Cardano wallet transaction signing popup
+      "float, title:^(Eternl Cardano light wallet)$"
+      "pin, title:^(Eternl Cardano light wallet)$"
+      "stayfocused, title:^(Eternl Cardano light wallet)$"
+
       # Brave download/save dialogs
       "float, class:^(brave)$, title:^(wants to save).*"
       "pin, class:^(brave)$, title:^(wants to save).*"

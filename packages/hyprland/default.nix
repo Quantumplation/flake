@@ -42,7 +42,7 @@ inputs: {
         split-monitor-workspaces = {
           count = 2;
           keep_focused = 1;
-          enable_notifications = 1;
+          enable_notifications = 0;
           enable_persistent_workspaces = 1;
         };
       };
