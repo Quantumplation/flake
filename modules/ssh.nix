@@ -15,6 +15,21 @@
         user = "ec2-user";
         proxyCommand = "ssh ec2-user@mainnet-sundae-gd-prometheus -W %h:%p";
       };
+      "relay1" = {
+        hostname = "164.92.82.145";
+        user = "pi";
+        port = 9265;
+      };
+      "relay2" = {
+        hostname = "164.92.90.119";
+        user = "pi";
+        port = 9265;
+      };
+      "bp" = {
+        hostname = "147.182.254.166";
+        user = "pi";
+        port = 9265;
+      };
       "*" = {
         forwardAgent = true;
         addKeysToAgent = "yes";

@@ -14,6 +14,10 @@
       "SUPER SHIFT, V, exec, clipboard-manager snippets"
       "SUPER CTRL, V, exec, clipboard-manager clear-all"
 
+      # 1Password quick access
+      "SUPER, P, exec, 1password --quick-access"
+      "CTRL SHIFT, SPACE, exec, 1password --quick-access"
+
       # Kill / exit / shutdown
       "SUPER, W, killactive"
       "SUPER, ESCAPE, exec, hyprlock"
@@ -30,7 +34,7 @@
       "ALT, Tab, bringactivetotop,"
       "ALT SHIFT, Tab, cyclenext, prev"
       "ALT SHIFT, Tab, bringactivetotop"
-      "SUPER CTRL, Tab, split-cycleworkspaces, next"
+      # "SUPER CTRL, Tab, split-cycleworkspaces, next"
       "SUPER, R, exec, hypr-snap-back"
 
       # Key Light controls (SUPER + L for Light)
@@ -56,7 +60,7 @@
       "SUPER, D, exec, discord"
       "SUPER, E, exec, zeditor"
       "SUPER, Z, exec, zeditor"
-      "SUPER, F, exec, nautilus" 
+      "SUPER, F, exec, nautilus"
     ];
 
     bindm = [

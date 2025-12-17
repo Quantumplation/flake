@@ -8,7 +8,6 @@ inputs: {
   ];
   programs.hyprshell = {
     enable = true;
-    hyprland = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.default;
     systemd.args = "-v";
     settings = {
       windows = {

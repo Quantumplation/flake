@@ -51,6 +51,7 @@
     alejandra  # Nix file formatting
     cachix     # Nix caching
     inotify-tools  # File watching
+    process-compose # Run multiple processes at once
 
     # Specialized tools
     arduino

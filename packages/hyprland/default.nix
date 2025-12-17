@@ -16,7 +16,7 @@ inputs: {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
     plugins = [
-      inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
+      # inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
     ];
 
     settings = {
@@ -39,12 +39,12 @@ inputs: {
       input.follow_mouse = 2;
       debug.disable_logs = false;
       plugin = {
-        split-monitor-workspaces = {
-          count = 2;
-          keep_focused = 1;
-          enable_notifications = 0;
-          enable_persistent_workspaces = 1;
-        };
+        # split-monitor-workspaces = {
+        #   count = 2;
+        #   keep_focused = 1;
+        #   enable_notifications = 0;
+        #   enable_persistent_workspaces = 1;
+        # };
       };
     };
   };

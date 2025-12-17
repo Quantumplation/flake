@@ -8,7 +8,7 @@
     nerd-fonts.iosevka
     nerd-fonts.jetbrains-mono
     noto-fonts
-    noto-fonts-emoji
+    noto-fonts-color-emoji
     nerd-fonts.caskaydia-mono
   ];
 }

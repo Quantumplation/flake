@@ -1,7 +1,7 @@
 { pkgs, ... }: {
   programs.vim = {
     enable = true;
-    packageConfigurable = pkgs.vim_configurable;
+    packageConfigurable = pkgs.vim-full;
     defaultEditor = true;
   };
 }

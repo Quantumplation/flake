@@ -103,7 +103,7 @@ let
       lib.mapAttrsToList (workspace: wsConfig:
         map (app:
           # Use windowrulev2 for better matching
-          "workspace ${workspace} silent, class:^(${app})$"
+          "workspace ${workspace} silent, match:class ^(${app})$"
         ) wsConfig.apps
       ) config
     );
@@ -118,7 +118,7 @@ in {
   # Generate Hyprland config
   wayland.windowManager.hyprland.settings = {
     # Window rules - auto-assign workspaces
-    windowrulev2 = generateWindowRules workspaceAssociations;
+    windowrule = generateWindowRules workspaceAssociations;
 
     # Keybindings
     bind = [

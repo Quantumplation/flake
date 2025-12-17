@@ -27,6 +27,23 @@
               }
             ]
           '')
+          (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/52-rode-profile.conf" ''
+            monitor.alsa.rules = [
+              {
+                matches = [
+                  {
+                    device.name = "alsa_card.usb-RODE_Microphones_RODE_Podcaster_v2_3BA811B4-00"
+                  }
+                ]
+                actions = {
+                  update-props = {
+                    api.acp.auto-profile = false
+                    device.profile = "analog-stereo"
+                  }
+                }
+              }
+            ]
+          '')
         ];
       };
     };

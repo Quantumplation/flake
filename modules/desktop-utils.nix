@@ -31,7 +31,6 @@
     playerctl
     gnome-themes-extra
     pavucontrol
-    kdePackages.xwaylandvideobridge
 
     # System utilities
     blueberry  # Bluetooth management
@@ -46,6 +45,7 @@
     unzip
     curl
     jq
+    tree
     sops
     age
     ssh-to-age
@@ -54,4 +54,5 @@
 
   # Services
   services.tailscale.enable = true;
+  services.gvfs.enable = true;
 }

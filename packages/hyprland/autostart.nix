@@ -10,6 +10,7 @@
       "wl-paste --type text --watch cliphist store"
       "wl-paste --type image --watch cliphist store"
       "xwaylandvideobridge"
+      "1password --silent"
     ];
 
     exec = [

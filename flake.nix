@@ -10,6 +10,7 @@
     hyprland.url = "github:hyprwm/Hyprland";
     hyprshell = {
       url = "github:H3rmt/hyprshell";
+      inputs.hyprland.follows = "hyprland";
     };
     split-monitor-workspaces = {
       url = "github:Duckonaut/split-monitor-workspaces";

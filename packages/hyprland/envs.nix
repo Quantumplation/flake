@@ -46,8 +46,13 @@ in {
         "ELECTRON_OZONE_PLATFORM_HINT,wayland"
         "OZONE_PLATFORM,wayland"
 
-        # Make .desktop files available for wofi    
+        # Make .desktop files available for wofi
         "XDG_DATA_DIRS,$XDG_DATA_DIRS:$HOME/.nix-profile/share:/nix/var/nix/profiles/default/share"
+
+        # XDG Desktop Portal
+        "XDG_CURRENT_DESKTOP,Hyprland"
+        "XDG_SESSION_TYPE,wayland"
+        "XDG_SESSION_DESKTOP,Hyprland"
 
         # Use XCompose file
         "XCOMPOSEFILE,~/.XCompose"
