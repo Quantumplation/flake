@@ -54,17 +54,17 @@
           ];
         };
 
-        # Future: Laptop - Noether (Intel/AMD graphics)
-        # noether = nixpkgs.lib.nixosSystem {
-        #   inherit system;
-        #   specialArgs = { inherit inputs; };
-        #   modules = [
-        #     { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
-        #     home-manager.nixosModules.home-manager
-        #     sops-nix.nixosModules.sops
-        #     ./hosts/noether
-        #   ];
-        # };
+        # Laptop - Noether (Framework 16, AMD)
+        noether = nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = { inherit inputs; };
+          modules = [
+            { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
+            home-manager.nixosModules.home-manager
+            sops-nix.nixosModules.sops
+            ./hosts/noether
+          ];
+        };
       };
     };
 }
