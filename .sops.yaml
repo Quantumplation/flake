@@ -1,9 +1,11 @@
-keys: 
+keys:
   - &admin age1f4jaegass4keq8j559sc2vlyjcfwahcvwyf2zz9xyysqmscmwpqq7tfx06
   - &host_goldwasser age1ev90f8afgj03yj6enjyg4k7k72q6gu3f8mcz8673zw24lk8n9dds6zlr77
+  - &host_noether age1lga25xl8ugf0gk5zg9zekkdgzcy5g00tf8nm4gwwpt0lhgfp6gwqxylyc6
 creation_rules:
   - path_regex: secrets/[^/]+\.yaml$
     key_groups:
       - age:
         - *admin
         - *host_goldwasser
+        - *host_noether
