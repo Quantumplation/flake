@@ -1,6 +1,7 @@
 THEME_DATA="$HOME/.config/theme-data"
 CURRENT_THEME_FILE="$HOME/.config/current-theme"
 WAYBAR_THEME="$HOME/.config/waybar/theme.css"
+SWAYNC_STYLE="$HOME/.config/swaync/style.css"
 
 if [ ! -d "$THEME_DATA" ]; then
   echo "Theme data not found at $THEME_DATA"
@@ -37,6 +38,12 @@ echo "$THEME" > "$CURRENT_THEME_FILE"
 
 # Apply waybar theme
 cp --no-preserve=mode "$THEME_DIR/theme.css" "$WAYBAR_THEME"
+
+# Apply swaync theme
+if [ -f "$THEME_DIR/swaync.css" ]; then
+  cp --no-preserve=mode "$THEME_DIR/swaync.css" "$SWAYNC_STYLE"
+  swaync-client --reload-css || true
+fi
 
 # Apply hyprland border colors
 bash "$THEME_DIR/borders.sh"

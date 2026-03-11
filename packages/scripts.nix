@@ -45,7 +45,7 @@
     # Runtime theme switcher (random on login, manual via theme-switch <name>)
     (writeShellApplication {
       name = "theme-switch";
-      runtimeInputs = [ coreutils hyprland swww libnotify procps ];
+      runtimeInputs = [ coreutils hyprland swww libnotify procps swaynotificationcenter ];
       text = builtins.readFile ../assets/scripts/theme-switch.sh;
     })
   ];

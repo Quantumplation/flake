@@ -99,7 +99,7 @@ in {
       services = {
         swaync = {
           enable = true;
-          style = ./assets/swaync/style.css;
+          # style.css is managed at runtime by theme-switch, not by home-manager
           settings = {
             positionX = "right";
             positionY = "top";
