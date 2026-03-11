@@ -12,8 +12,8 @@
 in {
   wayland.windowManager.hyprland.settings = {
     general = {
-      gaps_in = 5;
-      gaps_out = 10;
+      gaps_in = 3;
+      gaps_out = 6;
 
       border_size = 2;
 
@@ -28,16 +28,16 @@ in {
     };
 
     decoration = {
-      rounding = 4;
+      rounding = 14;
 
       inactive_opacity = 0.93;
       dim_inactive = true;
-      dim_strength = 0.2;
+      dim_strength = 0.15;
 
       shadow = {
         enabled = true;
-        range = 15;
-        render_power = 2;
+        range = 8;
+        render_power = 3;
         ignore_window = true;
         color = "rgba(00000030)";
       };
@@ -48,6 +48,9 @@ in {
         passes = 2;
 
         vibrancy = 0.1696;
+        special = true;
+        popups = true;
+        popups_ignorealpha = 0.2;
       };
     };
 

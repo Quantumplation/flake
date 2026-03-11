@@ -26,8 +26,8 @@ in {
       background = {
         monitor = "";
         path = selected_wallpaper_path;
-        # blur_passes = 3;
-        # brightness = 0.5;
+        blur_passes = 3;
+        brightness = 0.5;
       };
 
       input-field = {
@@ -50,7 +50,7 @@ in {
         check_color = "rgba(131, 192, 146, 1.0)";
         fail_text = "Wrong";
 
-        rounding = 0;
+        rounding = 14;
         shadow_passes = 0;
         fade_on_empty = false;
       };

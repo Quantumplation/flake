@@ -277,6 +277,12 @@
       }];
 
       wayland.windowManager.hyprland.settings = {
+        # Tighter gaps for laptop screen real estate
+        general = {
+          gaps_in = lib.mkForce 2;
+          gaps_out = lib.mkForce 4;
+        };
+
         input.touchpad = {
           natural_scroll = true;
           # Reduce scroll speed (default is 1.0, lower = slower)

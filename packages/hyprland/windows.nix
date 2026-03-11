@@ -92,6 +92,7 @@
     layerrule = [
       "blur true, match:namespace wofi"
       "blur true, match:namespace waybar"
+      "ignore_alpha 0.3, match:namespace waybar"
     ];
   };
 }
