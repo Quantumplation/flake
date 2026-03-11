@@ -229,8 +229,8 @@
           exec = "~/.config/waybar/waybar-clipboard.sh";
           format = "📋";
           interval = 5;
-          on-click = "clipboard-manager menu";
-          on-click-right = "clipboard-manager snippets";
+          on-click = "clipboard-manager snippets";
+          on-click-right = "clipboard-manager menu";
           return-type = "json";
         };
         "custom/volume" = {
