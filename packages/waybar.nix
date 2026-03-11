@@ -83,6 +83,9 @@ in {
         position = "top";
         spacing = 0;
         height = 32;
+        margin-top = 6;
+        margin-left = 6;
+        margin-right = 6;
         modules-left = [
           "custom/snapback"
           "custom/separator"
