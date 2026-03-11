@@ -33,6 +33,7 @@ in {
         (import ./packages/wofi.nix)
         (import ./packages/wayvnc.nix inputs)
         (import ./packages/scripts.nix)
+        (import ./packages/theme-data.nix inputs)
         (import ./packages/compact.nix)
         ./modules/ssh.nix
       ];

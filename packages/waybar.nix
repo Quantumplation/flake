@@ -1,8 +1,10 @@
 inputs: {
   config,
   pkgs,
+  lib,
   ...
 }: let
+  themes = import ../modules/themes.nix;
   palette = config.colorScheme.palette;
   convert = inputs.nix-colors.lib.conversions.hexToRGBString;
   backgroundRgb = "rgb(${convert ", " palette.base00})";
@@ -38,20 +40,24 @@ in {
       source = ../assets/waybar;
       recursive = true;
     };
-    ".config/waybar/theme.css" = {
-      text = ''
-        @define-color background ${backgroundRgb};
-        @define-color background-transparent ${backgroundRgba};
-        * {
-          color: ${foregroundRgb};
-        }
-
-        window#waybar {
-          background-color: ${backgroundRgba};
-        }
-      '';
-    };
+    # theme.css is managed at runtime by theme-switch, not by home-manager
   };
+
+  # On rebuild: apply current theme's CSS, or default theme if no choice made yet
+  home.activation.initWaybarTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    THEME_DATA="$HOME/.config/theme-data"
+    CURRENT="$HOME/.config/current-theme"
+    TARGET="$HOME/.config/waybar/theme.css"
+    if [ -f "$CURRENT" ]; then
+      THEME=$(cat "$CURRENT")
+    else
+      THEME="${themes.selected}"
+      echo "$THEME" > "$CURRENT"
+    fi
+    if [ -f "$THEME_DATA/$THEME/theme.css" ]; then
+      $DRY_RUN_CMD cp --no-preserve=mode "$THEME_DATA/$THEME/theme.css" "$TARGET"
+    fi
+  '';
 
   programs.waybar = {
     enable = true;

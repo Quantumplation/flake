@@ -41,5 +41,12 @@
       runtimeInputs = [ hyprland jq wofi libnotify ];
       text = builtins.readFile ../assets/scripts/swap-workspaces.sh;
     })
+
+    # Runtime theme switcher (random on login, manual via theme-switch <name>)
+    (writeShellApplication {
+      name = "theme-switch";
+      runtimeInputs = [ coreutils hyprland swww libnotify procps ];
+      text = builtins.readFile ../assets/scripts/theme-switch.sh;
+    })
   ];
 }

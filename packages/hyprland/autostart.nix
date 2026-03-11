@@ -5,7 +5,8 @@
 }: {
   wayland.windowManager.hyprland.settings = {
     exec-once = [
-      "swww-daemon && swww img '${(import ../wallpaper.nix config).wallpaper_path}'"
+      "swww-daemon"
+      "sleep 1 && theme-switch random"
       "hyprsunset"
       "systemctl --user start hyprpolkitagent"
       "wl-paste --type text --watch cliphist store"
