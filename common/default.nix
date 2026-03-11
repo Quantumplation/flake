@@ -32,7 +32,6 @@
   };
 
   networking.networkmanager.enable = true;
-  networking.extraHosts = "";
 
   time.timeZone = "America/New_York";
 
@@ -43,12 +42,12 @@
 
   services.greetd = {
     enable = true;
-    settings.default_session.command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+    settings.default_session.command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd start-hyprland";
   };
 
   environment = {
     variables = {
-      TERMINAL = "alacritty";
+      TERMINAL = "ghostty";
       EDITOR = "vim";
       VISUAL = "vim";
     };
@@ -76,5 +75,4 @@
 
   system.stateVersion = "22.11"; # Don't update
 
-  virtualisation.docker.enable = true;
 }

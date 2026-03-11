@@ -6,7 +6,7 @@ inputs: {
   ...
 }: let
   themes = import ./modules/themes.nix;
-  selectedTheme = themes.${"tokyo-night"};
+  selectedTheme = themes.${themes.selected};
   generatedColorScheme = null;
 in {
 
@@ -33,7 +33,7 @@ in {
         (import ./packages/wofi.nix)
         (import ./packages/wayvnc.nix inputs)
         (import ./packages/scripts.nix)
-        ./packages/snap-back
+        (import ./packages/compact.nix)
         ./modules/ssh.nix
       ];
 
@@ -49,13 +49,14 @@ in {
         ];
 
         sessionPath = [
+          "$HOME/.local/bin"
         ];
 
         sessionVariables = with pkgs; {
           "AWS_REGION" = "us-east-2";
           # CACHIX_AUTH_TOKEN is now managed via sops - add to shell config if needed
           LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-          LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${lib.makeLibraryPath ([stdenv xorg.libX11 xorg.libX11.dev xorg.libXcursor xorg.libXi libxkbcommon libGL vulkan-headers vulkan-loader fontconfig])}";
+          LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${lib.makeLibraryPath ([stdenv libx11 libx11.dev libxcursor libxi libxkbcommon libGL vulkan-headers vulkan-loader fontconfig])}";
         };
 
         pointerCursor = {
@@ -70,6 +71,14 @@ in {
 
       xdg.mime.enable = true;
       xdg.configFile."mimeapps.list".force = true;
+      xdg.configFile."brave-flags.conf".text = ''
+        --disable-features=VaapiVideoDecoder,VaapiVideoEncoder,VaapiVideoDecodeLinuxGL
+        --ozone-platform=wayland
+      '';
+      xdg.configFile."chromium-flags.conf".text = ''
+        --disable-features=VaapiVideoDecoder,VaapiVideoEncoder,VaapiVideoDecodeLinuxGL
+        --ozone-platform=wayland
+      '';
       xdg.mimeApps = {
         enable = true;
         associations.added = {
@@ -125,8 +134,6 @@ in {
         };
       };
 
-      nixGL.vulkan.enable = true;
-
       gtk = {
         enable = true;
         theme = {
@@ -146,8 +153,6 @@ in {
             inline_height = 10;
             style = "auto";
             enter_accept = true;
-          };
-          settings = {
             sync_address = "https://api.atuin.sh";
             key_path = config.sops.secrets."atuin/key".path;
             session_path = config.sops.secrets."atuin/session".path;
@@ -160,15 +165,39 @@ in {
             "default" = {
               "region" = "us-east-2";
             };
-            "profile dev-admin" = {
+            "profile dev" = {
               "sso_session" = "pi";
               "sso_account_id" = "529991308818";
               "sso_role_name" = "AWSAdministratorAccess";
               "region" = "us-east-2";
             };
-            "profile prod-admin" = {
+            "profile prod" = {
               "sso_session" = "pi";
               "sso_account_id" = "705895683800";
+              "sso_role_name" = "AWSAdministratorAccess";
+              "region" = "us-east-2";
+            };
+            "profile shared" = {
+              "sso_session" = "pi";
+              "sso_account_id" = "113073460856";
+              "sso_role_name" = "AWSAdministratorAccess";
+              "region" = "us-east-2";
+            };
+            "profile management" = {
+              "sso_session" = "pi";
+              "sso_account_id" = "583028480321";
+              "sso_role_name" = "AWSAdministratorAccess";
+              "region" = "us-east-2";
+            };
+            "profile founder" = {
+              "sso_session" = "pi";
+              "sso_account_id" = "890625032284";
+              "sso_role_name" = "AWSAdministratorAccess";
+              "region" = "us-east-2";
+            };
+            "profile cardano-tom" = {
+              "sso_session" = "pi";
+              "sso_account_id" = "978007052758";
               "sso_role_name" = "AWSAdministratorAccess";
               "region" = "us-east-2";
             };
@@ -187,9 +216,6 @@ in {
           ];
         };
 
-        vim = {
-          enable = true;
-        };
       };
     };
   };

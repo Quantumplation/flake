@@ -30,6 +30,10 @@
         user = "pi";
         port = 9265;
       };
+      "Goldwasser" = {
+        hostname = "100.76.247.80";
+        user = "pi";
+      };
       "*" = {
         forwardAgent = true;
         addKeysToAgent = "yes";

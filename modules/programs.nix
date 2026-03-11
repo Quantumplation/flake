@@ -7,6 +7,21 @@
     polkitPolicyOwners = [ "pi" ];
   };
 
+  # 1Password needs a secret service to persist device auth tokens
+  # (without this, it requires 2FA on every launch)
+  services.gnome.gnome-keyring.enable = true;
+  services.gnome.gcr-ssh-agent.enable = false;
+  security.pam.services.greetd.enableGnomeKeyring = true;
+
+  # Allow 1Password browser extension to connect from wrapped Brave binary
+  environment.etc."1password/custom_allowed_browsers" = {
+    text = ''
+      brave
+      .brave-wrapped
+    '';
+    mode = "0755";
+  };
+
   programs.fish.enable = true;
   programs.light.enable = true;
   programs.ssh.startAgent = true;
@@ -24,7 +39,7 @@
   # Nix-ld for running unpatched binaries
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
-    stdenv.cc.cc
+    stdenv.cc.cc.lib
     fuse3
     alsa-lib
     at-spi2-atk
@@ -47,7 +62,7 @@
     libpulseaudio
     libuuid
     libusb1
-    xorg.libxcb
+    libxcb
     libxkbcommon
     mesa
     nspr
@@ -56,19 +71,19 @@
     systemd
     icu
     openssl
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxkbfile
-    xorg.libxshmfence
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
+    libxkbfile
+    libxshmfence
     zlib
   ];
 }

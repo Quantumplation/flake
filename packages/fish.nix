@@ -4,6 +4,38 @@
     interactiveShellInit = ''
       set fish_greeting # Disable greeting
       ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
+
+      function '?' --description 'Quick inline Claude with terminal context'
+        set -l question (string join ' ' $argv)
+        if test -z "$question"
+          claude
+          return
+        end
+
+        set -l hist (builtin history --max 50 | string collect)
+        set -l git_branch (git branch --show-current 2>/dev/null; or echo 'not a git repo')
+        set -l ctx "The user invoked you inline from their fish shell. You are running in print mode — complete the task fully and output a concise summary of what you did. Do not ask for clarification; make reasonable assumptions.
+
+Working directory: $PWD
+Git branch: $git_branch
+
+Recent command history (most recent first):
+$hist"
+
+        # Route to the right model via quick haiku triage
+        set -l model (claude -p --model haiku "Pick the best model for this task. Reply with ONLY one word.
+- haiku: simple factual questions, quick lookups, short explanations
+- sonnet: moderate tasks, code edits, debugging, multi-step reasoning
+- opus: complex architecture, large refactors, subtle or ambiguous problems
+Question: $question" 2>/dev/null | string trim | string lower)
+
+        if not contains -- $model haiku sonnet opus
+          set model sonnet
+        end
+
+        echo "→ $model"
+        claude -p --model $model --append-system-prompt "$ctx" "$question"
+      end
     '';
     shellInit = ''
       set -Ux NIX_LD /run/current-system/sw/share/nix-ld/lib/ld.so
@@ -13,18 +45,24 @@
       set -Ux GOPRIVATE github.com/SundaeSwap-finance
       set --global tide_right_prompt_items status cmd_duration node rustc go aws time
     '';
+    shellAbbrs = {
+      awslogin = "aws sso login --sso-session pi";
+    };
     functions = {
       nrs = {
         description = "NixOS rebuild switch with auto git-add";
         body = ''
           echo "Adding new files to git..."
-          git add -v .
+          git -C ~/flake add -v .
           echo ""
           echo "Running nixos-rebuild..."
-          sudo nixos-rebuild switch --flake .#goldwasser
+          sudo nixos-rebuild switch --flake ~/flake#(hostname | string lower)
         '';
       };
     };
+    completions.tailscale-ssh = ''
+      complete -c ssh -f -a "(tailscale status --json 2>/dev/null | ${pkgs.jq}/bin/jq -r '.Peer[] | .DNSName' | string replace -r '\\.\$' '''')"
+    '';
     plugins = with pkgs.fishPlugins; [
       {
         # TODO: declarative tide config; remember to run tide configure when you first set this up

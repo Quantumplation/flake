@@ -40,6 +40,9 @@
     awscli2
     aws-vault
 
+    # AI/Development tools
+    claude-code
+
     # Misc tools
     zip
     unzip

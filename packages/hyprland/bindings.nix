@@ -29,11 +29,7 @@
       "SUPER, M, fullscreen, 1"
       "SUPER SHIFT, M, fullscreen, 0"
 
-      # Cycling
-      "ALT, Tab, cyclenext,"
-      "ALT, Tab, bringactivetotop,"
-      "ALT SHIFT, Tab, cyclenext, prev"
-      "ALT SHIFT, Tab, bringactivetotop"
+      # Cycling - alt-tab is configured per-host
       # "SUPER CTRL, Tab, split-cycleworkspaces, next"
       "SUPER, R, exec, hypr-snap-back"
 
@@ -51,7 +47,10 @@
       "SUPER, minus, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
 
       # Screenshotting
-      "CTRL SHIFT, 4, exec, hyprshot -m region"
+      "CTRL SHIFT, 4, exec, screenshot -m region"
+
+      # Workspace management
+      "SUPER, X, exec, swap-workspaces"
 
       # Applications
       "SUPER, A, exec, $terminal"

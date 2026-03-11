@@ -1,4 +1,5 @@
 config: let
+  themes = import ../modules/themes.nix;
   wallpapers = {
     "tokyo-night" = [
       "1-Pawel-Czerwinski-Abstract-Purple-Blue.jpg"
@@ -20,8 +21,8 @@ config: let
     ];
   };
 
-  selected_wallpaper = builtins.elemAt (wallpapers.${"tokyo-night"}) 0;
-  wallpaper_path = "~/Pictures/Wallpapers/${selected_wallpaper}";
+  selected_wallpaper = builtins.elemAt (wallpapers.${themes.selected}) 0;
+  wallpaper_path = "${config.home.homeDirectory}/Pictures/Wallpapers/${selected_wallpaper}";
 in {
   inherit wallpaper_path;
 }

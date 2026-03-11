@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixos-hardware.url = "github:nixos/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -12,13 +13,8 @@
       url = "github:H3rmt/hyprshell";
       inputs.hyprland.follows = "hyprland";
     };
-    split-monitor-workspaces = {
-      url = "github:Duckonaut/split-monitor-workspaces";
-      inputs.hyprland.follows = "hyprland";
-    };
-    nix-colors.url = "github:misterio77/nix-colors";
-    vscode-server.url = "github:nix-community/nixos-vscode-server";
-    rust-overlay.url = "github:oxalica/rust-overlay";
+nix-colors.url = "github:misterio77/nix-colors";
+rust-overlay.url = "github:oxalica/rust-overlay";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -31,22 +27,18 @@
     nixpkgs,
     hyprland,
     hyprshell,
-    split-monitor-workspaces,
     home-manager,
-    vscode-server,
     sops-nix,
     rust-overlay,
     ...
   }:
-    let
-      system = "x86_64-linux";
-    in {
+    {
       nixosConfigurations = {
         # Desktop - Goldwasser (AMD + NVIDIA)
         goldwasser = nixpkgs.lib.nixosSystem {
-          inherit system;
           specialArgs = { inherit inputs; };
           modules = [
+            { nixpkgs.hostPlatform = "x86_64-linux"; }
             { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
             home-manager.nixosModules.home-manager
             sops-nix.nixosModules.sops
@@ -56,9 +48,9 @@
 
         # Laptop - Noether (Framework 16, AMD)
         noether = nixpkgs.lib.nixosSystem {
-          inherit system;
           specialArgs = { inherit inputs; };
           modules = [
+            { nixpkgs.hostPlatform = "x86_64-linux"; }
             { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
             home-manager.nixosModules.home-manager
             sops-nix.nixosModules.sops

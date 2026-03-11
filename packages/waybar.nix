@@ -29,6 +29,9 @@ inputs: {
     text = builtins.readFile ../assets/waybar/waybar-ada-cycle.sh;
   };
 in {
+  # Make waybar-ada available in PATH for host-specific overrides
+  home.packages = [ waybar-ada waybar-ada-cycle waybar-ada-click ];
+
   home.file = {
     ".config/waybar/" = {
       source = ../assets/waybar;

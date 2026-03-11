@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(cat:*)",
+      "Bash(xargs ls:*)",
+      "WebSearch",
+      "Bash(grep:*)",
+      "Bash(echo:*)",
+      "Bash(nix-store --query --tree:*)"
+    ]
+  }
+}

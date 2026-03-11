@@ -1,4 +1,6 @@
 {
+  selected = "tokyo-night";
+
   "tokyo-night" = {
     base16-theme = "tokyo-night-dark";
     vscode-theme = "Tokyo Night";

@@ -1,10 +1,14 @@
 { ... }: {
+  home.file.".gitignore".text = ''
+    .claude
+  '';
+
   # Customized based on https://blog.gitbutler.com/how-git-core-devs-configure-git/
   programs.git = {
     enable = true;
-    userName = "Pi Lanningham";
-    userEmail = "pi.lanningham@gmail.com";
-    extraConfig = {
+    settings = {
+      user.email = "pi.lanningham@gmail.com";
+      user.name = "Pi Lanningham";
       init.defaultBranch = "main";
       branch.sort = "-committerdate";
       column.ui = "auto";

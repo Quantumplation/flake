@@ -11,7 +11,43 @@
       wireplumber = {
         enable = true;
         configPackages = [
-          (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/51-disable-hdmi.conf" ''
+          (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/50-device-names.conf" ''
+            monitor.alsa.rules = [
+              {
+                matches = [
+                  { node.name = "alsa_input.pci-0000_c2_00.6.HiFi__Mic2__source" }
+                ]
+                actions = {
+                  update-props = {
+                    node.description = "Headset Mic"
+                    priority.session = 1000
+                  }
+                }
+              }
+              {
+                matches = [
+                  { node.name = "alsa_input.pci-0000_c2_00.6.HiFi__Mic1__source" }
+                ]
+                actions = {
+                  update-props = {
+                    node.description = "Built-in Mic"
+                    priority.session = 2000
+                  }
+                }
+              }
+              {
+                matches = [
+                  { node.name = "alsa_output.pci-0000_c2_00.6.HiFi__Speaker__sink" }
+                ]
+                actions = {
+                  update-props = {
+                    node.description = "Laptop Speakers"
+                  }
+                }
+              }
+            ]
+          '')
+          (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/51-hdmi-audio.conf" ''
             monitor.alsa.rules = [
               {
                 matches = [
@@ -21,7 +57,8 @@
                 ]
                 actions = {
                   update-props = {
-                    node.disabled = true
+                    node.description = "HDMI Audio"
+                    priority.session = 500
                   }
                 }
               }

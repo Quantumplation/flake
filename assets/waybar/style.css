@@ -8,10 +8,24 @@
   font-size: 14px;
 }
 
+window#waybar {
+  margin: 4px 8px 0 8px;
+  border-radius: 8px;
+}
+
+#workspaces {
+  padding-left: 8px;
+}
+
 #workspaces button {
   padding: 4px;
   background-color: transparent;
   opacity: 0.4;
+  border-right: 1px solid rgba(108, 112, 134, 0.3);
+}
+
+#workspaces button:last-child {
+  border-right: none;
 }
 
 #workspaces button label {
@@ -65,6 +79,13 @@ window#waybar.DP-3 #workspaces button.active:nth-child(1) label {
 window#waybar.DP-3 #workspaces button.active:nth-child(2) label {
   color: #ffe066;  /* Brighter yellow */
 }
+
+/* eDP-1 (Laptop) - Colored workspaces */
+window#waybar.eDP-1 #workspaces button.active:nth-child(1) label { color: #89b4fa; }
+window#waybar.eDP-1 #workspaces button.active:nth-child(2) label { color: #a6e3a1; }
+window#waybar.eDP-1 #workspaces button.active:nth-child(3) label { color: #c77dff; }
+window#waybar.eDP-1 #workspaces button.active:nth-child(4) label { color: #f9e2af; }
+window#waybar.eDP-1 #workspaces button.active:nth-child(5) label { color: #f38ba8; }
 
 #workspaces button:hover {
   opacity: 0.8;

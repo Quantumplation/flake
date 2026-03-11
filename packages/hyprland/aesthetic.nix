@@ -8,6 +8,7 @@
 
   inactiveBorder = hexToRgba config.colorScheme.palette.base09 "aa";
   activeBorder = hexToRgba config.colorScheme.palette.base0D "aa";
+  activeBorder2 = hexToRgba config.colorScheme.palette.base0E "aa";
 in {
   wayland.windowManager.hyprland.settings = {
     general = {
@@ -16,7 +17,7 @@ in {
 
       border_size = 2;
 
-      "col.active_border" = activeBorder;
+      "col.active_border" = "${activeBorder} ${activeBorder2} 45deg";
       "col.inactive_border" = inactiveBorder;
 
       resize_on_border = false;
@@ -29,12 +30,16 @@ in {
     decoration = {
       rounding = 4;
 
+      inactive_opacity = 0.93;
+      dim_inactive = true;
+      dim_strength = 0.2;
+
       shadow = {
-        enabled = false;
-        range = 30;
-        render_power = 3;
+        enabled = true;
+        range = 15;
+        render_power = 2;
         ignore_window = true;
-        color = "rgba(00000045)";
+        color = "rgba(00000030)";
       };
 
       blur = {
@@ -71,7 +76,7 @@ in {
         "layersOut, 1, 1.5, linear, fade"
         "fadeLayersIn, 1, 1.79, almostLinear"
         "fadeLayersOut, 1, 1.39, almostLinear"
-        "workspaces, 0, 0, ease"
+        "workspaces, 1, 3, easeOutQuint, slide"
       ];
     };
 

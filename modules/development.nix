@@ -1,5 +1,10 @@
-{ pkgs, ... }: {
+{ pkgs, lib, ... }: {
+  # Docker
+  virtualisation.docker.enable = true;
+  users.users.pi.extraGroups = [ "docker" ];
+
   environment.systemPackages = with pkgs; [
+    docker-compose
     # Compilers
     gcc
     clang
@@ -20,6 +25,7 @@
     zlib
     zlib.dev
     pkg-config
+    stdenv.cc.cc.lib
     webkitgtk_6_0
     libsoup_3
     gobject-introspection
@@ -28,8 +34,11 @@
     (rust-bin.selectLatestNightlyWith (t:
       t.default.override {
         extensions = [ "rustfmt" "clippy" "rust-src" ];
+        targets = [ "wasm32-wasip2" "wasm32-unknown-unknown" ];
       }
     ))
+
+    cargo-watch
 
     # Golang toolchain
     gotools
@@ -39,7 +48,7 @@
     buf
 
     # Node.js
-    nodejs_20
+    nodejs_22
     bun
 
     # Python
@@ -51,7 +60,12 @@
     alejandra  # Nix file formatting
     cachix     # Nix caching
     inotify-tools  # File watching
+    just           # Command runner
     process-compose # Run multiple processes at once
+    xxd        # Hex dump utility
+
+    # Lean 4
+    lean4
 
     # Specialized tools
     arduino
@@ -59,5 +73,12 @@
     kubectl
     k9s
     aiken
+
+    # Cloud / Infrastructure
+    terraform
+    google-cloud-sdk
+
+    # Utilities
+    ouch  # Compression/decompression
   ];
 }

@@ -59,10 +59,14 @@ in {
         "EDITOR,vim"
 
         "GTK_THEME,Adwaita:dark"
+
+        # XWayland scaling (for force_zero_scaling)
+        "GDK_SCALE,2"
+        "QT_SCALE_FACTOR,1.6"
       ];
 
     xwayland = {
-      # force_zero_scaling = true;
+      force_zero_scaling = true;
     };
 
     # Don't show update on first launch
