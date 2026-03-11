@@ -145,7 +145,7 @@
         layer = "top";
         position = "top";
         spacing = 0;
-        height = 26;
+        height = 32;
         modules-left = [
           "hyprland/workspaces"
           "custom/separator"

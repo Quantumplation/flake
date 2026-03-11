@@ -9,8 +9,18 @@
 }
 
 window#waybar {
-  margin: 4px 8px 0 8px;
-  border-radius: 8px;
+  margin: 6px 8px 0 8px;
+  border-radius: 12px;
+}
+
+/* Pill-shaped module groups */
+.modules-left,
+.modules-center,
+.modules-right {
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 0 4px;
+  margin: 3px 4px;
 }
 
 #workspaces {
@@ -119,7 +129,21 @@ window#waybar.eDP-1 #workspaces button.active:nth-child(5) label { color: #f38ba
   background-color: transparent;
   min-width: 12px;
   margin-right: 13px;
-  padding: 0 4px;  /* Increased from 2px to 4px for more spacing */
+  padding: 0 6px;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect for interactive modules */
+#custom-keylight:hover,
+#custom-volume:hover,
+#custom-system:hover,
+#custom-ada:hover,
+#custom-github:hover,
+#custom-clipboard:hover,
+#custom-swaync:hover,
+#custom-brightness:hover,
+#battery:hover {
+  opacity: 0.7;
 }
 
 #custom-swaync.notification {
@@ -238,15 +262,6 @@ window#waybar.eDP-1 #workspaces button.active:nth-child(5) label { color: #f38ba
   color: #89b4fa; /* blue */
 }
 
-/* Clipboard history styling */
-#custom-clipboard.empty {
-  opacity: 0.5;
-}
-
-#custom-clipboard.has-items {
-  color: #89b4fa; /* blue */
-}
-
 #custom-clipboard.sensitive {
   color: #f38ba8; /* red */
   animation: blink 1s ease-in-out infinite;
@@ -276,8 +291,9 @@ window#waybar.eDP-1 #workspaces button.active:nth-child(5) label { color: #f38ba
 
 /* Tooltip styling */
 tooltip {
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background-color: @background;
 }
 
 tooltip label {

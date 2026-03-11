@@ -22,4 +22,7 @@ in {
       ];
     };
   };
+
+  # hyprpaper races with Hyprland monitor init — delay startup slightly
+  systemd.user.services.hyprpaper.Service.ExecStartPre = "${pkgs.coreutils}/bin/sleep 2";
 }

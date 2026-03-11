@@ -6,6 +6,7 @@ inputs: {
   palette = config.colorScheme.palette;
   convert = inputs.nix-colors.lib.conversions.hexToRGBString;
   backgroundRgb = "rgb(${convert ", " palette.base00})";
+  backgroundRgba = "rgba(${convert ", " palette.base00}, 0.75)";
   foregroundRgb = "rgb(${convert ", " palette.base05})";
   waybar-ada = pkgs.writeShellApplication {
     name = "waybar-ada";
@@ -40,12 +41,13 @@ in {
     ".config/waybar/theme.css" = {
       text = ''
         @define-color background ${backgroundRgb};
+        @define-color background-transparent ${backgroundRgba};
         * {
           color: ${foregroundRgb};
         }
 
         window#waybar {
-          background-color: ${backgroundRgb};
+          background-color: ${backgroundRgba};
         }
       '';
     };
@@ -58,7 +60,7 @@ in {
         layer = "top";
         position = "top";
         spacing = 0;
-        height = 26;
+        height = 32;
         modules-left = [
           "custom/snapback"
           "custom/separator"
