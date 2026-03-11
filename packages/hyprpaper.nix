@@ -11,18 +11,10 @@ in {
       recursive = true;
     };
   };
-  services.hyprpaper = {
-    enable = true;
-    settings = {
-      preload = [
-        selected_wallpaper_path
-      ];
-      wallpaper = [
-        ",${selected_wallpaper_path}"
-      ];
-    };
-  };
 
-  # hyprpaper races with Hyprland monitor init — delay startup slightly
-  systemd.user.services.hyprpaper.Service.ExecStartPre = "${pkgs.coreutils}/bin/sleep 2";
+  home.packages = [ pkgs.swww ];
+
+  # swww replaces hyprpaper: faster startup, smooth transitions, reliable IPC
+  # swww-daemon + initial wallpaper set in hyprland/autostart.nix
+  services.hyprpaper.enable = false;
 }
