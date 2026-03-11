@@ -159,7 +159,6 @@
           "battery"
           "custom/brightness"
           "custom/separator"
-          "custom/github"
           "tray"
           "custom/clipboard"
           "custom/ada"
@@ -202,7 +201,8 @@
         };
 
         clock = {
-          format = "{:%Y-%m-%d %I:%M %p}";
+          format = "{:%I:%M %p}";
+          format-alt = "{:%Y-%m-%d  %A}";
           tooltip = false;
         };
 
@@ -225,12 +225,6 @@
         };
 
         "custom/separator".format = "|";
-        "custom/github" = {
-          exec = "~/.config/waybar/waybar-github.sh";
-          return-type = "json";
-          interval = 30;
-          on-click = "xdg-open https://github.com/notifications";
-        };
         "custom/clipboard" = {
           exec = "~/.config/waybar/waybar-clipboard.sh";
           format = "📋";

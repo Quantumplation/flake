@@ -97,7 +97,6 @@ in {
           "clock"
         ];
         modules-right = [
-          "custom/github"
           "tray"
           "custom/clipboard"
           "custom/ada"
@@ -145,17 +144,9 @@ in {
         };
 
         clock = {
-          format = "{:%Y-%m-%d %I:%M %p}";
-          format-alt = "{%A, %B %d, %Y}";
+          format = "{:%I:%M %p}";
+          format-alt = "{:%Y-%m-%d  %A}";
           tooltip = false;
-        };
-
-        "custom/github" = {
-          exec = "~/.config/waybar/waybar-github.sh";
-          return-type = "json";
-          interval = 30;
-          on-click = "xdg-open https://github.com/notifications";
-          format = "{}";
         };
 
         "custom/separator" = {

@@ -55,17 +55,42 @@ in {
         fade_on_empty = false;
       };
 
-      label = {
-        monitor = "";
-        text = "\$FPRINTPROMPT";
-        text_align = "center";
-        color = "rgb(211, 198, 170)";
-        font_size = 24;
-        font_family = "CaskaydiaMono Nerd Font";
-        position = "0, -100";
-        halign = "center";
-        valign = "center";
-      };
+      label = [
+        {
+          monitor = "";
+          text = "cmd[update:1000] date +\"%I:%M %p\"";
+          text_align = "center";
+          color = foregroundRgb;
+          font_size = 64;
+          font_family = "CaskaydiaMono Nerd Font";
+          position = "0, 200";
+          halign = "center";
+          valign = "center";
+          shadow_passes = 1;
+        }
+        {
+          monitor = "";
+          text = "cmd[update:60000] date +\"%A, %B %d\"";
+          text_align = "center";
+          color = foregroundMutedRgb;
+          font_size = 20;
+          font_family = "CaskaydiaMono Nerd Font";
+          position = "0, 140";
+          halign = "center";
+          valign = "center";
+        }
+        {
+          monitor = "";
+          text = "\$FPRINTPROMPT";
+          text_align = "center";
+          color = foregroundMutedRgb;
+          font_size = 24;
+          font_family = "CaskaydiaMono Nerd Font";
+          position = "0, -100";
+          halign = "center";
+          valign = "center";
+        }
+      ];
     };
   };
 }
