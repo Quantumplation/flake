@@ -20,6 +20,10 @@ rust-overlay.url = "github:oxalica/rust-overlay";
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ambxst = {
+      url = "github:Axenide/Ambxst";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs @ {
@@ -30,6 +34,7 @@ rust-overlay.url = "github:oxalica/rust-overlay";
     home-manager,
     sops-nix,
     rust-overlay,
+    ambxst,
     ...
   }:
     {
@@ -42,6 +47,7 @@ rust-overlay.url = "github:oxalica/rust-overlay";
             { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
             home-manager.nixosModules.home-manager
             sops-nix.nixosModules.sops
+            ambxst.nixosModules.default
             ./hosts/goldwasser
           ];
         };
@@ -54,6 +60,7 @@ rust-overlay.url = "github:oxalica/rust-overlay";
             { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
             home-manager.nixosModules.home-manager
             sops-nix.nixosModules.sops
+            ambxst.nixosModules.default
             ./hosts/noether
           ];
         };
