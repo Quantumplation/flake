@@ -9,10 +9,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprland.url = "github:hyprwm/Hyprland";
-    hyprshell = {
-      url = "github:H3rmt/hyprshell";
-      inputs.hyprland.follows = "hyprland";
-    };
+    hyprshell.url = "github:H3rmt/hyprshell";
 nix-colors.url = "github:misterio77/nix-colors";
 rust-overlay.url = "github:oxalica/rust-overlay";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
@@ -20,10 +17,7 @@ rust-overlay.url = "github:oxalica/rust-overlay";
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    ambxst = {
-      url = "github:Axenide/Ambxst";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    claude-code.url = "github:sadjow/claude-code-nix";
   };
 
   outputs = inputs @ {
@@ -34,7 +28,6 @@ rust-overlay.url = "github:oxalica/rust-overlay";
     home-manager,
     sops-nix,
     rust-overlay,
-    ambxst,
     ...
   }:
     {
@@ -44,10 +37,9 @@ rust-overlay.url = "github:oxalica/rust-overlay";
           specialArgs = { inherit inputs; };
           modules = [
             { nixpkgs.hostPlatform = "x86_64-linux"; }
-            { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
+            { nixpkgs.overlays = [ rust-overlay.overlays.default inputs.claude-code.overlays.default ]; }
             home-manager.nixosModules.home-manager
             sops-nix.nixosModules.sops
-            ambxst.nixosModules.default
             ./hosts/goldwasser
           ];
         };
@@ -57,10 +49,9 @@ rust-overlay.url = "github:oxalica/rust-overlay";
           specialArgs = { inherit inputs; };
           modules = [
             { nixpkgs.hostPlatform = "x86_64-linux"; }
-            { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
+            { nixpkgs.overlays = [ rust-overlay.overlays.default inputs.claude-code.overlays.default ]; }
             home-manager.nixosModules.home-manager
             sops-nix.nixosModules.sops
-            ambxst.nixosModules.default
             ./hosts/noether
           ];
         };
