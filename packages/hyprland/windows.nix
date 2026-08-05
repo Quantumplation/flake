@@ -20,6 +20,14 @@
       "match:class todo-panel, border_size 0"
       "match:class todo-panel, no_blur on"
 
+      # Wattson panel (power history, toggled from the waybar battery icon).
+      # Same stash-in-special-workspace mechanics as todo-panel above.
+      "match:class wattson-panel, float on, size 880 640, center on"
+      "match:class wattson-panel, workspace special:wattson silent"
+      "match:class wattson-panel, opacity 1.0"
+      "match:class wattson-panel, border_size 0"
+      "match:class wattson-panel, no_blur on"
+
       # Claude dashboard (waybar dropdown): full-height overlay panel hugging
       # the right screen edge, sliding in like a notification center. The
       # dashboard process computes its exact geometry from the focused

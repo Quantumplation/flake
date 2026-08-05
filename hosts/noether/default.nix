@@ -99,6 +99,41 @@
   services.power-profiles-daemon.enable = true;
   services.thermald.enable = true;
 
+  # Wattson: power-history sampler (RAPL + battery + per-app CPU → SQLite,
+  # API on 127.0.0.1:4713). The panel is toggled from the waybar battery
+  # icon. Inlined copy of ~/proj/wattson/nix/module.nix — flake purity
+  # forbids importing module files from outside this repo; keep in sync.
+  # Root because RAPL counters are 0400 root (PLATYPUS mitigation); code
+  # runs from the checked-out repo, so changes need only a service restart.
+  systemd.services.wattson = {
+    description = "wattson power-history sampler";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "local-fs.target" ];
+    environment = {
+      WATTSON_DB = "/var/lib/wattson/wattson.db";
+      WATTSON_PORT = "4713";
+      WATTSON_INTERVAL_MS = "10000";
+    };
+    serviceConfig = {
+      ExecStart = "${pkgs.bun}/bin/bun /home/pi/proj/wattson/packages/daemon/src/index.ts";
+      WorkingDirectory = "/home/pi/proj/wattson";
+      StateDirectory = "wattson";
+      Restart = "on-failure";
+      RestartSec = 5;
+      ProtectSystem = "strict";
+      ProtectHome = "read-only"; # bun reads the repo out of /home
+      ReadWritePaths = [ "/var/lib/wattson" ];
+      PrivateTmp = true;
+      NoNewPrivileges = true;
+      # DAC_READ_SEARCH: /home/pi is 0700, so even root needs this to
+      # traverse into the repo (dropping ALL caps → CouldntReadCurrentDirectory)
+      CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH" ];
+      RestrictAddressFamilies = [ "AF_INET" "AF_UNIX" ];
+      MemoryMax = "512M";
+      CPUWeight = 20; # never compete with real work
+    };
+  };
+
   # Touchpad support
   services.libinput = {
     enable = true;
@@ -211,6 +246,7 @@
           format-icons = [ "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹" ];
           format-charging = "󰂄 {capacity}%";
           tooltip-format = "{timeTo}";
+          on-click = "wattson-toggle"; # power history panel (~/proj/wattson)
         };
 
         "custom/brightness" = {

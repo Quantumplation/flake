@@ -103,5 +103,28 @@
         exec todo-panel --prefill "$sel"
       '';
     })
+
+    # Wattson panel: toggles the floating power-history panel
+    # (~/.local/bin/wattson-panel, built from ~/proj/wattson/packages/panel).
+    # Same resident-instance mechanics as todo-panel-toggle above.
+    (writeShellApplication {
+      name = "wattson-toggle";
+      runtimeInputs = [ coreutils libnotify ];
+      text = ''
+        # eframe dlopens wayland/xkbcommon/GL at runtime (NixOS has no global libs)
+        export LD_LIBRARY_PATH=${lib.makeLibraryPath [ wayland libxkbcommon libGL ]}:''${LD_LIBRARY_PATH:-}
+        export PATH="$HOME/.local/bin:$PATH"
+        if ! command -v wattson-panel >/dev/null; then
+          # not built on this machine (e.g. fresh host) — fail quietly on autostart
+          [[ "''${1:-}" == "--autostart" ]] && exit 0
+          notify-send "wattson" "wattson-panel not installed (build ~/proj/wattson)"
+          exit 1
+        fi
+        if [[ "''${1:-}" == "--autostart" ]]; then
+          exec wattson-panel --hidden
+        fi
+        exec wattson-panel
+      '';
+    })
   ];
 }

@@ -14,6 +14,7 @@
       "xwaylandvideobridge"
       "1password --silent"
       "todo-panel-toggle --autostart"
+      "wattson-toggle --autostart"
     ];
 
     exec = [
