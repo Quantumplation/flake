@@ -52,6 +52,9 @@
       # Workspace management
       "SUPER, X, exec, swap-workspaces"
 
+      # Quake-style dropdown terminal
+      "SUPER SHIFT, A, exec, quake-terminal"
+
       # Applications
       "SUPER, A, exec, $terminal"
       "SUPER, B, exec, $browser"

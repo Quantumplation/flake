@@ -48,5 +48,12 @@
       runtimeInputs = [ coreutils hyprland swww libnotify procps swaynotificationcenter ];
       text = builtins.readFile ../assets/scripts/theme-switch.sh;
     })
+
+    # Quake-style dropdown terminal toggle
+    (writeShellApplication {
+      name = "quake-terminal";
+      runtimeInputs = [ hyprland jq ghostty ];
+      text = builtins.readFile ../assets/scripts/quake-terminal.sh;
+    })
   ];
 }
