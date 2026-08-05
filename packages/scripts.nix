@@ -76,5 +76,32 @@
       runtimeInputs = [ jq coreutils procps hyprland ];
       text = builtins.readFile ../assets/scripts/claude-hook.sh;
     })
+
+    # Todo capture (zero-UI): highlighted text straight into the todo app via
+    # the `todo` CLI (imperative: ~/.local/bin, built from ~/proj/todo), which
+    # handles auth + offline queueing.
+    (writeShellApplication {
+      name = "todo-capture";
+      runtimeInputs = [ wofi wl-clipboard libnotify coreutils gnused ];
+      text = builtins.readFile ../assets/scripts/todo-capture.sh;
+    })
+
+    # Todo panel: toggles the floating Tauri panel (~/.local/bin/todo-panel,
+    # built from ~/proj/todo/packages/panel), passing the primary selection as
+    # prefill. --autostart launches the resident instance hidden at login.
+    (writeShellApplication {
+      name = "todo-panel-toggle";
+      runtimeInputs = [ wl-clipboard coreutils libnotify ]; # libnotify: panel notifications
+      text = ''
+        # eframe dlopens wayland/xkbcommon/GL at runtime (NixOS has no global libs)
+        export LD_LIBRARY_PATH=${lib.makeLibraryPath [ wayland libxkbcommon libGL ]}:''${LD_LIBRARY_PATH:-}
+        export PATH="$HOME/.local/bin:$PATH"
+        if [[ "''${1:-}" == "--autostart" ]]; then
+          exec todo-panel --hidden
+        fi
+        sel="$(wl-paste --primary --no-newline 2>/dev/null | head -c 500 || true)"
+        exec todo-panel --prefill "$sel"
+      '';
+    })
   ];
 }

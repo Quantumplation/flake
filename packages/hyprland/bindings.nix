@@ -60,6 +60,10 @@
       # it if already open.
       "SUPER, Q, exec, claude-dropdown"
 
+      # Todo panel (floating quick-add + list) / zero-UI selection capture
+      "SUPER, T, exec, todo-panel-toggle"
+      "SUPER CTRL, T, exec, todo-capture --selection"
+
       # Applications
       "SUPER, A, exec, $terminal"
       "SUPER, B, exec, $browser"

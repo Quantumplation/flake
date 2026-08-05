@@ -13,6 +13,7 @@
       "wl-paste --type image --watch cliphist store"
       "xwaylandvideobridge"
       "1password --silent"
+      "todo-panel-toggle --autostart"
     ];
 
     exec = [

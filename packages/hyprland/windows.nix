@@ -5,6 +5,21 @@
 }: {
   wayland.windowManager.hyprland.settings = {
     windowrule = [
+      # Todo panel (hotkey-toggled floating quick-add). Opens stashed in the
+      # special workspace (winit can't map hidden on Wayland); the panel's
+      # show/hide moves it in and out, quake-terminal style. NO `pin on`:
+      # Hyprland silently refuses to move pinned windows between workspaces,
+      # which breaks hiding entirely.
+      "match:class todo-panel, float on, size 760 600, center on"
+      "match:class todo-panel, workspace special:todo silent"
+      # opaque: the panel is transparent-with-own-frame; theme opacity washes it out
+      "match:class todo-panel, opacity 1.0"
+      # no compositor border or blur: the panel paints its own card, and the
+      # transparent strip below it must stay perfectly clear so the hint text
+      # floats over the bare desktop (blur would haze the whole surface)
+      "match:class todo-panel, border_size 0"
+      "match:class todo-panel, no_blur on"
+
       # Claude dashboard (waybar dropdown): full-height overlay panel hugging
       # the right screen edge, sliding in like a notification center. The
       # dashboard process computes its exact geometry from the focused
