@@ -55,6 +55,11 @@
       # Quake-style dropdown terminal
       "SUPER SHIFT, A, exec, quake-terminal"
 
+      # Claude approval queue / session dashboard (Q = approval Queue).
+      # Same toggle as the waybar click: opens the sliding panel, or closes
+      # it if already open.
+      "SUPER, Q, exec, claude-dropdown"
+
       # Applications
       "SUPER, A, exec, $terminal"
       "SUPER, B, exec, $browser"

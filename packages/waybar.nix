@@ -101,8 +101,8 @@ in {
           "custom/clipboard"
           "custom/ada"
           "custom/keylight"
+          "custom/claude"
           "custom/volume"
-          "custom/system"
           "custom/swaync"
         ];
 
@@ -201,11 +201,14 @@ in {
           format = "{}";
         };
 
-        "custom/system" = {
-          exec = "~/.config/waybar/waybar-system.sh";
+        "custom/claude" = {
+          exec = "~/.config/waybar/waybar-claude.sh";
           return-type = "json";
-          interval = 3;
-          on-click = "ghostty -e btop";
+          # instant updates come from the hook via signal 9; the slow poll
+          # exists to prune sessions that died without a SessionEnd hook
+          interval = 15;
+          signal = 9;
+          on-click = "claude-dropdown";
           format = "{}";
         };
 

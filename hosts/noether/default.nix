@@ -162,8 +162,8 @@
           "tray"
           "custom/clipboard"
           "custom/ada"
+          "custom/claude"
           "custom/volume"
-          "custom/system"
           "custom/swaync"
         ];
 
@@ -243,11 +243,11 @@
           on-scroll-up = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
           on-scroll-down = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
         };
-        "custom/system" = {
-          exec = "~/.config/waybar/waybar-system.sh";
+        "custom/claude" = {
+          exec = "~/.config/waybar/waybar-claude.sh";
           return-type = "json";
-          interval = 3;
-          on-click = "ghostty -e btop";
+          interval = 5;
+          on-click = "claude-dropdown";
         };
         "custom/ada" = {
           exec = "waybar-ada";

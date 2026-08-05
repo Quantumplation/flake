@@ -5,6 +5,15 @@
 }: {
   wayland.windowManager.hyprland.settings = {
     windowrule = [
+      # Claude dashboard (waybar dropdown): full-height overlay panel hugging
+      # the right screen edge, sliding in like a notification center. The
+      # dashboard process computes its exact geometry from the focused
+      # monitor at startup (windowrule move formulas proved unreliable, and
+      # tiling it mangles existing layouts; `addreserved` at runtime resets
+      # monitor scale, so overlay it is).
+      "match:title ClaudeDashboard, float on, pin on, size 560 90%"
+      "match:title ClaudeDashboard, animation slide right"
+
       # Eternl Cardano wallet (Brave PWA)
       "float true, match:class ^(brave-kmhcihpebfmpgmihbkipmjlmmioameka-Default)$"
 
@@ -71,6 +80,8 @@
 
       # Max size constraint
       "max_size 1400 900, match:float true"
+      # ...except the Claude sidebar, which is intentionally near-full-height
+      "match:title ClaudeDashboard, max_size 560 2400"
 
       # Prevent screen from sleeping
       "idle_inhibit fullscreen, match:class ^(brave|chromium|firefox)$"

@@ -55,5 +55,26 @@
       runtimeInputs = [ hyprland jq ghostty ];
       text = builtins.readFile ../assets/scripts/quake-terminal.sh;
     })
+
+    # Claude session dashboard
+    (writeShellApplication {
+      name = "claude-dashboard";
+      runtimeInputs = [ hyprland jq procps ncurses coreutils ];
+      text = builtins.readFile ../assets/scripts/claude-dashboard.sh;
+    })
+
+    # Claude dashboard launcher (waybar click handler)
+    (writeShellApplication {
+      name = "claude-dropdown";
+      runtimeInputs = [ hyprland jq ghostty procps ];
+      text = builtins.readFile ../assets/scripts/claude-dropdown.sh;
+    })
+
+    # Claude Code hook for session monitoring (window capture needs hyprctl)
+    (writeShellApplication {
+      name = "claude-session-hook";
+      runtimeInputs = [ jq coreutils procps hyprland ];
+      text = builtins.readFile ../assets/scripts/claude-hook.sh;
+    })
   ];
 }
