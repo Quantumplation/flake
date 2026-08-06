@@ -135,5 +135,8 @@
       runtimeInputs = [ bubblewrap coreutils git findutils bashInteractive ];
       text = builtins.readFile ../assets/scripts/sbx.sh;
     })
+
+    # Sonos CLI — noson ships noson-cli under lib/noson/, expose on PATH
+    (writeShellScriptBin "noson-cli" ''exec ${noson}/lib/noson/noson-cli "$@"'')
   ];
 }

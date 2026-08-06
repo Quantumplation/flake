@@ -13,6 +13,7 @@
     obs-studio
     mypaint
     digikam
+    noson    # Sonos controller (GUI + noson-cli)
 
     # Wayland utilities
     cliphist
