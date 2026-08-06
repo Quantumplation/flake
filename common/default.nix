@@ -12,6 +12,7 @@
     ../modules/audio.nix
     ../modules/users.nix
     ../modules/programs.nix
+    ../modules/vpn.nix
     ../modules/sonos.nix
     (import ../home.nix inputs)
   ];
