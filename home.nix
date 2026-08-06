@@ -32,6 +32,7 @@ in {
         (import ./packages/vim.nix)
         (import ./packages/zed.nix)
         (import ./packages/obsidian.nix)
+        (import ./packages/tldraw.nix)
         (import ./packages/waybar.nix inputs)
         (import ./packages/wofi.nix)
         (import ./packages/wayvnc.nix inputs)
