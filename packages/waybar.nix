@@ -29,7 +29,9 @@ inputs: {
   waybar-ada-click = pkgs.writeShellApplication {
     name = "waybar-ada-click";
     runtimeInputs = [ pkgs.xdg-utils ];
-    text = builtins.readFile ../assets/waybar/waybar-ada-cycle.sh;
+    # Was reading waybar-ada-cycle.sh — copy-paste bug, so clicking cycled
+    # the display mode instead of opening the explorer.
+    text = builtins.readFile ../assets/waybar/waybar-ada-click.sh;
   };
 in {
   # Make waybar-ada available in PATH for host-specific overrides

@@ -67,7 +67,7 @@
       # class-independently, so the old per-Brave picker rules were dropped.
 
       # Default these to floating
-      "float true, match:class ^(org.pulseaudio.pavucontrol|blueberry.py)$"
+      "float true, match:class ^(org.pulseaudio.pavucontrol|\\.?blueman-manager(-wrapped)?)$"
       "float true, match:class ^(steam)$"
       "fullscreen true, match:class ^(com.libretro.RetroArch)$"
 
@@ -89,8 +89,8 @@
       "size 800 600, match:class ^(org.pulseaudio.pavucontrol)$"
       "center true, match:class ^(org.pulseaudio.pavucontrol)$"
 
-      "size 700 500, match:class ^(blueberry.py)$"
-      "center true, match:class ^(blueberry.py)$"
+      "size 700 500, match:class ^(\\.?blueman-manager(-wrapped)?)$"
+      "center true, match:class ^(\\.?blueman-manager(-wrapped)?)$"
 
       # Network manager
       "float true, match:class ^(nm-connection-editor)$"
@@ -128,9 +128,6 @@
       "size 25% 25%, match:title ^(Picture-in-Picture)$"
       "pin true, match:title ^(Picture-in-Picture)$"
       "move 72% 72%, match:title ^(Picture-in-Picture)$"
-
-      # Satty screenshot editor
-      "fullscreen true, match:class ^(com.gabm.satty)$"
 
       # Max size constraint
       "max_size 1400 900, match:float true"

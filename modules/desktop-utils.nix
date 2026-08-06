@@ -24,7 +24,6 @@
     wlr-randr
 
     # Hyprland utilities
-    hyprshot
     hyprpicker
     hyprsunset
     brightnessctl
