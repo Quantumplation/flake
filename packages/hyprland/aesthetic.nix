@@ -30,16 +30,16 @@ in {
     decoration = {
       rounding = 14;
 
+      active_opacity = 0.97;
       inactive_opacity = 0.93;
       dim_inactive = true;
       dim_strength = 0.15;
 
       shadow = {
         enabled = true;
-        range = 8;
-        render_power = 3;
-        ignore_window = true;
-        color = "rgba(00000030)";
+        range = 20;
+        render_power = 2;
+        color = "rgba(00000050)";
       };
 
       blur = {
@@ -69,8 +69,8 @@ in {
         "global, 1, 10, default"
         "border, 1, 5.39, easeOutQuint"
         "windows, 1, 4.79, easeOutQuint"
-        "windowsIn, 1, 4.1, easeOutQuint, popin 87%"
-        "windowsOut, 1, 1.49, linear, popin 87%"
+        "windowsIn, 1, 3.5, easeOutQuint, popin 80%"
+        "windowsOut, 1, 1.2, almostLinear, popin 80%"
         "fadeIn, 1, 1.73, almostLinear"
         "fadeOut, 1, 1.46, almostLinear"
         "fade, 1, 3.03, quick"
@@ -79,12 +79,13 @@ in {
         "layersOut, 1, 1.5, linear, fade"
         "fadeLayersIn, 1, 1.79, almostLinear"
         "fadeLayersOut, 1, 1.39, almostLinear"
-        "workspaces, 1, 3, easeOutQuint, slide"
+        "fadeDim, 1, 6, almostLinear"
+        "workspaces, 1, 3.5, easeOutQuint, slidefadevert 15%"
+        "specialWorkspace, 1, 4, easeOutQuint, slidevert"
       ];
     };
 
     dwindle = {
-      pseudotile = true;
       preserve_split = true;
       force_split = 2;
     };

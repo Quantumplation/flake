@@ -23,6 +23,16 @@ inputs: {
   in ''
     @define-color background ${bgRgb};
     @define-color background-transparent ${bgRgba};
+    @define-color ws1 #${palette.base0D};
+    @define-color ws2 #${palette.base0B};
+    @define-color ws3 #${palette.base0E};
+    @define-color ws4 #${palette.base0A};
+    @define-color ws5 #${palette.base08};
+    @define-color good #${palette.base0B};
+    @define-color warning #${palette.base0A};
+    @define-color critical #${palette.base08};
+    @define-color accent #${palette.base0D};
+    @define-color muted #${palette.base03};
     * { color: ${fgRgb}; }
     window#waybar { background-color: ${bgRgba}; }
   '';
@@ -40,18 +50,21 @@ inputs: {
     redRgb = convert ", " palette.base08;
     cyan = convert ", " palette.base0C;
   in ''
+    /* Polish spec: spacing 4/8/12/16, radius surface=12 control=8,
+     * type 11/13/14, dims 1.0/0.65/0.35, hover brightens via white@6%. */
+
     * {
       all: unset;
       font-family: "JetBrainsMono Nerd Font", monospace;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .control-center {
-      background: rgba(${bg}, 0.95);
-      border: 2px solid rgba(${accentRgb}, 0.4);
+      background: rgba(${bg}, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 12px;
-      margin: 10px;
-      padding: 10px;
+      margin: 8px;
+      padding: 12px;
     }
 
     .control-center-list {
@@ -59,41 +72,39 @@ inputs: {
     }
 
     .notification {
-      background: rgba(${bg1}, 0.9);
-      border: 1px solid rgba(${accentRgb}, 0.3);
-      border-radius: 8px;
-      margin: 6px 0;
-      padding: 10px;
+      background: rgba(${bg1}, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      margin: 4px 0;
+      padding: 12px;
     }
 
     .notification-time {
       color: ${muted};
-      font-size: 12px;
+      font-size: 11px;
     }
 
     .notification:hover {
-      background: rgba(${bg2}, 0.95);
-      border-color: rgba(${accentRgb}, 0.6);
+      background: rgba(${bg2}, 0.9);
     }
 
     .notification-content {
-      padding: 8px;
+      padding: 4px;
     }
 
     .notification-default-action,
     .notification-action {
-      background: rgba(${accentRgb}, 0.15);
-      border: 1px solid rgba(${accentRgb}, 0.4);
-      border-radius: 6px;
-      padding: 8px 16px;
+      background: rgba(${accentRgb}, 0.12);
+      border: 1px solid rgba(${accentRgb}, 0.25);
+      border-radius: 8px;
+      padding: 8px 12px;
       color: #${accent};
       margin: 4px;
     }
 
     .notification-default-action:hover,
     .notification-action:hover {
-      background: rgba(${accentRgb}, 0.25);
-      border-color: rgba(${accentRgb}, 0.6);
+      background: rgba(${accentRgb}, 0.2);
     }
 
     .notification-default-action button,
@@ -113,17 +124,16 @@ inputs: {
     }
 
     .control-center-clear-all {
-      background: rgba(${accentRgb}, 0.2);
-      border: 1px solid rgba(${accentRgb}, 0.4);
-      border-radius: 6px;
+      background: rgba(${accentRgb}, 0.15);
+      border: 1px solid rgba(${accentRgb}, 0.25);
+      border-radius: 8px;
       color: #${accent};
-      margin: 6px;
-      padding: 8px;
+      margin: 4px;
+      padding: 8px 12px;
     }
 
     .control-center-clear-all:hover {
-      background: rgba(${accentRgb}, 0.3);
-      border-color: rgba(${accentRgb}, 0.6);
+      background: rgba(${accentRgb}, 0.25);
     }
 
     .close-button {
@@ -134,13 +144,13 @@ inputs: {
     }
 
     .close-button:hover {
-      background: rgba(${redRgb}, 0.2);
+      background: rgba(${redRgb}, 0.15);
     }
 
     .notification-window {
-      background: rgba(${bg}, 0.95);
-      border: 2px solid rgba(${accentRgb}, 0.4);
-      border-radius: 8px;
+      background: rgba(${bg}, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
     }
 
     .low {
@@ -153,23 +163,23 @@ inputs: {
 
     .critical {
       border-left: 3px solid rgba(${redRgb}, 0.8);
-      animation: blink 1s ease infinite;
+      animation: breathe 3s ease-in-out infinite;
     }
 
     .widget-dnd {
       background: transparent;
-      padding: 8px 10px;
-      margin: 5px 10px;
+      padding: 8px 12px;
+      margin: 4px 8px;
     }
 
     .widget-dnd > label {
       color: ${fg};
-      font-size: 14px;
+      font-size: 13px;
     }
 
     switch.control-center-dnd {
-      background: rgba(${bg2}, 0.8);
-      border: 1px solid rgba(${accentRgb}, 0.3);
+      background: rgba(${bg2}, 0.6);
+      border: 1px solid rgba(${accentRgb}, 0.25);
       border-radius: 12px;
       min-width: 42px;
       min-height: 22px;
@@ -177,7 +187,6 @@ inputs: {
 
     switch.control-center-dnd:checked {
       background: rgba(${accentRgb}, 0.4);
-      border-color: rgba(${accentRgb}, 0.6);
     }
 
     switch.control-center-dnd slider {
@@ -188,9 +197,9 @@ inputs: {
       margin: 3px;
     }
 
-    @keyframes blink {
+    @keyframes breathe {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.8; }
+      50% { opacity: 0.65; }
     }
   '';
 

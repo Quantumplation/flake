@@ -137,7 +137,7 @@ in {
             notification-icon-size = 48;
             notification-body-image-height = 100;
             notification-body-image-width = 200;
-            transition-time = 200;
+            transition-time = 300;
             hide-on-clear = true;
             hide-on-action = true;
             script-fail-notify = false;

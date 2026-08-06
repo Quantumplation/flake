@@ -1,11 +1,20 @@
 @import "./theme.css";
 
+/* Polish spec — keep all values in this file consistent.
+ * Spacing: 4 / 8 / 12 / 16 / 24
+ * Radius:  surface=12, control=8
+ * Type:    11 (caption) / 13 (body) / 14 (emphasis)
+ * Dims:    1.0 (active) / 0.65 (inactive) / 0.35 (disabled)
+ * Motion:  150ms (controls) / 250ms (panels)
+ * Hover:   brighten via rgba(255,255,255,0.06) — never dim
+ */
+
 * {
   border: none;
   border-radius: 0;
   min-height: 0;
   font-family: CaskaydiaMono Nerd Font;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 window#waybar {
@@ -13,14 +22,15 @@ window#waybar {
   border-radius: 12px;
 }
 
-/* Pill-shaped module groups */
+/* Glass-pill module groups */
 .modules-left,
 .modules-center,
 .modules-right {
   background-color: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
-  padding: 0 4px;
-  margin: 3px 4px;
+  padding: 0 8px;
+  margin: 4px;
 }
 
 #workspaces {
@@ -28,10 +38,15 @@ window#waybar {
 }
 
 #workspaces button {
-  padding: 4px;
+  padding: 4px 8px;
   background-color: transparent;
-  opacity: 0.4;
-  border-right: 1px solid rgba(108, 112, 134, 0.3);
+  opacity: 0.65;
+  border-right: 1px solid alpha(@muted, 0.35);
+  transition: all 150ms ease;
+}
+
+#workspaces button.visible {
+  opacity: 0.85;
 }
 
 #workspaces button:last-child {
@@ -39,80 +54,52 @@ window#waybar {
 }
 
 #workspaces button label {
-  color: #6c7086;  /* Grey by default */
-  font-size: 24px;
-  padding-left: 6px;
-  padding-right: 12px;
-  margin: 0px;
+  font-size: 14px;
+  padding: 0 8px;
+  margin: 0;
 }
 
-/* DP-2 (Monitor 1) - Visible workspaces */
-window#waybar.DP-2 #workspaces button.visible:nth-child(1) label {
-  color: #89b4fa;  /* Blue for workspace 1 */
-  opacity: 1;
-}
+/* DP-2 (Monitor 1) */
+window#waybar.DP-2 #workspaces button.visible:nth-child(1) label { color: @ws1; }
+window#waybar.DP-2 #workspaces button.visible:nth-child(2) label { color: @ws2; }
 
-window#waybar.DP-2 #workspaces button.visible:nth-child(2) label {
-  color: #a6e3a1;  /* Green for workspace 2 */
-  opacity: 1;
-}
+/* DP-3 (Monitor 2) */
+window#waybar.DP-3 #workspaces button.visible:nth-child(1) label { color: @ws3; }
+window#waybar.DP-3 #workspaces button.visible:nth-child(2) label { color: @ws4; }
 
-/* DP-3 (Monitor 2) - Visible workspaces */
-window#waybar.DP-3 #workspaces button.visible:nth-child(1) label {
-  color: #c77dff;  /* Purple for workspace 3 */
-  opacity: 1;
-}
-
-window#waybar.DP-3 #workspaces button.visible:nth-child(2) label {
-  color: #f9e2af;  /* Yellow/gold for workspace 4 */
-  opacity: 1;
-}
-
-/* Active workspace - brighter/bolder versions */
 #workspaces button.active {
   font-weight: bold;
   opacity: 1;
 }
 
-window#waybar.DP-2 #workspaces button.active:nth-child(1) label {
-  color: #5eb8ff;  /* Brighter blue */
-}
+window#waybar.DP-2 #workspaces button.active:nth-child(1) label { color: @ws1; }
+window#waybar.DP-2 #workspaces button.active:nth-child(2) label { color: @ws2; }
+window#waybar.DP-3 #workspaces button.active:nth-child(1) label { color: @ws3; }
+window#waybar.DP-3 #workspaces button.active:nth-child(2) label { color: @ws4; }
 
-window#waybar.DP-2 #workspaces button.active:nth-child(2) label {
-  color: #7dff7d;  /* Brighter green */
-}
-
-window#waybar.DP-3 #workspaces button.active:nth-child(1) label {
-  color: #e0aaff;  /* Brighter purple */
-}
-
-window#waybar.DP-3 #workspaces button.active:nth-child(2) label {
-  color: #ffe066;  /* Brighter yellow */
-}
-
-/* eDP-1 (Laptop) - Colored workspaces */
-window#waybar.eDP-1 #workspaces button.active:nth-child(1) label { color: #89b4fa; }
-window#waybar.eDP-1 #workspaces button.active:nth-child(2) label { color: #a6e3a1; }
-window#waybar.eDP-1 #workspaces button.active:nth-child(3) label { color: #c77dff; }
-window#waybar.eDP-1 #workspaces button.active:nth-child(4) label { color: #f9e2af; }
-window#waybar.eDP-1 #workspaces button.active:nth-child(5) label { color: #f38ba8; }
+/* eDP-1 (Laptop) */
+window#waybar.eDP-1 #workspaces button.active:nth-child(1) label { color: @ws1; }
+window#waybar.eDP-1 #workspaces button.active:nth-child(2) label { color: @ws2; }
+window#waybar.eDP-1 #workspaces button.active:nth-child(3) label { color: @ws3; }
+window#waybar.eDP-1 #workspaces button.active:nth-child(4) label { color: @ws4; }
+window#waybar.eDP-1 #workspaces button.active:nth-child(5) label { color: @ws5; }
 
 #workspaces button:hover {
-  opacity: 0.8;
+  background-color: rgba(255, 255, 255, 0.06);
+  opacity: 1;
 }
 
 /* Focused window title */
 #window {
-  margin-left: 10px;
-  padding: 0 10px;
-  font-style: italic;
-  opacity: 0.8;
+  margin-left: 12px;
+  padding: 0 8px;
+  opacity: 0.65;
 }
 
 /* All right-side modules */
 #custom-keylight,
 #custom-volume,
-#custom-system,
+#custom-claude,
 #custom-ada,
 #custom-pomodoro,
 #custom-clipboard,
@@ -126,169 +113,122 @@ window#waybar.eDP-1 #workspaces button.active:nth-child(5) label { color: #f38ba
 #clock {
   background-color: transparent;
   min-width: 12px;
-  margin-right: 13px;
-  padding: 0 6px;
-  transition: all 0.3s ease;
+  margin-right: 8px;
+  padding: 0 8px;
+  border-radius: 8px;
+  transition: all 150ms ease;
 }
 
-/* Hover effect for interactive modules */
+/* Hover brightens, never dims */
 #custom-keylight:hover,
 #custom-volume:hover,
-#custom-system:hover,
+#custom-claude:hover,
 #custom-ada:hover,
 #custom-clipboard:hover,
 #custom-swaync:hover,
 #custom-brightness:hover,
 #battery:hover {
-  opacity: 0.7;
+  background-color: rgba(255, 255, 255, 0.06);
 }
 
 #custom-swaync.notification {
-  color: #f38ba8;  /* Red when you have notifications */
+  color: @critical;
 }
 
 #custom-swaync.dnd {
-  color: #f9e2af;  /* Yellow when DND is on */
-  opacity: 0.7;
+  color: @warning;
+  opacity: 0.65;
 }
 
 #custom-separator {
-  border-left: #6c7086;
-  opacity: 0.3;
+  border-left: @muted;
+  opacity: 0.35;
   margin: 0 8px;
-  font-size: 18px;
+  font-size: 14px;
 }
 
-/* Volume module styling */
-#custom-volume.muted {
-  opacity: 0.5;
-}
+/* Volume */
+#custom-volume.muted { opacity: 0.35; }
+#custom-volume.high { color: @good; }
+#custom-volume.medium { color: @warning; }
+#custom-volume.low { color: @critical; }
 
-#custom-volume.high {
-  color: #a6e3a1; /* green */
-}
+/* Keylight */
+#custom-keylight.on { color: @warning; }
+#custom-keylight.off { opacity: 0.35; }
 
-#custom-volume.medium {
-  color: #f9e2af; /* yellow */
+/* Claude session monitor */
+#custom-claude.working {
+  color: @accent;
+  animation: breathe 3s ease-in-out infinite;
 }
-
-#custom-volume.low {
-  color: #f38ba8; /* red */
+#custom-claude.awaiting { color: @warning; }
+#custom-claude.permission {
+  color: @critical;
+  animation: breathe 1.5s ease-in-out infinite;
 }
+#custom-claude.idle { opacity: 0.65; }
+#custom-claude.none { opacity: 0.35; }
 
-/* Keylight module styling */
-#custom-keylight.on {
-  color: #f9e2af; /* warm yellow when on */
-}
+/* ADA price */
+#custom-ada.up { color: @good; }
+#custom-ada.down { color: @critical; }
+#custom-ada.neutral { color: @warning; }
+#custom-ada.error { opacity: 0.35; }
 
-#custom-keylight.off {
-  opacity: 0.5;
-}
-
-/* System monitor styling */
-#custom-system.good {
-  color: #a6e3a1; /* green */
-}
-
-#custom-system.warning {
-  color: #f9e2af; /* yellow */
-}
-
-#custom-system.critical {
-  color: #f38ba8; /* red */
-  font-weight: bold;
-}
-
-/* ADA price styling */
-#custom-ada.up {
-  color: #a6e3a1; /* green */
-}
-
-#custom-ada.down {
-  color: #f38ba8; /* red */
-}
-
-#custom-ada.neutral {
-  color: #f9e2af; /* yellow */
-}
-
-#custom-ada.error {
-  opacity: 0.5;
-}
-
-/* Pomodoro timer styling */
-#custom-pomodoro.running {
-  color: #f38ba8; /* red when running */
-  font-weight: bold;
-}
-
-#custom-pomodoro.stopped {
-  opacity: 0.7;
-}
-
+/* Pomodoro */
+#custom-pomodoro.running { color: @critical; }
+#custom-pomodoro.stopped { opacity: 0.65; }
 #custom-pomodoro.stopped-break {
-  color: #a6e3a1; /* green for break ready */
-  opacity: 0.7;
+  color: @good;
+  opacity: 0.65;
 }
 
-/* Clipboard history styling */
-#custom-clipboard.empty {
-  opacity: 0.5;
-}
-
-#custom-clipboard.has-items {
-  color: #89b4fa; /* blue */
-}
-
+/* Clipboard */
+#custom-clipboard.empty { opacity: 0.35; }
+#custom-clipboard.has-items { color: @accent; }
 #custom-clipboard.sensitive {
-  color: #f38ba8; /* red */
-  animation: blink 1s ease-in-out infinite;
+  color: @critical;
+  animation: breathe 3s ease-in-out infinite;
 }
 
-/* Clock styling */
+/* Clock */
 #clock {
   font-weight: bold;
-  font-size: 16px;
-  padding: 0 14px;
+  font-size: 14px;
+  padding: 0 12px;
 }
 
-/* Battery colors */
-#battery.warning {
-  color: #f9e2af;
-}
-
+/* Battery */
+#battery.warning { color: @warning; }
 #battery.critical {
-  color: #f38ba8;
-  animation: blink 1s linear infinite;
+  color: @critical;
+  animation: breathe 3s ease-in-out infinite;
 }
 
-@keyframes blink {
-  50% {
-    opacity: 0.5;
-  }
+@keyframes breathe {
+  50% { opacity: 0.65; }
 }
 
-/* Tooltip styling */
+/* Tooltip */
 tooltip {
-  padding: 6px 10px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   background-color: @background;
 }
 
 tooltip label {
-  padding: 2px 4px;
+  padding: 0 4px;
 }
 
 #custom-snapback {
-  padding: 0 10px;
+  padding: 0 8px;
   color: @theme_text_color;
 }
 
-#custom-snapback.organized {
-  color: #a6e3a1; /* Green when organized */
-}
-
+#custom-snapback.organized { color: @good; }
 #custom-snapback.misplaced {
-  color: #f38ba8; /* Red when misplaced */
-  animation: blink 1s ease-in-out infinite;
+  color: @critical;
+  animation: breathe 3s ease-in-out infinite;
 }

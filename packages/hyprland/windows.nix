@@ -158,6 +158,10 @@
       "blur true, match:namespace wofi"
       "blur true, match:namespace waybar"
       "ignore_alpha 0.3, match:namespace waybar"
+      "blur true, match:namespace swaync-control-center"
+      "blur true, match:namespace swaync-notification-window"
+      "ignore_alpha 0.3, match:namespace swaync-control-center"
+      "ignore_alpha 0.3, match:namespace swaync-notification-window"
     ];
   };
 }
