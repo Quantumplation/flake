@@ -1,3 +1,4 @@
 /result*
 .context/
 *.qcow2
+.claude/settings.local.json
