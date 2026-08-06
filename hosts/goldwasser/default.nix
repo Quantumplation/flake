@@ -17,6 +17,20 @@
     {
       imports = [ ../../packages/snap-back ];
 
+      # Multi-monitor NVIDIA wake workaround: monitors stay black on resume
+      # unless DPMS is toggled a couple of times to force signal renegotiation.
+      services.hypridle.settings.listener = lib.mkForce [
+        {
+          timeout = 300;
+          on-timeout = "loginctl lock-session";
+        }
+        {
+          timeout = 330;
+          on-timeout = "hyprctl dispatch dpms off";
+          on-resume = "sleep 1 && hyprctl dispatch dpms on && sleep 3 && hyprctl dispatch dpms off && sleep 3 && hyprctl dispatch dpms on";
+        }
+      ];
+
       wayland.windowManager.hyprland.settings = {
         # Dual monitor setup
         monitor = [
