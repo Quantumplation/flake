@@ -10,8 +10,8 @@
     };
     hyprland.url = "github:hyprwm/Hyprland";
     hyprshell.url = "github:H3rmt/hyprshell";
-nix-colors.url = "github:misterio77/nix-colors";
-rust-overlay.url = "github:oxalica/rust-overlay";
+    nix-colors.url = "github:misterio77/nix-colors";
+    rust-overlay.url = "github:oxalica/rust-overlay";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -31,6 +31,9 @@ rust-overlay.url = "github:oxalica/rust-overlay";
     ...
   }:
     {
+      # `nix fmt` — not enforced in CI, just there when wanted
+      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
+
       nixosConfigurations = {
         # Desktop - Goldwasser (AMD + NVIDIA)
         goldwasser = nixpkgs.lib.nixosSystem {

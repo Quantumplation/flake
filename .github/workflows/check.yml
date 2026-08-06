@@ -1,0 +1,20 @@
+name: Eval check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v16
+      - uses: DeterminateSystems/magic-nix-cache-action@v9
+      # Eval only — building two full systems is far too heavy for CI, but
+      # evaluation catches syntax errors, bad merges, and missing attrs.
+      - name: Evaluate goldwasser
+        run: nix eval .#nixosConfigurations.goldwasser.config.system.build.toplevel.drvPath
+      - name: Evaluate noether
+        run: nix eval .#nixosConfigurations.noether.config.system.build.toplevel.drvPath
