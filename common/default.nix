@@ -34,6 +34,8 @@
   };
 
   networking.networkmanager.enable = true;
+  # needed on some wifi networks
+  # networking.resolvconf.dnsExtensionMechanism = false;
 
   time.timeZone = "America/New_York";
 

@@ -4,7 +4,6 @@
   users.users.pi.extraGroups = [ "docker" ];
 
   environment.systemPackages = with pkgs; [
-    docker-compose
     # Compilers
     gcc
     clang
@@ -56,6 +55,7 @@
 
     # CLI development tools
     meld       # Diff / merge
+    gh
     wget
     alejandra  # Nix file formatting
     cachix     # Nix caching
@@ -70,6 +70,7 @@
     # Specialized tools
     arduino
     typst
+    tinymist  # Typst LSP + incremental preview (kibitz preview upgrade path)
     kubectl
     k9s
     aiken

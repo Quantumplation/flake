@@ -34,7 +34,7 @@
     pavucontrol
 
     # System utilities
-    blueberry  # Bluetooth management
+    blueman    # Bluetooth management (replaces blueberry which was removed upstream)
     openrgb    # RGB lighting control
 
     # Cloud & DevOps

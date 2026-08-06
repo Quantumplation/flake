@@ -90,6 +90,20 @@ Question: $question" 2>/dev/null | string trim | string lower)
           sudo nixos-rebuild switch --flake ~/flake#(hostname | string lower)
         '';
       };
+      nfu = {
+        description = "Nix flake update (all inputs or specific ones)";
+        body = ''
+          if test (count $argv) -eq 0
+            echo "Updating all flake inputs..."
+            nix flake update --flake ~/flake
+          else
+            echo "Updating: $argv"
+            for input in $argv
+              nix flake update $input --flake ~/flake
+            end
+          end
+        '';
+      };
     };
     completions.tailscale-ssh = ''
       complete -c ssh -f -a "(tailscale status --json 2>/dev/null | ${pkgs.jq}/bin/jq -r '.Peer[] | .DNSName' | string replace -r '\\.\$' '''')"

@@ -24,7 +24,7 @@
       "SUPER, Y, exec, wofi-power-menu"
 
       # Tiling
-      "SUPER, grave, togglesplit, # dwindle"
+      "SUPER, grave, layoutmsg, togglesplit # dwindle"
       "SUPER, S, togglefloating,"
       "SUPER, M, fullscreen, 1"
       "SUPER SHIFT, M, fullscreen, 0"

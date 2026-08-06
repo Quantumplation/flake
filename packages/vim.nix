@@ -52,12 +52,15 @@
       gruvbox
     ];
 
-    extraLuaConfig = ''
+    initLua = ''
       require('lean').setup({
         lsp = {},
         mappings = true,
       })
     '';
+
+    withRuby = true;
+    withPython3 = true;
 
     extraConfig = ''
       " Basic settings

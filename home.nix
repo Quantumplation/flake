@@ -64,9 +64,9 @@ in {
         };
 
         pointerCursor = {
-          name = "Adwaita";
-          package = pkgs.adwaita-icon-theme;
-          size = 24;
+          name = "Bibata-Modern-Classic";
+          package = pkgs.bibata-cursors;
+          size = 22;
           gtk.enable = true;
           x11.enable = true;
         };
@@ -75,6 +75,12 @@ in {
 
       xdg.mime.enable = true;
       xdg.configFile."mimeapps.list".force = true;
+      # NOTE: these *-flags.conf files are an Arch launcher-script convention;
+      # neither upstream Chromium/Brave nor the nixpkgs wrappers read them, so
+      # they are inert here. Kept only as documentation of intent. Hardware
+      # video decode is enabled by the nixpkgs brave wrapper
+      # (--enable-features=AcceleratedVideoDecodeLinuxGL) and Wayland comes from
+      # NIXOS_OZONE_WL --ozone-platform-hint=auto.
       # Annotator for the `screenshot` script. early_exit makes swappy quit
       # immediately after Ctrl+C / Ctrl+S instead of sitting there waiting to be
       # dismissed separately.
@@ -90,11 +96,9 @@ in {
       '';
 
       xdg.configFile."brave-flags.conf".text = ''
-        --disable-features=VaapiVideoDecoder,VaapiVideoEncoder,VaapiVideoDecodeLinuxGL
         --ozone-platform=wayland
       '';
       xdg.configFile."chromium-flags.conf".text = ''
-        --disable-features=VaapiVideoDecoder,VaapiVideoEncoder,VaapiVideoDecodeLinuxGL
         --ozone-platform=wayland
       '';
       xdg.mimeApps = {
@@ -152,12 +156,26 @@ in {
         };
       };
 
-      gtk = {
-        enable = true;
-        theme = {
+      gtk = let
+        gtkTheme = {
           package = pkgs.gnome-themes-extra;
           name = "Adwaita:dark";
         };
+      in {
+        enable = true;
+        theme = gtkTheme;
+        gtk4.theme = gtkTheme;
+
+        # No "Recent" list in GTK file choosers — including the portal picker,
+        # which is what every app now gets (xdg-desktop-portal-gtk is a GTK3
+        # binary, so the gtk3 key is the one that actually matters here; gtk4 is
+        # set for other apps).
+        #
+        # NOT done via `gsettings set org.gnome.desktop.privacy
+        # remember-recent-files false`, which is the usual advice: that schema
+        # isn't installed on this machine (no GNOME), so nothing would read it.
+        gtk3.extraConfig."gtk-recent-files-enabled" = false;
+        gtk4.extraConfig."gtk-recent-files-enabled" = false;
       };
 
       programs = {
