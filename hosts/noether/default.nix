@@ -15,6 +15,31 @@
 
   # Enable sound
   environment.variables.ALSA_CONFIG_UCM2_DIR = "${pkgs.alsa-ucm-conf}/share/alsa/ucm2";
+
+  # Keep the ALC285 codec powered: with power_save enabled it suspends after
+  # 10s of silence, and the speaker amp randomly comes back quiet/muffled from
+  # D3 (recovers only on a lucky later power cycle). Costs ~0.1-0.3W.
+  boot.extraModprobeConfig = ''
+    options snd_hda_intel power_save=0 power_save_controller=N
+  '';
+
+  # ...but that option is module-wide, so it also pinned the *dGPU's* HDMI-audio
+  # function (0000:c1:00.1, "HDA NVidia") awake. Both functions of a multi-function
+  # PCI device must be suspended before it can reach D3cold, so this kept the
+  # RTX 5070 runtime-active 24/7 at ~5.8W — with no display attached, 0% util and
+  # 2MiB VRAM in use. Measured: suspended 0.6s out of 20.8h uptime.
+  #
+  # Keep that one function unbound and runtime-PM-managed. Nothing uses it: HDMI
+  # audio on the dGPU only matters with a display wired to it, and eDP-1 is on the
+  # AMD iGPU. The ALC285 workaround above is untouched, and the analog codec keeps
+  # power_save=0. Verified: speakers + mic unaffected, ALSA card indices unchanged.
+  #
+  # driver_override prevents snd_hda_intel from claiming it at boot; the RUN clause
+  # covers a re-trigger where it is already bound (unbind resets power/control to
+  # "on", so control is re-armed after, in that order).
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{driver_override}="none", RUN+="${pkgs.bash}/bin/sh -c 'echo %k > /sys/bus/pci/drivers/snd_hda_intel/unbind 2>/dev/null; echo auto > /sys/bus/pci/devices/%k/power/control'"
+  '';
   environment.systemPackages = [
     pkgs.alsa-ucm-conf
     pkgs.easyeffects
