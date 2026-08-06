@@ -37,22 +37,34 @@
       "match:title ClaudeDashboard, float on, pin on, size 560 90%"
       "match:title ClaudeDashboard, animation slide right"
 
+      # Moraine, my terrain generator project
+      "match:class moraine, float on, size 1280 800, center on"
+
+      # Apoapsis, Bevy game project
+      "match:class apoapsis, float on, size 1280 800, center on"
+
+      # leaf2 and any other macroquad project (miniquad hardcodes this X11
+      # class; no size rule — the game's own Conf controls resolution)
+      "match:class miniquad-application, float on, center on"
+
       # Eternl Cardano wallet (Brave PWA)
       "float true, match:class ^(brave-kmhcihpebfmpgmihbkipmjlmmioameka-Default)$"
 
-      # Brave download/save dialogs
-      "float true, match:class ^(brave)$, match:title ^(wants to save).*"
-      "pin true, match:class ^(brave)$, match:title ^(wants to save).*"
-      "size 941 250, match:class ^(brave)$, match:title ^(wants to save).*"
-      "center true, match:class ^(brave)$, match:title ^(wants to save).*"
-
-      # Other common Brave dialogs
-      "float true, match:class ^(brave)$, match:title ^(Open File)$"
-      "float true, match:class ^(brave)$, match:title ^(Save File)$"
-      "float true, match:class ^(brave)$, match:title ^(Select Files)$"
-      "pin true, match:class ^(brave)$, match:title ^(Open File)$"
-      "pin true, match:class ^(brave)$, match:title ^(Save File)$"
-      "pin true, match:class ^(brave)$, match:title ^(Select Files)$"
+      # Brave download/save dialogs.
+      #
+      # Class is ^(brave|brave-browser)$: the running window reports
+      # `brave-browser`, so the old bare ^(brave)$ was anchored against a name
+      # nothing uses and never matched. Both spellings are kept because the
+      # class has varied across Brave/nixpkgs versions.
+      "float true, match:class ^(brave|brave-browser)$, match:title ^(wants to save).*"
+      "pin true, match:class ^(brave|brave-browser)$, match:title ^(wants to save).*"
+      "size 941 250, match:class ^(brave|brave-browser)$, match:title ^(wants to save).*"
+      "center true, match:class ^(brave|brave-browser)$, match:title ^(wants to save).*"
+      # NOTE: that title regex expects the title to *start* with "wants to
+      # save"; Brave usually prefixes the site name. Left as-is (unverified,
+      # separate from the picker fix) — see the File pickers block below, which
+      # now covers Brave's Open File / Save File / Select Files dialogs
+      # class-independently, so the old per-Brave picker rules were dropped.
 
       # Default these to floating
       "float true, match:class ^(org.pulseaudio.pavucontrol|blueberry.py)$"
@@ -90,10 +102,26 @@
       "size 400 500, match:class ^(org.gnome.Calculator|qalculate-gtk)$"
       "center true, match:class ^(org.gnome.Calculator|qalculate-gtk)$"
 
-      # File pickers
-      "float true, match:class ^(xdg-desktop-portal-gtk)$, match:title ^(.*File.*|.*Open.*|.*Save.*)$"
-      "size 900 600, match:class ^(xdg-desktop-portal-gtk)$, match:title ^(.*File.*|.*Open.*|.*Save.*)$"
-      "center true, match:class ^(xdg-desktop-portal-gtk)$, match:title ^(.*File.*|.*Open.*|.*Save.*)$"
+      # File pickers.
+      #
+      # Matched on title ALONE, deliberately — class is useless here. A picker
+      # only carries the `xdg-desktop-portal-gtk` class when the portal handles
+      # it; when an app falls back to its own in-process GTK dialog it inherits
+      # the *app's* class, which need not even match the app's own main window
+      # (tldraw's picker is `tldraw-offline`, its main window `tldraw offline`).
+      # The old class-scoped rule therefore never fired for those, and the
+      # picker got tiled into whatever slot was free — the "distorted and
+      # unusable" case.
+      #
+      # `match:modal` exists in 0.55 but does NOT work for this: it keys off
+      # xdg-dialog-v1, which GTK only advertises from GTK4. Electron/Chromium
+      # pickers are GTK3, and verified as not matching. Don't "simplify" to it.
+      #
+      # Titles are exact-anchored, not substring: `.*Save.*` would float any
+      # browser tab that happens to say "Save" in its title.
+      "float true, match:title ^(Open|Open File|Open Files|Open Folder|Save|Save As|Save File|Save File As|Save Image|Select File|Select Files|Select Folder|Select a File|Select Folder to Upload|Choose File|Choose Files|File Upload|Upload File)$"
+      "size 900 600, match:title ^(Open|Open File|Open Files|Open Folder|Save|Save As|Save File|Save File As|Save Image|Select File|Select Files|Select Folder|Select a File|Select Folder to Upload|Choose File|Choose Files|File Upload|Upload File)$"
+      "center true, match:title ^(Open|Open File|Open Files|Open Folder|Save|Save As|Save File|Save File As|Save Image|Select File|Select Files|Select Folder|Select a File|Select Folder to Upload|Choose File|Choose Files|File Upload|Upload File)$"
 
       # Picture-in-Picture
       "float true, match:title ^(Picture-in-Picture)$"
