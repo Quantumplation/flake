@@ -101,6 +101,9 @@
       "pin true, match:title ^(Picture-in-Picture)$"
       "move 72% 72%, match:title ^(Picture-in-Picture)$"
 
+      # Satty screenshot editor
+      "fullscreen true, match:class ^(com.gabm.satty)$"
+
       # Max size constraint
       "max_size 1400 900, match:float true"
       # ...except the Claude sidebar, which is intentionally near-full-height

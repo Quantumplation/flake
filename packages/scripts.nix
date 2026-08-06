@@ -28,10 +28,10 @@
       text = builtins.readFile ../assets/scripts/smart-tab.sh;
     })
 
-    # Screenshot wrapper that saves to ~/Captures/{year}-{month}/
+    # Screenshot: slurp (drag-select) -> grim (capture) -> swappy (annotate)
     (writeShellApplication {
       name = "screenshot";
-      runtimeInputs = [ hyprshot coreutils ];
+      runtimeInputs = [ grim slurp swappy wl-clipboard coreutils ];
       text = builtins.readFile ../assets/scripts/screenshot.sh;
     })
 

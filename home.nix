@@ -75,6 +75,20 @@ in {
 
       xdg.mime.enable = true;
       xdg.configFile."mimeapps.list".force = true;
+      # Annotator for the `screenshot` script. early_exit makes swappy quit
+      # immediately after Ctrl+C / Ctrl+S instead of sitting there waiting to be
+      # dismissed separately.
+      xdg.configFile."swappy/config".text = ''
+        [Default]
+        save_dir=$HOME/Captures
+        save_filename_format=%Y-%m/%Y-%m-%d_%H-%M-%S.png
+        early_exit=true
+        show_panel=true
+        line_size=4
+        text_size=20
+        paint_mode=arrow
+      '';
+
       xdg.configFile."brave-flags.conf".text = ''
         --disable-features=VaapiVideoDecoder,VaapiVideoEncoder,VaapiVideoDecodeLinuxGL
         --ozone-platform=wayland
