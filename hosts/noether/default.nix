@@ -411,6 +411,36 @@
         misc.initial_workspace_tracking = 2;
       };
     }
+
+    # Nightly network speed battery: logs real (ISP-unclassifiable) throughput
+    # to ~/proj/claude/net-speed/log.csv to track Optimum post-honeymoon.
+    # Only runs when connected to MyOptimum; timer covers the 8pm peak hour.
+    (let
+      netBattery = pkgs.writeShellApplication {
+        name = "net-battery";
+        runtimeInputs = with pkgs; [ iperf3 jq curl gawk gnugrep coreutils networkmanager iputils tailscale openssh ];
+        text = builtins.readFile ../../assets/scripts/net-battery.sh;
+      };
+    in {
+      home.packages = [ netBattery ];
+
+      systemd.user.services.net-battery = {
+        Unit.Description = "Network speed battery (logs to ~/proj/claude/net-speed)";
+        Service = {
+          Type = "oneshot";
+          ExecStart = "${netBattery}/bin/net-battery";
+        };
+      };
+
+      systemd.user.timers.net-battery = {
+        Unit.Description = "Nightly network speed battery during evening peak";
+        Timer = {
+          OnCalendar = "*-*-* 20:00:00";
+          RandomizedDelaySec = "45min";
+        };
+        Install.WantedBy = [ "timers.target" ];
+      };
+    })
   ];
 
   # Boot splash theme
