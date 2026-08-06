@@ -1,4 +1,36 @@
-{ pkgs, ... }: {
+{ pkgs, lib, ... }:
+
+let
+  # Package managers and build tools that execute arbitrary third-party code
+  # (postinstall scripts, build.rs, setup.py) as part of normal operation.
+  # These get transparently routed through the sbx sandbox so it is not
+  # something you have to remember. Bypass any of them with `command <tool>`.
+  #
+  # Deliberately not wrapped: `go` (no dependency code runs at build time) and
+  # `node`/`deno` (wrapping the runtime itself breaks far more than it protects
+  # — the install step is where untrusted code actually executes).
+  sandboxedTools = [
+    "npm" "npx" "pnpm" "yarn"
+    "bun" "bunx"
+    "pip" "pip3" "uv" "uvx" "poetry"
+    "cargo"
+  ];
+
+  sandboxWrappers = lib.genAttrs sandboxedTools (tool: {
+    description = "${tool}, sandboxed via sbx (bypass: command ${tool})";
+    # IN_SBX is set by sbx itself. The guard is belt-and-braces: the sandbox
+    # gets a scratch $HOME so these autoloaded functions aren't present inside
+    # it anyway, but this makes recursion impossible if that ever changes.
+    body = ''
+      if set -q IN_SBX
+        command ${tool} $argv
+      else
+        sbx -- ${tool} $argv
+      end
+    '';
+  });
+in
+{
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
@@ -48,7 +80,7 @@ Question: $question" 2>/dev/null | string trim | string lower)
     shellAbbrs = {
       awslogin = "aws sso login --sso-session pi";
     };
-    functions = {
+    functions = sandboxWrappers // {
       nrs = {
         description = "NixOS rebuild switch with auto git-add";
         body = ''

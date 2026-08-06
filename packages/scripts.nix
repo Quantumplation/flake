@@ -126,5 +126,14 @@
         exec wattson-panel
       '';
     })
+
+    # Sandboxed build/dev shell. `sbx npm install` runs the install with a
+    # scratch $HOME, so postinstall scripts and build.rs cannot read ~/.ssh,
+    # ~/.npmrc, ~/.aws or reach the SSH agent. See assets/scripts/sbx.sh.
+    (writeShellApplication {
+      name = "sbx";
+      runtimeInputs = [ bubblewrap coreutils git findutils bashInteractive ];
+      text = builtins.readFile ../assets/scripts/sbx.sh;
+    })
   ];
 }
