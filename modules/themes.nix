@@ -86,4 +86,26 @@
     vscode-theme = "Solarized Dark";
     wallpaper = "solarized-1.jpg";
   };
+  "lumon" = {
+    vscode-theme = "Lumon";
+    wallpaper = "lumon-1.jpg";
+    custom-palette = {
+      base00 = "1b2d40"; # background — deep Lumon navy
+      base01 = "253d55"; # lighter background
+      base02 = "304860"; # selection / gutter
+      base03 = "4d86b0"; # comments — muted steel blue
+      base04 = "86b7d8"; # dark foreground
+      base05 = "d6e2ee"; # foreground
+      base06 = "f2fcff"; # light foreground
+      base07 = "ffffff"; # lightest
+      base08 = "5e95bc"; # variables — medium blue
+      base09 = "73a6cb"; # integers — warm blue
+      base0A = "9dcae5"; # classes/warnings — sky blue
+      base0B = "6fa4c9"; # strings — teal blue
+      base0C = "b4e4f6"; # support — ice blue
+      base0D = "6fb8e3"; # functions — accent blue
+      base0E = "8bc9eb"; # keywords — periwinkle
+      base0F = "b1d8ee"; # deprecated — soft blue
+    };
+  };
 }

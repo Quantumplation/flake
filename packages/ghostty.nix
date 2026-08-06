@@ -2,12 +2,13 @@
   config,
   pkgs,
   ...
-}: let
-  palette = config.colorScheme.palette;
-in {
+}: {
   programs.ghostty = {
     enable = true;
     enableFishIntegration = true;
+    # Install the systemd user service + D-Bus activation (defaults to true on
+    # Linux, set explicitly for clarity). See https://ghostty.org/docs/linux/systemd
+    systemd.enable = true;
     settings = {
       # Window settings
       window-padding-x = 14;
@@ -15,48 +16,33 @@ in {
       background-opacity = 0.95;
       window-decoration = "none";
 
-      font-family = "Liberation Sans 11";
+      font-family = "CaskaydiaMono Nerd Font";
       font-size = 12;
+
+      cursor-style = "block";
+      cursor-style-blink = false;
+      mouse-hide-while-typing = true;
+      window-padding-balance = true;
 
       shell-integration-features = "sudo";
 
-      theme = "omarchy";
+      # Connect to the running systemd/D-Bus daemon instead of spawning a fresh
+      # process. Without this, `exec ghostty` keybinds bypass the daemon (the
+      # "desktop" default only single-instances when launched from a .desktop
+      # file). New windows go from ~300ms to ~20ms.
+      gtk-single-instance = true;
+
+      config-file = "/home/pi/.config/ghostty/theme-colors";
       keybind = [
         "ctrl+k=reset"
       ];
     };
-    themes = {
-      omarchy = {
-        background = "#${palette.base00}";
-        foreground = "#${palette.base05}";
-
-        selection-background = "#${palette.base02}";
-        selection-foreground = "#${palette.base00}";
-        palette = [
-          "0=#${palette.base00}"
-          "1=#${palette.base08}"
-          "2=#${palette.base0B}"
-          "3=#${palette.base0A}"
-          "4=#${palette.base0D}"
-          "5=#${palette.base0E}"
-          "6=#${palette.base0C}"
-          "7=#${palette.base05}"
-          "8=#${palette.base03}"
-          "9=#${palette.base08}"
-          "10=#${palette.base0B}"
-          "11=#${palette.base0A}"
-          "12=#${palette.base0D}"
-          "13=#${palette.base0E}"
-          "14=#${palette.base0C}"
-          "15=#${palette.base07}"
-          "16=#${palette.base09}"
-          "17=#${palette.base0F}"
-          "18=#${palette.base01}"
-          "19=#${palette.base02}"
-          "20=#${palette.base04}"
-          "21=#${palette.base06}"
-        ];
-      };
-    };
   };
+
+  # Start the daemon at login so even the first window is instant (the home-manager
+  # ghostty module installs the unit but doesn't enable it). This is the
+  # declarative equivalent of `systemctl --user enable app-com.mitchellh.ghostty`.
+  # The unit's [Install] section is WantedBy=graphical-session.target.
+  xdg.configFile."systemd/user/graphical-session.target.wants/app-com.mitchellh.ghostty.service".source =
+    "${config.programs.ghostty.package}/share/systemd/user/app-com.mitchellh.ghostty.service";
 }

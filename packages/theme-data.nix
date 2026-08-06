@@ -8,8 +8,12 @@ inputs: {
   themeNames = builtins.filter (n: n != "selected") (builtins.attrNames themes);
   convert = inputs.nix-colors.lib.conversions.hexToRGBString;
 
-  getColorScheme = name:
-    inputs.nix-colors.colorSchemes.${themes.${name}.base16-theme};
+  getColorScheme = name: let
+    theme = themes.${name};
+  in
+    if theme ? custom-palette
+    then { slug = name; name = name; palette = theme.custom-palette; }
+    else inputs.nix-colors.colorSchemes.${theme.base16-theme};
 
   mkThemeCss = name: let
     palette = (getColorScheme name).palette;
@@ -201,6 +205,65 @@ inputs: {
     hyprctl keyword general:col.inactive_border "${inactive}"
   '';
 
+  mkTideFish = name: let
+    palette = (getColorScheme name).palette;
+  in ''
+    # Tide prompt colors derived from base16 palette
+    set -U tide_os_bg_color ${palette.base0D}
+    set -U tide_os_color ${palette.base00}
+    set -U tide_pwd_bg_color ${palette.base02}
+    set -U tide_pwd_color_dirs ${palette.base05}
+    set -U tide_pwd_color_anchors ${palette.base07}
+    set -U tide_pwd_color_truncated_dirs ${palette.base04}
+    set -U tide_git_bg_color ${palette.base0B}
+    set -U tide_git_bg_color_unstable ${palette.base0A}
+    set -U tide_git_bg_color_urgent ${palette.base08}
+    set -U tide_git_color_branch ${palette.base00}
+    set -U tide_git_color_conflicted ${palette.base00}
+    set -U tide_git_color_dirty ${palette.base00}
+    set -U tide_git_color_operation ${palette.base00}
+    set -U tide_git_color_staged ${palette.base00}
+    set -U tide_git_color_stash ${palette.base00}
+    set -U tide_git_color_untracked ${palette.base00}
+    set -U tide_git_color_upstream ${palette.base00}
+    set -U tide_character_color ${palette.base0B}
+    set -U tide_character_color_failure ${palette.base08}
+    set -U tide_cmd_duration_bg_color ${palette.base0A}
+    set -U tide_cmd_duration_color ${palette.base00}
+    set -U tide_prompt_color_separator_same_color ${palette.base03}
+  '';
+
+  mkGhosttyConf = name: let
+    palette = (getColorScheme name).palette;
+  in ''
+    background = #${palette.base00}
+    foreground = #${palette.base05}
+    selection-background = #${palette.base02}
+    selection-foreground = #${palette.base00}
+    palette = 0=#${palette.base00}
+    palette = 1=#${palette.base08}
+    palette = 2=#${palette.base0B}
+    palette = 3=#${palette.base0A}
+    palette = 4=#${palette.base0D}
+    palette = 5=#${palette.base0E}
+    palette = 6=#${palette.base0C}
+    palette = 7=#${palette.base05}
+    palette = 8=#${palette.base03}
+    palette = 9=#${palette.base08}
+    palette = 10=#${palette.base0B}
+    palette = 11=#${palette.base0A}
+    palette = 12=#${palette.base0D}
+    palette = 13=#${palette.base0E}
+    palette = 14=#${palette.base0C}
+    palette = 15=#${palette.base07}
+    palette = 16=#${palette.base09}
+    palette = 17=#${palette.base0F}
+    palette = 18=#${palette.base01}
+    palette = 19=#${palette.base02}
+    palette = 20=#${palette.base04}
+    palette = 21=#${palette.base06}
+  '';
+
   wallpaperDir = "${config.home.homeDirectory}/Pictures/Wallpapers";
   mkWallpaperPath = name: "${wallpaperDir}/${themes.${name}.wallpaper}";
 
@@ -221,6 +284,12 @@ inputs: {
       cat > $out/${name}/swaync.css << 'SWAYNC_CSS_EOF'
       ${mkSwayncCss name}
       SWAYNC_CSS_EOF
+      cat > $out/${name}/ghostty.conf << 'GHOSTTY_EOF'
+      ${mkGhosttyConf name}
+      GHOSTTY_EOF
+      cat > $out/${name}/tide.fish << 'TIDE_EOF'
+      ${mkTideFish name}
+      TIDE_EOF
     '') themeNames)
     + ''
       echo "${builtins.concatStringsSep "\n" themeNames}" > $out/themes.list

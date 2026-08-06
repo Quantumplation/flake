@@ -75,6 +75,22 @@ in {
     fi
   '';
 
+  # On rebuild: apply current theme's ghostty colors
+  home.activation.initGhosttyTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    THEME_DATA="$HOME/.config/theme-data"
+    CURRENT="$HOME/.config/current-theme"
+    TARGET="$HOME/.config/ghostty/theme-colors"
+    if [ -f "$CURRENT" ]; then
+      THEME=$(cat "$CURRENT")
+    else
+      THEME="${themes.selected}"
+    fi
+    if [ -f "$THEME_DATA/$THEME/ghostty.conf" ]; then
+      $DRY_RUN_CMD mkdir -p "$(dirname "$TARGET")"
+      $DRY_RUN_CMD cp --no-preserve=mode "$THEME_DATA/$THEME/ghostty.conf" "$TARGET"
+    fi
+  '';
+
   programs.waybar = {
     enable = true;
     settings = [

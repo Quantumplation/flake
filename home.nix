@@ -7,7 +7,10 @@ inputs: {
 }: let
   themes = import ./modules/themes.nix;
   selectedTheme = themes.${themes.selected};
-  generatedColorScheme = null;
+  selectedColorScheme =
+    if selectedTheme ? custom-palette
+    then { slug = themes.selected; name = themes.selected; palette = selectedTheme.custom-palette; }
+    else inputs.nix-colors.colorSchemes.${selectedTheme.base16-theme};
 in {
 
   home-manager = {
@@ -38,7 +41,7 @@ in {
         ./modules/ssh.nix
       ];
 
-      colorScheme = inputs.nix-colors.colorSchemes.${selectedTheme.base16-theme};
+      colorScheme = selectedColorScheme;
 
       home = {
         username = "pi";

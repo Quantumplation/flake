@@ -6,13 +6,23 @@ inputs: {
 }: let
   palette = config.colorScheme.palette;
   convert = inputs.nix-colors.lib.conversions.hexToRGBString;
-  selected_wallpaper_path = (import ./wallpaper.nix config).wallpaper_path;
+  defaultWallpaperPath = (import ./wallpaper.nix config).wallpaper_path;
+  # Stable symlink kept current by theme-switch; hyprlock reads through it
+  # so the lock screen tracks whichever theme is active at runtime.
+  lockWallpaperLink = "${config.home.homeDirectory}/.cache/lockscreen-wallpaper";
 
   backgroundRgb = "rgba(${convert ", " palette.base00}, 0.8)";
   surfaceRgb = "rgb(${convert ", " palette.base02})";
   foregroundRgb = "rgb(${convert ", " palette.base05})";
   foregroundMutedRgb = "rgb(${convert ", " palette.base04})";
 in {
+  # Seed the symlink at activation so hyprlock has a valid target on first
+  # boot, before autostart runs `theme-switch random`.
+  home.activation.lockscreenWallpaper = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    mkdir -p "$(dirname ${lockWallpaperLink})"
+    ln -sfn "${defaultWallpaperPath}" "${lockWallpaperLink}"
+  '';
+
   programs.hyprlock = {
     enable = true;
     settings = {
@@ -25,32 +35,32 @@ in {
       };
       background = {
         monitor = "";
-        path = selected_wallpaper_path;
+        path = lockWallpaperLink;
         blur_passes = 3;
         brightness = 0.5;
       };
 
       input-field = {
         monitor = "";
-        size = "600, 100";
+        size = "420, 60";
         position = "0, 0";
         halign = "center";
         valign = "center";
 
         inner_color = surfaceRgb;
-        outer_color = foregroundRgb; # #d3c6aa
-        outline_thickness = 4;
+        outer_color = foregroundRgb;
+        outline_thickness = 2;
 
         font_family = "CaskaydiaMono Nerd Font";
-        font_size = 32;
+        font_size = 22;
         font_color = foregroundRgb;
 
         placeholder_color = foregroundMutedRgb;
-        placeholder_text = "  Enter Password 󰈷 ";
+        placeholder_text = "";
         check_color = "rgba(131, 192, 146, 1.0)";
-        fail_text = "Wrong";
+        fail_text = "";
 
-        rounding = 14;
+        rounding = 12;
         shadow_passes = 0;
         fade_on_empty = false;
       };
