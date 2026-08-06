@@ -39,6 +39,9 @@
   # "on", so control is re-armed after, in that order).
   services.udev.extraRules = ''
     ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{driver_override}="none", RUN+="${pkgs.bash}/bin/sh -c 'echo %k > /sys/bus/pci/drivers/snd_hda_intel/unbind 2>/dev/null; echo auto > /sys/bus/pci/devices/%k/power/control'"
+    # RAPL energy counters for wattson: 0400 root upstream (PLATYPUS
+    # mitigation); regrant to the rapl group only — see the wattson service.
+    ACTION=="add", SUBSYSTEM=="powercap", RUN+="${pkgs.bash}/bin/sh -c 'test -f /sys%p/energy_uj && chgrp rapl /sys%p/energy_uj && chmod 440 /sys%p/energy_uj'"
   '';
   environment.systemPackages = [
     pkgs.alsa-ucm-conf
@@ -152,8 +155,17 @@
   # API on 127.0.0.1:4713). The panel is toggled from the waybar battery
   # icon. Inlined copy of ~/proj/wattson/nix/module.nix — flake purity
   # forbids importing module files from outside this repo; keep in sync.
-  # Root because RAPL counters are 0400 root (PLATYPUS mitigation); code
-  # runs from the checked-out repo, so changes need only a service restart.
+  #
+  # Runs as pi + a rapl group, NOT root: the code lives in the pi-writable
+  # checkout, so a root service here would be a straight pi→root escalation
+  # (exactly what dropping pi from trusted-users was meant to close). RAPL
+  # counters are 0400 root upstream (PLATYPUS mitigation); the udev rule
+  # below regrants them to the rapl group only, so unprivileged processes
+  # still can't read them. Running as pi (not a dedicated user) is what
+  # keeps per-app attribution working: /proc/<pid>/cwd is only readable
+  # for same-uid processes without CAP_SYS_PTRACE, which we'd rather not
+  # grant.
+  users.groups.rapl = {};
   systemd.services.wattson = {
     description = "wattson power-history sampler";
     wantedBy = [ "multi-user.target" ];
@@ -166,6 +178,9 @@
     serviceConfig = {
       ExecStart = "${pkgs.bun}/bin/bun /home/pi/proj/wattson/packages/daemon/src/index.ts";
       WorkingDirectory = "/home/pi/proj/wattson";
+      User = "pi";
+      Group = "users";
+      SupplementaryGroups = [ "rapl" ];
       StateDirectory = "wattson";
       Restart = "on-failure";
       RestartSec = 5;
@@ -174,9 +189,7 @@
       ReadWritePaths = [ "/var/lib/wattson" ];
       PrivateTmp = true;
       NoNewPrivileges = true;
-      # DAC_READ_SEARCH: /home/pi is 0700, so even root needs this to
-      # traverse into the repo (dropping ALL caps → CouldntReadCurrentDirectory)
-      CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH" ];
+      CapabilityBoundingSet = [ ];
       RestrictAddressFamilies = [ "AF_INET" "AF_UNIX" ];
       MemoryMax = "512M";
       CPUWeight = 20; # never compete with real work
