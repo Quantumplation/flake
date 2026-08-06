@@ -61,7 +61,6 @@ in {
           "AWS_REGION" = "us-east-2";
           # CACHIX_AUTH_TOKEN is now managed via sops - add to shell config if needed
           LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-          LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${lib.makeLibraryPath ([stdenv libx11 libx11.dev libxcursor libxi libxkbcommon libGL vulkan-headers vulkan-loader fontconfig])}";
         };
 
         pointerCursor = {

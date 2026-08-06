@@ -72,7 +72,6 @@ Question: $question" 2>/dev/null | string trim | string lower)
     shellInit = ''
       set -Ux NIX_LD /run/current-system/sw/share/nix-ld/lib/ld.so
       set -Ux NIX_LD_LIBRARY_PATH /run/current-system/sw/share/nix-ld/lib
-      set -Ux LD_LIBRARY_PATH "${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.openssl.out}/lib"
       set -Ux PKG_CONFIG_PATH "${pkgs.openssl.dev}/lib/pkgconfig:${pkgs.libsoup_3.dev}:${pkgs.glib.dev}:${pkgs.gobject-introspection.dev}"
       set -Ux GOPRIVATE github.com/SundaeSwap-finance
       set --global tide_right_prompt_items status cmd_duration node rustc go aws time
