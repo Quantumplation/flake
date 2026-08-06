@@ -379,15 +379,18 @@
           workspace_swipe_create_new = false;
         };
 
-        # Smoother workspace switch animation for gestures
+        # Horizontal cross-fade — matches 3-finger swipe axis, no vertical motion
+        # so the animation tracks gestures naturally.
         animations.animation = [
-          "workspaces, 1, 5, default, slide"  # enabled, speed (higher=slower), curve, style
+          "workspaces, 1, 4, easeOutQuint, slidefade 15%"
         ];
 
-        # Smart tab: cycles workspaces normally, cycles windows when fullscreen
+        # ALT+Tab: cycle workspaces, ALT+grave: cycle windows within workspace
         bind = [
-          "ALT, Tab, exec, smart-tab next"
-          "ALT SHIFT, Tab, exec, smart-tab prev"
+          "ALT, Tab, workspace, e+1"
+          "ALT SHIFT, Tab, workspace, e-1"
+          "ALT, grave, exec, smart-tab next"
+          "ALT SHIFT, grave, exec, smart-tab prev"
 
           # Switch to specific workspaces
           "SUPER, 1, workspace, 1"
@@ -408,7 +411,7 @@
         ];
 
         # Open new windows on the workspace where they were invoked
-        misc.initial_workspace_tracking = 2;
+        misc.initial_workspace_tracking = 1;
       };
     }
 
