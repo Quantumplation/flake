@@ -52,6 +52,9 @@
       # Workspace management
       "SUPER, X, exec, swap-workspaces"
 
+      # Theme
+      "SUPER SHIFT, T, exec, theme-switch random"
+
       # Quake-style dropdown terminal
       "SUPER SHIFT, A, exec, quake-terminal"
 
