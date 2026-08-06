@@ -68,7 +68,7 @@
       "SUPER, A, exec, $terminal"
       "SUPER, B, exec, $browser"
       "SUPER, C, exec, $messenger"
-      "SUPER, D, exec, discord"
+      "SUPER, D, exec, vesktop"
       "SUPER, E, exec, zeditor"
       "SUPER, Z, exec, zeditor"
       "SUPER, F, exec, nautilus"
