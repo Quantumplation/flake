@@ -88,6 +88,15 @@ Question: $question" 2>/dev/null | string trim | string lower)
           echo ""
           echo "Running nixos-rebuild..."
           sudo nixos-rebuild switch --flake ~/flake#(hostname | string lower)
+          and begin
+            # Staged-but-never-committed drift accumulates silently otherwise
+            # (it once hit 48 files / 2700 lines before anyone noticed).
+            set -l dirty (git -C ~/flake status --porcelain | count)
+            if test $dirty -gt 0
+              set -l last (git -C ~/flake log -1 --format=%cr)
+              echo (set_color yellow)"flake: $dirty uncommitted file(s); last commit was $last"(set_color normal)
+            end
+          end
         '';
       };
       nfu = {
