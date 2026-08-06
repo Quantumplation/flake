@@ -139,4 +139,18 @@
     # Sonos CLI — noson ships noson-cli under lib/noson/, expose on PATH
     (writeShellScriptBin "noson-cli" ''exec ${noson}/lib/noson/noson-cli "$@"'')
   ];
+
+  # Annotator for the `screenshot` script above. early_exit makes swappy quit
+  # immediately after Ctrl+C / Ctrl+S instead of sitting there waiting to be
+  # dismissed separately.
+  xdg.configFile."swappy/config".text = ''
+    [Default]
+    save_dir=$HOME/Captures
+    save_filename_format=%Y-%m/%Y-%m-%d_%H-%M-%S.png
+    early_exit=true
+    show_panel=true
+    line_size=4
+    text_size=20
+    paint_mode=arrow
+  '';
 }

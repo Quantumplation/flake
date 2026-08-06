@@ -42,6 +42,11 @@ in {
         ./packages/scripts.nix
         ./packages/theme-data.nix
         ./packages/compact.nix
+        ./packages/browser.nix
+        ./packages/gtk.nix
+        ./packages/swaync.nix
+        ./packages/atuin.nix
+        ./packages/aws.nix
         ./modules/ssh.nix
       ];
 
@@ -51,10 +56,6 @@ in {
         username = "pi";
         homeDirectory = "/home/pi";
         stateVersion = "22.11";
-
-        packages = with pkgs; [
-          swaynotificationcenter
-        ];
 
         sessionPath = [
           "$HOME/.local/bin"
@@ -76,81 +77,6 @@ in {
 
       };
 
-      xdg.mime.enable = true;
-      xdg.configFile."mimeapps.list".force = true;
-      # NOTE: these *-flags.conf files are an Arch launcher-script convention;
-      # neither upstream Chromium/Brave nor the nixpkgs wrappers read them, so
-      # they are inert here. Kept only as documentation of intent. Hardware
-      # video decode is enabled by the nixpkgs brave wrapper
-      # (--enable-features=AcceleratedVideoDecodeLinuxGL) and Wayland comes from
-      # NIXOS_OZONE_WL --ozone-platform-hint=auto.
-      # Annotator for the `screenshot` script. early_exit makes swappy quit
-      # immediately after Ctrl+C / Ctrl+S instead of sitting there waiting to be
-      # dismissed separately.
-      xdg.configFile."swappy/config".text = ''
-        [Default]
-        save_dir=$HOME/Captures
-        save_filename_format=%Y-%m/%Y-%m-%d_%H-%M-%S.png
-        early_exit=true
-        show_panel=true
-        line_size=4
-        text_size=20
-        paint_mode=arrow
-      '';
-
-      xdg.configFile."brave-flags.conf".text = ''
-        --ozone-platform=wayland
-      '';
-      xdg.configFile."chromium-flags.conf".text = ''
-        --ozone-platform=wayland
-      '';
-      xdg.mimeApps = {
-        enable = true;
-        associations.added = {
-          "application/x-zerosize" = "code.desktop";
-          "image/svg+xml" = "brave-browser.desktop";
-          "video/x-matroska" = [ "org.xfce.Parole.desktop" "vlc.desktop" ];
-        };
-        defaultApplications = {
-          "text/html" = "brave-browser.desktop";
-          "x-scheme-handler/about" = "brave-browser.desktop";
-          "x-scheme-handler/http" = "brave-browser.desktop";
-          "x-scheme-handler/https" = "brave-browser.desktop";
-          "x-scheme-handler/unknown" = "brave-browser.desktop";
-        };
-      };
-
-      services = {
-        swaync = {
-          enable = true;
-          # style.css is managed at runtime by theme-switch, not by home-manager
-          settings = {
-            positionX = "right";
-            positionY = "top";
-            control-center-width = 400;
-            control-center-height = 600;
-            control-center-margin-top = 10;
-            control-center-margin-bottom = 10;
-            control-center-margin-right = 10;
-            control-center-margin-left = 10;
-            notification-window-width = 400;
-            timeout = 5;
-            timeout-low = 3;
-            timeout-critical = 0;
-            fit-to-screen = false;
-            keyboard-shortcuts = true;
-            image-visibility = "when-available";
-            notification-icon-size = 48;
-            notification-body-image-height = 100;
-            notification-body-image-width = 200;
-            transition-time = 300;
-            hide-on-clear = true;
-            hide-on-action = true;
-            script-fail-notify = false;
-          };
-        };
-      };
-
       # Workaround for something? https://github.com/nix-community/home-manager/issues/2064#issuecomment-887300055
       systemd.user.targets.tray = {
         Unit = {
@@ -159,109 +85,8 @@ in {
         };
       };
 
-      gtk = let
-        gtkTheme = {
-          package = pkgs.gnome-themes-extra;
-          name = "Adwaita:dark";
-        };
-      in {
-        enable = true;
-        theme = gtkTheme;
-        gtk4.theme = gtkTheme;
-
-        # No "Recent" list in GTK file choosers — including the portal picker,
-        # which is what every app now gets (xdg-desktop-portal-gtk is a GTK3
-        # binary, so the gtk3 key is the one that actually matters here; gtk4 is
-        # set for other apps).
-        #
-        # NOT done via `gsettings set org.gnome.desktop.privacy
-        # remember-recent-files false`, which is the usual advice: that schema
-        # isn't installed on this machine (no GNOME), so nothing would read it.
-        gtk3.extraConfig."gtk-recent-files-enabled" = false;
-        gtk4.extraConfig."gtk-recent-files-enabled" = false;
-      };
-
       programs = {
         home-manager.enable = true;
-
-        atuin = {
-          enable = true;
-          # Pinned to 18.13.6 — newer versions have a bug preventing recent results from showing.
-          package = pkgs.atuin.overrideAttrs (finalAttrs: _prev: {
-            version = "18.13.6";
-            src = pkgs.fetchFromGitHub {
-              owner = "atuinsh";
-              repo = "atuin";
-              tag = "v18.13.6";
-              hash = "sha256-yAw+ty6FUnFbiRTdAe2QQHzj6uU24fZ/bEIXcHl/thg=";
-            };
-            cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
-              inherit (finalAttrs) src;
-              name = "atuin-18.13.6-vendor";
-              hash = "sha256-jirVe0+N5+UHZWioj8AipUhawMBameqEJJpa8HPTnfw=";
-            };
-          });
-          settings = {
-            show_preview = true;
-            invert = false;
-            inline_height = 10;
-            style = "auto";
-            enter_accept = true;
-            sync_address = "https://api.atuin.sh";
-            key_path = config.sops.secrets."atuin/key".path;
-            session_path = config.sops.secrets."atuin/session".path;
-          };
-        };
-
-        awscli = {
-          enable = true;
-          settings = {
-            "default" = {
-              "region" = "us-east-2";
-            };
-            "profile dev" = {
-              "sso_session" = "pi";
-              "sso_account_id" = "529991308818";
-              "sso_role_name" = "AWSAdministratorAccess";
-              "region" = "us-east-2";
-            };
-            "profile prod" = {
-              "sso_session" = "pi";
-              "sso_account_id" = "705895683800";
-              "sso_role_name" = "AWSAdministratorAccess";
-              "region" = "us-east-2";
-            };
-            "profile shared" = {
-              "sso_session" = "pi";
-              "sso_account_id" = "113073460856";
-              "sso_role_name" = "AWSAdministratorAccess";
-              "region" = "us-east-2";
-            };
-            "profile management" = {
-              "sso_session" = "pi";
-              "sso_account_id" = "583028480321";
-              "sso_role_name" = "AWSAdministratorAccess";
-              "region" = "us-east-2";
-            };
-            "profile founder" = {
-              "sso_session" = "pi";
-              "sso_account_id" = "890625032284";
-              "sso_role_name" = "AWSAdministratorAccess";
-              "region" = "us-east-2";
-            };
-            "profile cardano-tom" = {
-              "sso_session" = "pi";
-              "sso_account_id" = "978007052758";
-              "sso_role_name" = "AWSAdministratorAccess";
-              "region" = "us-east-2";
-            };
-            "sso-session pi" = {
-              "sso_start_url" = "https://d-9a672d8c7d.awsapps.com/start/#";
-              "sso_region" = "us-east-2";
-              "sso_registration_scopes" = "sso:account:access";
-            };
-          };
-        };
 
         go = {
           enable = true;
@@ -269,7 +94,6 @@ in {
             "github.com/SundaeSwap-finance"
           ];
         };
-
       };
     };
   };
