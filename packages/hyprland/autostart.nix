@@ -5,7 +5,7 @@
 }: {
   wayland.windowManager.hyprland.settings = {
     exec-once = [
-      "swww-daemon"
+      "awww-daemon"
       "sleep 1 && theme-switch random"
       "hyprsunset"
       "systemctl --user start hyprpolkitagent"

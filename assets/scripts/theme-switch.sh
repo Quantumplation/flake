@@ -72,14 +72,14 @@ fi
 # Apply hyprland border colors
 bash "$THEME_DIR/borders.sh"
 
-# Apply wallpaper via swww with a fade transition
+# Apply wallpaper via awww (formerly swww) with a fade transition
 WALLPAPER=$(cat "$THEME_DIR/wallpaper")
-if pgrep -f swww-daemon > /dev/null; then
-  swww img "$WALLPAPER" --transition-type fade --transition-duration 1
+if pgrep -f awww-daemon > /dev/null; then
+  awww img "$WALLPAPER" --transition-type fade --transition-duration 1
 else
-  swww-daemon &
+  awww-daemon &
   sleep 1
-  swww img "$WALLPAPER"
+  awww img "$WALLPAPER"
 fi
 
 # Keep lock screen wallpaper in sync (hyprlock reads through this symlink)
