@@ -1,4 +1,4 @@
-inputs: { pkgs, ... }: {
+{ inputs, pkgs, ... }: {
   # System-level Hyprland configuration
   programs.hyprland = {
     enable = true;

@@ -1,4 +1,4 @@
-inputs: {
+{
   config,
   lib,
   pkgs,
@@ -17,28 +17,31 @@ in {
     backupFileExtension = "backup";
     useGlobalPkgs = true;
     useUserPackages = true;
+    # Every home module is a plain module taking { inputs, ... } via
+    # extraSpecialArgs — no more curried (import ./foo.nix inputs) pattern.
+    extraSpecialArgs = { inherit inputs; };
     users.pi = {
       imports = [
         inputs.nix-colors.homeManagerModules.default
-        (import ./packages/hyprland inputs)
-        (import ./packages/hyprlock.nix inputs)
-        (import ./packages/hyprshell.nix inputs)
-        (import ./packages/hyprpaper.nix)
-        (import ./packages/hypridle.nix)
-        (import ./packages/ghostty.nix)
-        (import ./packages/git.nix)
-        (import ./packages/fish.nix)
-        (import ./packages/btop.nix)
-        (import ./packages/vim.nix)
-        (import ./packages/zed.nix)
-        (import ./packages/obsidian.nix)
-        (import ./packages/tldraw.nix)
-        (import ./packages/waybar.nix inputs)
-        (import ./packages/wofi.nix)
-        (import ./packages/wayvnc.nix inputs)
-        (import ./packages/scripts.nix)
-        (import ./packages/theme-data.nix inputs)
-        (import ./packages/compact.nix)
+        ./packages/hyprland
+        ./packages/hyprlock.nix
+        ./packages/hyprshell.nix
+        ./packages/hyprpaper.nix
+        ./packages/hypridle.nix
+        ./packages/ghostty.nix
+        ./packages/git.nix
+        ./packages/fish.nix
+        ./packages/btop.nix
+        ./packages/vim.nix
+        ./packages/zed.nix
+        ./packages/obsidian.nix
+        ./packages/tldraw.nix
+        ./packages/waybar.nix
+        ./packages/wofi.nix
+        ./packages/wayvnc.nix
+        ./packages/scripts.nix
+        ./packages/theme-data.nix
+        ./packages/compact.nix
         ./modules/ssh.nix
       ];
 

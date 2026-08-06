@@ -4,7 +4,7 @@
   imports = [
     ../packages/sops.nix
     ../packages/discord.nix
-    (import ../packages/hyprland/system.nix inputs)
+    ../packages/hyprland/system.nix
     ../modules/development.nix
     ../modules/desktop-utils.nix
     ../modules/fonts.nix
@@ -14,7 +14,7 @@
     ../modules/programs.nix
     ../modules/vpn.nix
     ../modules/sonos.nix
-    (import ../home.nix inputs)
+    ../home.nix
   ];
 
   nixpkgs.config.allowUnfree = true;
