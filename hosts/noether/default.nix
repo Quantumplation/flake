@@ -62,11 +62,35 @@
 
   # Hibernation support
   boot.resumeDevice = "/dev/mapper/cryptroot";
+  boot.kernel.sysctl."kernel.perf_event_paranoid" = 1;
   boot.kernelParams = [
     "resume=/dev/mapper/cryptroot"
     "resume_offset=19226624"
     "hibernate=noerrors"  # Relax memory map validation - AMD laptops have inconsistent maps between boots
   ];
+
+  # Fix: kernel can't resolve resume=/dev/mapper/cryptroot at parse time (LUKS not yet open),
+  # so /sys/power/resume stays 0:0 and hibernate is disabled. This service writes the correct
+  # device major:minor after boot, enabling the kernel hibernate subsystem.
+  systemd.services.setup-hibernate-resume = {
+    description = "Configure kernel hibernate resume device";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "dev-mapper-cryptroot.device" "swap.target" ];
+    requires = [ "dev-mapper-cryptroot.device" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
+      # Get the major:minor of the resume device
+      MAJMIN=$(stat -c '%t:%T' /dev/mapper/cryptroot)
+      # Convert hex to decimal (stat %t/%T are hex)
+      MAJOR=$((16#''${MAJMIN%%:*}))
+      MINOR=$((16#''${MAJMIN##*:}))
+      echo "Setting /sys/power/resume to $MAJOR:$MINOR for /dev/mapper/cryptroot"
+      echo "$MAJOR:$MINOR" > /sys/power/resume
+    '';
+  };
 
   # Low battery warning and hibernate
   # Thresholds raised for safety - hibernate needs time and power to complete
@@ -80,9 +104,9 @@
 
   # Suspend-then-hibernate: if suspended for 30min, automatically hibernate
   # This prevents battery death during extended suspend
-  systemd.sleep.extraConfig = ''
-    HibernateDelaySec=30min
-  '';
+  systemd.sleep.settings.Sleep = {
+    HibernateDelaySec = "30min";
+  };
 
   # Emergency failsafe: force hibernate at 8% regardless of UPower
   # Runs as root, checks every 30 seconds when below 15%
